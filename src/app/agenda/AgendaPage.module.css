@@ -1,0 +1,2468 @@
+.page {
+
+  --cyan: #18d4ff;
+
+  --green: #b9f82d;
+
+  --muted: #a4adbd;
+
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  color: var(--text);
+
+  background:
+
+    radial-gradient(circle at 10% 6%, rgba(0, 206, 255, 0.15), transparent 26rem),
+
+    radial-gradient(circle at 80% 8%, rgba(153, 108, 255, 0.16), transparent 30rem),
+
+    linear-gradient(180deg, #020713 0%, #031022 52%, #020a18 100%);
+
+}
+ 
+.container,
+
+.split {
+
+  width: min(1120px, calc(100% - 48px));
+
+  margin: 0 auto;
+
+}
+ 
+.gradientText {
+
+  color: transparent;
+
+  background: linear-gradient(90deg, #8ddcff 0%, #10d7ff 38%, #4ee9be 68%, #b5f43b 100%);
+
+  -webkit-background-clip: text;
+
+  background-clip: text;
+
+}
+ 
+.header {
+
+  position: sticky;
+
+  top: 20px;
+
+  z-index: 90;
+
+  width: 100%;
+
+  padding: 0 24px;
+
+}
+ 
+.nav {
+
+  display: grid;
+
+  grid-template-columns: 205px 1fr auto;
+
+  align-items: center;
+
+  gap: 22px;
+
+  width: min(1172px, 100%);
+
+  height: 61px;
+
+  margin: 0 auto;
+
+  padding: 0 22px 0 25px;
+
+  overflow: visible;
+
+  border: 1px solid rgba(126, 172, 217, 0.14);
+
+  border-radius: 34px;
+
+  background: rgba(4, 8, 15, 0.88);
+
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.45), inset 0 0 26px rgba(33, 173, 255, 0.07);
+
+  backdrop-filter: blur(18px);
+
+}
+ 
+.logo {
+
+  display: block;
+
+  width: 118px;
+
+}
+ 
+.logo img {
+
+  width: 100%;
+
+  height: auto;
+
+}
+ 
+.links,
+
+.navActions,
+
+.subNav {
+
+  display: flex;
+
+  align-items: center;
+
+}
+ 
+.links {
+
+  justify-content: center;
+
+  gap: 31px;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 14px;
+
+}
+ 
+.activeLink {
+
+  color: #45c8ff;
+
+  font-weight: 700;
+
+}
+ 
+.navActions {
+
+  gap: 26px;
+
+  white-space: nowrap;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+}
+ 
+.pass,
+
+.button.solid {
+
+  color: #06111f;
+
+  background: var(--green);
+
+}
+ 
+.pass {
+
+  padding: 15px 23px;
+
+  border-radius: 999px;
+
+  box-shadow: 0 0 24px rgba(185, 248, 45, 0.24);
+
+}
+ 
+.menuToggle {
+
+  display: none;
+
+}
+ 
+.subNav {
+
+  position: absolute;
+
+  left: 50%;
+
+  top: 61px;
+
+  justify-content: center;
+
+  gap: 74px;
+
+  width: min(1008px, calc(100% - 108px));
+
+  height: 41px;
+
+  padding: 0 34px;
+
+  border-radius: 0 0 24px 24px;
+
+  color: #101727;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.16);
+
+  font-size: 12px;
+
+  font-weight: 650;
+
+  letter-spacing: 1.6px;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transform: translate(-50%, -8px);
+
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+
+  visibility: hidden;
+
+}
+ 
+.header:hover .subNav,
+
+.header:focus-within .subNav {
+
+  opacity: 1;
+
+  pointer-events: auto;
+
+  transform: translate(-50%, 0);
+
+  visibility: visible;
+
+}
+ 
+.hero {
+
+  min-height: 750px;
+
+  margin-top: 0px;
+
+  display: flex;
+
+  align-items: center;
+
+  background: 
+
+    linear-gradient(90deg, rgba(2, 7, 19, 0.9) 0%, rgba(2, 7, 19, 0.7) 40%, rgba(2, 7, 19, 0.25) 100%),
+
+    url("/malaysia/images/agenda/Agenda-bg.webp") center / cover no-repeat;
+
+}
+ 
+.hero h1,
+
+.aboutSection h2,
+
+.formatsSection h2,
+
+.visionSection h2,
+
+.gatewaySection h2,
+
+.accelerateSection h2,
+
+.timelineIntro h2,
+
+.themeSection h2,
+
+.speakerSection h2,
+
+.finalCta h2 {
+
+  margin: 0;
+
+  color: #f7f9ff;
+
+  font-weight: 850;
+
+  letter-spacing: -1.8px;
+
+  line-height: 1.05;
+
+}
+ 
+.hero h1 {
+
+  max-width: 790px;
+
+  font-size: clamp(46px, 6.6vw, 72px);
+
+}
+
+.heroPara {
+
+  max-width: 710px;
+
+  margin: 28px 0 0;
+
+  color: rgba(255, 255, 255, 0.84);
+
+  font-size: clamp(17px, 2.5vw, 21px);
+
+  line-height: 1.5;
+
+}
+ 
+.aboutSection,
+
+.formatsSection,
+
+.visionSection,
+
+.gatewaySection,
+
+.accelerateSection,
+
+.timelineSection,
+
+.themeSection,
+
+.speakerSection,
+
+.finalCta {
+
+  padding: 96px 0;
+
+  background: #020b1c;
+
+}
+ 
+.split {
+
+  display: grid;
+
+  grid-template-columns: 0.94fr 1fr;
+
+  gap: 76px;
+
+  align-items: center;
+
+}
+ 
+.split h2 {
+
+  font-size: clamp(30px, 4vw, 40px);
+
+}
+ 
+.split p {
+
+  color: rgba(255, 255, 255, 0.64);
+
+  font-size: 16px;
+
+  line-height: 1.55;
+
+}
+
+.formatsSection > .container > p,
+
+.gatewaySection > .container > p,
+
+.accelerateSection > .container > p,
+
+.timelineIntro p,
+
+.themeSection > .container > p,
+
+.speakerGrid p,
+
+.finalCta p {
+
+  color: rgba(255, 255, 255, 0.64);
+
+  font-size: 19px;
+
+  line-height: 1.55;
+
+}
+ 
+.split h3 {
+
+  margin: 36px 0 0;
+
+  font-size: clamp(24px, 3.2vw, 32px);
+
+  line-height: 1.14;
+
+}
+ 
+.split img,
+
+.accelerateGrid > img,
+
+.speakerGrid > img {
+
+  width: 100%;
+
+  border: 1px solid rgba(32, 213, 255, 0.32);
+
+  border-radius: 22px;
+
+  object-fit: cover;
+
+  box-shadow: 0 0 42px rgba(0, 206, 255, 0.12);
+
+}
+ 
+.formatsSection,
+
+.gatewaySection,
+
+.timelineSection,
+
+.speakerSection {
+
+  background: linear-gradient(180deg, #020b1c, #031127);
+
+}
+ 
+.formatsSection h2,
+
+.gatewaySection h2,
+
+.accelerateSection h2,
+
+.timelineIntro h2,
+
+.themeSection h2,
+
+.speakerSection h2 {
+
+  max-width: 920px;
+
+  margin: 0 auto;
+
+  font-size: clamp(42px, 5vw, 62px);
+
+  text-align: center;
+
+}
+ 
+.formatsSection > .container > p,
+
+.gatewaySection > .container > p,
+
+.accelerateSection > .container > p,
+
+.themeSection > .container > p {
+
+  max-width: 790px;
+
+  margin: 22px auto 58px;
+
+  text-align: center;
+
+}
+ 
+.formatGrid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+
+}
+ 
+.formatCard {
+
+  overflow: hidden;
+
+  border: 1px solid rgba(83, 207, 255, 0.22);
+
+  border-radius: 20px;
+
+  background: rgba(5, 12, 28, 0.86);
+
+  box-shadow: inset 0 0 28px rgba(65, 220, 255, 0.05), 0 24px 60px rgba(0, 0, 0, 0.34);
+
+  padding: 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+
+  transition: transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 250ms ease;
+
+}
+ 
+.formatCard:hover {
+
+  border-color: rgba(185, 248, 45, 0.72);
+
+  transform: translateY(-6px);
+
+  box-shadow: 0 15px 45px rgba(192, 244, 60, 0.16), inset 0 0 28px rgba(192, 244, 60, 0.05);
+
+}
+ 
+.formatCard img {
+
+  width: 100%;
+
+  height: 220px;
+
+  object-fit: cover;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(24, 212, 255, 0.15);
+
+}
+ 
+.formatCard div {
+
+  padding: 0;
+
+}
+ 
+.formatCard h3,
+
+.iconCard h3,
+
+.timelineRow h3,
+
+.speakerGrid h3 {
+
+  margin: 0 0 12px;
+
+  color: #f7f9ff;
+
+}
+ 
+.formatCard h3 {
+
+  color: var(--cyan);
+
+  font-size: 22px;
+
+}
+ 
+.formatCard p,
+
+.iconCard p,
+
+.timelineRow p,
+
+.focusItem p {
+
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.62);
+
+  line-height: 1.55;
+
+}
+ 
+.visionSection .split {
+
+  align-items: start;
+
+}
+
+.leftCol {
+
+  position: sticky;
+
+  top: 100px;
+
+}
+
+.visionCopy {
+
+  max-height: 700px;
+
+  overflow-y: auto;
+
+  padding-right: 15px;
+
+}
+
+/* Custom scrollbar for vision copy */
+.visionCopy::-webkit-scrollbar {
+
+  width: 6px;
+
+}
+
+.visionCopy::-webkit-scrollbar-track {
+
+  background: rgba(255, 255, 255, 0.02);
+
+  border-radius: 3px;
+
+}
+
+.visionCopy::-webkit-scrollbar-thumb {
+
+  background: rgba(24, 212, 255, 0.2);
+
+  border-radius: 3px;
+
+}
+
+.visionCopy::-webkit-scrollbar-thumb:hover {
+
+  background: rgba(24, 212, 255, 0.4);
+
+}
+
+.visionCopy blockquote {
+
+  margin: 36px 0 0;
+
+  padding: 38px 40px;
+
+  border: 1.5px solid rgba(24, 212, 255, 0.42);
+
+  border-radius: 20px;
+
+  background: linear-gradient(135deg, rgba(4, 11, 27, 0.95), rgba(10, 24, 52, 0.98));
+
+  box-shadow: 0 0 35px rgba(24, 212, 255, 0.18), inset 0 0 25px rgba(24, 212, 255, 0.05);
+
+  font-size: 24px;
+
+  font-weight: 750;
+
+  line-height: 1.45;
+
+  color: #f7f9ff;
+
+}
+
+.blockquoteCite {
+
+  display: block;
+
+  margin-top: 18px;
+
+  font-size: 11px;
+
+  font-weight: 750;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+  color: rgba(255, 255, 255, 0.45);
+
+  font-family: monospace;
+
+}
+ 
+.cardGrid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 16px;
+
+}
+ 
+.iconCard {
+
+  position: relative;
+
+  min-height: 262px;
+
+  padding: 28px;
+
+  border: 1px solid rgba(88, 213, 255, 0.17);
+
+  border-radius: 13px;
+
+  background: linear-gradient(135deg, #00ceff1f, #996cff24), #050c1cd1;
+
+  box-shadow: inset 0 0 28px rgba(65, 220, 255, 0.05), 0 20px 60px rgba(0, 0, 0, 0.24);
+
+}
+ 
+.iconBadge {
+
+  display: grid;
+
+  width: 58px;
+
+  height: 58px;
+
+  place-items: center;
+
+  margin-bottom: 26px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 16px;
+
+  background: rgba(3, 9, 20, 0.72);
+
+}
+ 
+.iconBadge img {
+
+  width: 28px;
+
+  height: 28px;
+
+  object-fit: contain;
+
+}
+ 
+.cardIndex {
+
+  position: absolute;
+
+  right: 28px;
+
+  top: 32px;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-family: monospace;
+
+  font-size: 13px;
+
+}
+ 
+.accelerateGrid,
+
+.speakerGrid {
+
+  display: grid;
+
+  grid-template-columns: 0.9fr 1fr;
+
+  gap: 64px;
+
+  align-items: center;
+
+}
+ 
+.focusItem {
+
+  display: grid;
+
+  grid-template-columns: 48px 1fr;
+
+  gap: 16px;
+
+  padding: 0 0 26px;
+
+  margin-bottom: 26px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+}
+ 
+.focusItem span {
+
+  grid-row: span 2;
+
+  display: grid;
+
+  width: 48px;
+
+  height: 48px;
+
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+}
+ 
+.focusItem img {
+
+  width: 25px;
+
+  height: 25px;
+
+}
+ 
+.focusItem h3 {
+
+  margin: 0;
+
+}
+ 
+.timelineIntro {
+
+  display: block;
+
+  text-align: center;
+
+  margin-bottom: 52px;
+
+}
+ 
+.timelineIntro h2 {
+
+  text-align: center;
+
+}
+ 
+.dayTabs {
+
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 24px;
+
+}
+ 
+.dayTabs button,
+
+.trackTabs button {
+
+  position: relative;
+
+  min-height: 134px;
+
+  padding: 28px 30px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(151, 108, 255, 0.65);
+
+  border-radius: 14px;
+
+  color: #f7f9ff;
+
+  background: rgba(5, 12, 28, 0.72);
+
+  text-align: left;
+
+  isolation: isolate;
+
+  transform: translateZ(0);
+
+  transition:
+
+    border-color 360ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    box-shadow 360ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    background 360ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.dayTabs button::before,
+
+.trackTabs button::before,
+
+.timelineRow::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  opacity: 0;
+
+  background:
+
+    radial-gradient(
+
+      260px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+
+      rgba(0, 206, 255, 0.22),
+
+      rgba(153, 108, 255, 0.1) 38%,
+
+      transparent 68%
+
+    );
+
+  transition: opacity 320ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.dayTabs button::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: auto 24px 0;
+
+  height: 2px;
+
+  opacity: 0;
+
+  background: linear-gradient(90deg, transparent, var(--green), var(--cyan), transparent);
+
+  transform: translateX(-45%);
+
+  transition: opacity 300ms ease, transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.dayTabs button:hover,
+
+.dayTabs .activeDay,
+
+.trackTabs button:hover,
+
+.trackTabs .activeTrack {
+
+  border-color: rgba(185, 248, 45, 0.62);
+
+  background: linear-gradient(135deg, rgba(0, 206, 255, 0.12), rgba(153, 108, 255, 0.13)), rgba(5, 12, 28, 0.8);
+
+  box-shadow: 0 0 34px rgba(185, 248, 45, 0.13), inset 0 0 30px rgba(0, 206, 255, 0.08);
+
+  transform: translateY(-5px);
+
+}
+ 
+.dayTabs button:hover::before,
+
+.dayTabs .activeDay::before,
+
+.trackTabs button:hover::before,
+
+.trackTabs .activeTrack::before,
+
+.timelineRow:hover::before {
+
+  opacity: 1;
+
+}
+ 
+.dayTabs button:hover::after,
+
+.dayTabs .activeDay::after {
+
+  opacity: 1;
+
+  transform: translateX(0);
+
+}
+ 
+.trackTabs {
+
+  display: flex;
+
+  gap: 12px;
+
+  margin: -4px 0 24px;
+
+  overflow-x: auto;
+
+  padding-bottom: 8px;
+
+}
+ 
+.trackTabs button {
+
+  min-height: 42px;
+
+  white-space: nowrap;
+
+  padding: 0 18px;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+}
+ 
+.trackTabs button:hover,
+
+.trackTabs .activeTrack {
+
+  transform: translateY(-3px);
+
+}
+ 
+.agendaFilters {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+
+  gap: 12px;
+
+  align-items: end;
+
+  margin: 0 0 24px;
+
+}
+ 
+.agendaFilters label {
+
+  display: grid;
+
+  gap: 8px;
+
+}
+ 
+.agendaFilters span {
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-family: monospace;
+
+  font-size: 11px;
+
+  letter-spacing: 1.6px;
+
+  text-transform: uppercase;
+
+}
+ 
+.agendaFilters input,
+
+.agendaFilters select {
+
+  width: 100%;
+
+  height: 46px;
+
+  padding: 0 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  border-radius: 999px;
+
+  color: #f7f9ff;
+
+  background: rgba(5, 12, 28, 0.86);
+
+  font: inherit;
+
+  outline: 0;
+
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+
+}
+ 
+.agendaFilters input:focus,
+
+.agendaFilters select:focus {
+
+  border-color: rgba(24, 212, 255, 0.7);
+
+  box-shadow: 0 0 20px rgba(24, 212, 255, 0.12);
+
+}
+ 
+.agendaFilters button {
+
+  width: fit-content;
+
+  min-width: 104px;
+
+  height: 46px;
+
+  padding: 0 22px;
+
+  border: 0;
+
+  border-radius: 999px;
+
+  color: #06111f;
+
+  background: var(--green);
+
+  font-weight: 850;
+
+  cursor: pointer;
+
+}
+ 
+.dayTabs span,
+
+.timelineHead,
+
+.note {
+
+  color: var(--green);
+
+  font-family: monospace;
+
+  font-size: 13px;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+}
+ 
+.dayTabs strong {
+
+  display: block;
+
+  margin: 14px 0 8px;
+
+  font-size: 24px;
+
+}
+ 
+.dayTabs small {
+
+  color: rgba(255, 255, 255, 0.6);
+
+}
+ 
+.timeline {
+
+  position: relative;
+
+  padding: 36px 24px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 22px;
+
+  background: rgba(5, 12, 28, 0.72);
+
+}
+ 
+.timeline::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+
+    linear-gradient(90deg, transparent, rgba(0, 206, 255, 0.08), transparent),
+
+    radial-gradient(circle at 50% 0, rgba(185, 248, 45, 0.08), transparent 42%);
+
+  opacity: 0.7;
+
+}
+ 
+.timelineHead {
+
+  position: relative;
+
+  z-index: 1;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  padding-bottom: 18px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.68);
+
+}
+ 
+.timelineRow {
+
+  position: relative;
+
+  z-index: 1;
+
+  display: grid;
+
+  grid-template-columns: 110px 145px 1fr;
+
+  gap: 26px;
+
+  padding: 26px 20px;
+
+  overflow: hidden;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.36);
+
+  border-radius: 14px;
+
+  opacity: 0;
+
+  transform: translateY(22px);
+
+  animation: agendaRowIn 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  animation-delay: calc(var(--row-index, 0) * 48ms);
+
+  transition:
+
+    border-color 320ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    background 320ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.timelineRow:last-child {
+
+  border-bottom: 0;
+
+}
+ 
+.timelineRow:hover {
+
+  border-color: rgba(185, 248, 45, 0.42);
+
+  background: linear-gradient(135deg, rgba(0, 206, 255, 0.08), rgba(153, 108, 255, 0.1));
+
+  box-shadow: inset 0 0 24px rgba(0, 206, 255, 0.08), 0 20px 46px rgba(0, 0, 0, 0.2);
+
+  transform: translateY(-4px);
+
+}
+ 
+.timelineRow time {
+
+  color: #f7f9ff;
+
+  font-family: monospace;
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  transition: color 300ms ease, transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.timelineRow time span {
+
+  display: block;
+
+  margin-top: 7px;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 13px;
+
+  font-weight: 400;
+
+}
+ 
+.sessionType {
+
+  align-self: start;
+
+  width: fit-content;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  color: #06111f;
+
+  background: rgba(185, 248, 45, 0.68);
+
+  font-family: monospace;
+
+  font-size: 11px;
+
+  letter-spacing: 1.6px;
+
+  text-transform: uppercase;
+
+  transition: background 300ms ease, box-shadow 300ms ease, transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.timelineRow h3 {
+
+  transition: color 300ms ease, transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.timelineRow:hover time,
+
+.timelineRow:hover h3 {
+
+  color: #ffffff;
+
+  transform: translateX(4px);
+
+}
+ 
+.timelineRow:hover .sessionType {
+
+  background: var(--green);
+
+  box-shadow: 0 0 22px rgba(185, 248, 45, 0.24);
+
+  transform: translateX(4px);
+
+}
+ 
+.note {
+
+  margin: 28px 0 0;
+
+  text-align: center;
+
+  color: rgba(255, 255, 255, 0.55);
+
+}
+ 
+.loadingState {
+
+  margin: 28px 20px;
+
+  color: rgba(255, 255, 255, 0.66);
+
+}
+ 
+.locationText {
+
+  display: block;
+
+  margin-top: 10px;
+
+  color: var(--cyan);
+
+  font-size: 13px;
+
+}
+ 
+.sessionSpeakers {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 18px;
+
+}
+ 
+.sessionSpeakers span {
+
+  display: grid;
+
+  grid-template-columns: 42px 1fr;
+
+  column-gap: 10px;
+
+  min-width: min(260px, 100%);
+
+  padding: 8px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  transition: border-color 260ms ease, background 260ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.sessionSpeakers span:hover {
+
+  border-color: rgba(24, 212, 255, 0.34);
+
+  background: rgba(24, 212, 255, 0.07);
+
+  transform: translateY(-2px);
+
+}
+ 
+.sessionSpeakers img {
+
+  grid-row: span 3;
+
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+}
+ 
+.sessionSpeakers em {
+
+  color: var(--cyan);
+
+  font-size: 10px;
+
+  font-style: normal;
+
+  font-weight: 900;
+
+  letter-spacing: 1.3px;
+
+}
+ 
+.sessionSpeakers strong {
+
+  font-size: 13px;
+
+}
+ 
+.sessionSpeakers small {
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 12px;
+
+}
+ 
+@keyframes agendaRowIn {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(22px);
+
+  }
+ 
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+}
+ 
+.themeGrid {
+
+  display: grid;
+
+  grid-template-columns: 1.2fr 0.85fr;
+
+  gap: 24px;
+
+  width: min(1110px, 100%);
+
+  margin: 54px auto 0;
+
+}
+ 
+.themeList {
+
+  display: grid;
+
+  gap: 16px;
+
+}
+ 
+.themeList button,
+
+.focusCard,
+
+.brochureCta,
+
+.speakerBox,
+
+.ctaBox {
+
+  border: 1px solid rgba(88, 213, 255, 0.22);
+
+  background: linear-gradient(135deg, #00ceff1f, #996cff24), #050c1cd1;
+
+  box-shadow: inset 0 0 28px rgba(65, 220, 255, 0.06), 0 20px 60px rgba(0, 0, 0, 0.28);
+
+}
+ 
+.themeList button {
+
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns: 54px 102px minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 18px;
+
+  min-height: 96px;
+
+  padding: 20px 25px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  color: #f7f9ff;
+
+  text-align: left;
+
+  isolation: isolate;
+
+  transform: translateZ(0);
+
+  transition:
+
+    border-color 360ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    box-shadow 360ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+
+    background 360ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.themeList button::before,
+
+.focusCard::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  opacity: 0;
+
+  background:
+
+    radial-gradient(
+
+      340px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+
+      rgba(0, 206, 255, 0.22),
+
+      rgba(153, 108, 255, 0.14) 38%,
+
+      transparent 70%
+
+    );
+
+  transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.themeList button::after {
+
+  content: "";
+
+  grid-column: 3;
+
+  grid-row: 1;
+
+  align-self: center;
+
+  width: 100%;
+
+  height: 1px;
+
+  margin-top: -28px;
+
+  opacity: 0.18;
+
+  background: linear-gradient(90deg, rgba(185, 248, 45, 0.95), rgba(255, 255, 255, 0.08));
+
+  transform: scaleX(0.38);
+
+  transform-origin: left;
+
+  transition: opacity 360ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.themeList button:hover,
+
+.themeList .activeTheme {
+
+  border-color: rgba(185, 248, 45, 0.68);
+
+  background: linear-gradient(135deg, rgba(0, 206, 255, 0.1), rgba(192, 244, 60, 0.08)), #050c1cd1;
+
+  box-shadow: inset 0 0 28px rgba(0, 206, 255, 0.08), 0 0 32px rgba(192, 244, 60, 0.12), 0 22px 60px rgba(0, 0, 0, 0.34);
+
+  transform: translateX(0) translateY(-2px);
+
+}
+ 
+.themeList button:hover::before,
+
+.themeList .activeTheme::before,
+
+.focusCard:hover::before {
+
+  opacity: 1;
+
+}
+ 
+.themeList button:hover::after,
+
+.themeList .activeTheme::after {
+
+  opacity: 1;
+
+  transform: scaleX(1);
+
+}
+ 
+.themeList span {
+
+  grid-row: 1 / span 2;
+
+  display: grid;
+
+  width: 50px;
+
+  height: 50px;
+
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  transition:
+
+    border-color 360ms ease,
+
+    background 360ms ease,
+
+    box-shadow 360ms ease,
+
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.themeList button:hover span,
+
+.themeList .activeTheme span {
+
+  border-color: rgba(185, 248, 45, 0.3);
+
+  background: rgba(185, 248, 45, 0.13);
+
+  box-shadow: inset 0 0 20px rgba(185, 248, 45, 0.09), 0 0 22px rgba(185, 248, 45, 0.08);
+
+  transform: scale(1.03);
+
+}
+ 
+.themeList img {
+
+  width: 24px;
+
+  height: 24px;
+
+  object-fit: contain;
+
+}
+ 
+.themeList small,
+
+.focusCard small {
+
+  color: var(--green);
+
+  font-family: monospace;
+
+  font-size: 12px;
+
+  letter-spacing: 2.4px;
+
+  text-transform: uppercase;
+
+}
+ 
+.themeList strong {
+
+  grid-column: 2 / -1;
+
+  font-size: 20px;
+
+  font-weight: 850;
+
+  line-height: 1.16;
+
+  transition: color 300ms ease, transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.themeList button:hover strong,
+
+.themeList .activeTheme strong {
+
+  color: #ffffff;
+
+  transform: translateX(3px);
+
+}
+ 
+.focusCard {
+
+  position: relative;
+
+  min-height: 440px;
+
+  padding: 38px 36px 26px;
+
+  border-radius: 22px;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  border-color: rgba(185, 248, 45, 0.42);
+
+  background:
+
+    radial-gradient(circle at 80% 10%, rgba(0, 206, 255, 0.2), transparent 28%),
+
+    linear-gradient(135deg, rgba(0, 206, 255, 0.08), rgba(192, 244, 60, 0.06)),
+
+    #050c1cd1;
+
+  box-shadow: inset 0 0 32px rgba(0, 206, 255, 0.08), 0 0 34px rgba(192, 244, 60, 0.12), 0 28px 70px rgba(0, 0, 0, 0.34);
+
+  transition: border-color 360ms ease, box-shadow 360ms ease, transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+
+}
+ 
+.focusCard:hover {
+
+  border-color: rgba(185, 248, 45, 0.72);
+
+  box-shadow: inset 0 0 36px rgba(0, 206, 255, 0.1), 0 0 42px rgba(192, 244, 60, 0.16), 0 30px 76px rgba(0, 0, 0, 0.38);
+
+  transform: translateY(-2px);
+
+}
+ 
+.focusCard h3 {
+
+  margin: 24px 0 28px;
+
+  max-width: 410px;
+
+  font-size: 34px;
+
+  font-weight: 850;
+
+  line-height: 1.13;
+
+  letter-spacing: -0.5px;
+
+}
+ 
+.focusCard img {
+
+  width: 100%;
+
+  min-height: 250px;
+
+  object-fit: contain;
+
+  border-radius: 16px;
+
+  opacity: 0;
+
+  transform: translateY(16px) scale(0.985);
+
+  animation: focusImageIn 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  filter: drop-shadow(0 18px 32px rgba(0, 206, 255, 0.15));
+
+}
+ 
+@keyframes focusImageIn {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(16px) scale(0.985);
+
+  }
+ 
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+
+  }
+
+}
+ 
+.brochureCta {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 24px;
+
+  margin-top: 40px;
+
+  padding: 42px;
+
+  border-color: rgba(185, 248, 45, 0.35);
+
+  border-radius: 20px;
+
+}
+ 
+.brochureCta h3 {
+
+  margin: 0 0 12px;
+
+  font-size: 30px;
+
+}
+ 
+.brochureCta p {
+
+  max-width: 640px;
+
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.62);
+
+}
+ 
+.button {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 14px;
+
+  min-width: 172px;
+
+  height: 55px;
+
+  padding: 0 26px;
+
+  border-radius: 999px;
+
+  font-weight: 850;
+
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+
+}
+ 
+.button:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 0 28px rgba(185, 248, 45, 0.24);
+
+}
+ 
+.outline {
+
+  color: #f7f9ff;
+
+  border: 1px solid rgba(151, 108, 255, 0.8);
+
+  background: rgba(3, 10, 24, 0.42);
+
+}
+ 
+.speakerGrid {
+
+  margin-top: 64px;
+
+}
+ 
+.speakerBox {
+
+  margin: 30px 0;
+
+  padding: 28px 32px;
+
+  border-color: rgba(185, 248, 45, 0.42);
+
+  border-radius: 20px;
+
+}
+ 
+.speakerBox ul {
+
+  display: grid;
+
+  gap: 18px;
+
+  margin: 18px 0 0;
+
+  padding: 0;
+
+  list-style: none;
+
+}
+ 
+.speakerBox li::before {
+
+  content: "";
+
+  display: inline-block;
+
+  width: 11px;
+
+  height: 11px;
+
+  margin-right: 12px;
+
+  border-radius: 50%;
+
+  background: var(--green);
+
+}
+ 
+.actions {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 14px;
+
+  justify-content: center;
+
+}
+ 
+.speakerGrid .actions {
+
+  justify-content: flex-start;
+
+}
+ 
+.finalCta {
+
+  padding-top: 70px;
+
+}
+ 
+.ctaBox {
+
+  width: min(980px, calc(100% - 48px));
+
+  margin: 0 auto;
+
+  padding: 66px 64px;
+
+  border-color: rgba(185, 248, 45, 0.42);
+
+  border-radius: 25px;
+
+  text-align: center;
+
+}
+ 
+.ctaBox h2 {
+
+  max-width: 780px;
+
+  margin: 0 auto;
+
+  font-size: clamp(44px, 5vw, 68px);
+
+}
+ 
+.ctaBox p {
+
+  max-width: 720px;
+
+  margin: 28px auto 38px;
+
+}
+ 
+.ctaBox dl {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 24px;
+
+  margin: 40px 0 0;
+
+  padding-top: 34px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.36);
+
+}
+ 
+.ctaBox dt {
+
+  color: rgba(255, 255, 255, 0.52);
+
+  font-family: monospace;
+
+  letter-spacing: 1.8px;
+
+  text-transform: uppercase;
+
+}
+ 
+.ctaBox dd {
+
+  margin: 12px 0 0;
+
+  font-size: 18px;
+
+  font-weight: 850;
+
+}
+ 
+@media (max-width: 980px) {
+
+  .header {
+
+    top: 12px;
+
+    padding: 0 14px;
+
+  }
+ 
+  .nav {
+
+    grid-template-columns: auto 44px;
+
+    min-height: 62px;
+
+    height: auto;
+
+    padding: 12px 16px;
+
+  }
+ 
+  .menuToggle {
+
+    justify-self: end;
+
+    display: grid;
+
+    gap: 5px;
+
+    width: 42px;
+
+    height: 42px;
+
+    place-content: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.04);
+
+  }
+ 
+  .menuToggle span {
+
+    width: 18px;
+
+    height: 2px;
+
+    border-radius: 999px;
+
+    background: #fff;
+
+  }
+ 
+  .links {
+
+    grid-column: 1 / -1;
+
+    display: grid;
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    gap: 0;
+
+    transition: max-height 260ms ease, padding 260ms ease;
+
+  }
+ 
+  .links[data-open="true"] {
+
+    max-height: 280px;
+
+    padding: 12px 0 4px;
+
+  }
+ 
+  .links a {
+
+    padding: 10px 0;
+
+  }
+ 
+  .navActions {
+
+    grid-column: 1 / -1;
+
+    justify-content: space-between;
+
+    margin-top: 8px;
+
+    font-size: 12px;
+
+  }
+ 
+  .subNav {
+
+    width: min(100%, calc(100% - 44px));
+
+    justify-content: flex-start;
+
+    gap: 28px;
+
+    overflow-x: auto;
+
+  }
+ 
+  .split,
+
+  .accelerateGrid,
+
+  .speakerGrid,
+
+  .timelineIntro,
+
+  .themeGrid {
+
+    grid-template-columns: 1fr;
+
+  }
+ 
+  .formatGrid,
+
+  .cardGrid {
+
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+ 
+  .timelineRow {
+
+    grid-template-columns: 90px 125px 1fr;
+
+  }
+ 
+  .agendaFilters {
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  }
+
+}
+ 
+@media (max-width: 640px) {
+
+  .container,
+
+  .split,
+
+  .ctaBox {
+
+    width: min(100% - 28px, 1120px);
+
+  }
+ 
+  .nav {
+
+    border-radius: 24px;
+
+  }
+ 
+  .hero {
+
+    min-height: 620px;
+
+    padding-top: 105px;
+
+  }
+ 
+  .hero h1 {
+
+    font-size: 46px;
+
+  }
+ 
+  .aboutSection,
+
+  .formatsSection,
+
+  .visionSection,
+
+  .gatewaySection,
+
+  .accelerateSection,
+
+  .timelineSection,
+
+  .themeSection,
+
+  .speakerSection,
+
+  .finalCta {
+
+    padding: 64px 0;
+
+  }
+ 
+  .formatsSection h2,
+
+  .gatewaySection h2,
+
+  .accelerateSection h2,
+
+  .timelineIntro h2,
+
+  .themeSection h2,
+
+  .speakerSection h2,
+
+  .ctaBox h2 {
+
+    font-size: 38px;
+
+    letter-spacing: -1px;
+
+  }
+ 
+  .formatGrid,
+
+  .cardGrid,
+
+  .dayTabs,
+
+  .ctaBox dl {
+
+    grid-template-columns: 1fr;
+
+  }
+ 
+  .formatCard img {
+
+    height: 190px;
+
+  }
+ 
+  .timeline {
+
+    padding: 24px 14px;
+
+  }
+ 
+  .timelineHead {
+
+    display: grid;
+
+    gap: 10px;
+
+  }
+ 
+  .timelineRow {
+
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+
+    padding: 24px 10px;
+
+  }
+ 
+  .agendaFilters {
+
+    grid-template-columns: 1fr;
+
+  }
+ 
+  .agendaFilters button {
+
+    width: 100%;
+
+  }
+ 
+  .sessionType {
+
+    order: -1;
+
+  }
+ 
+  .themeList button {
+
+    grid-template-columns: 46px 1fr;
+
+    min-height: 104px;
+
+    padding: 18px;
+
+  }
+ 
+  .themeList small {
+
+    grid-column: 2;
+
+  }
+ 
+  .themeList button::after {
+
+    display: none;
+
+  }
+ 
+  .themeList strong {
+
+    grid-column: 1 / -1;
+
+    font-size: 18px;
+
+  }
+ 
+  .focusCard {
+
+    min-height: auto;
+
+    padding: 30px 22px 22px;
+
+  }
+ 
+  .focusCard h3 {
+
+    font-size: 28px;
+
+  }
+ 
+  .focusCard img {
+
+    min-height: 190px;
+
+  }
+ 
+  .brochureCta,
+
+  .ctaBox {
+
+    display: grid;
+
+    padding: 34px 22px;
+
+  }
+ 
+  .actions,
+
+  .speakerGrid .actions {
+
+    justify-content: stretch;
+
+  }
+ 
+  .button {
+
+    width: 100%;
+
+  }
+
+}
+ 
+@media (hover: none) {
+
+  .dayTabs button:hover,
+
+  .trackTabs button:hover,
+
+  .timelineRow:hover,
+
+  .themeList button:hover,
+
+  .focusCard:hover {
+
+    transform: none;
+
+  }
+ 
+  .timelineRow:hover time,
+
+  .timelineRow:hover h3,
+
+  .timelineRow:hover .sessionType,
+
+  .themeList button:hover strong,
+
+  .themeList button:hover span {
+
+    transform: none;
+
+  }
+
+}
+ 
+@media (prefers-reduced-motion: reduce) {
+
+  .dayTabs button,
+
+  .trackTabs button,
+
+  .timelineRow,
+
+  .sessionType,
+
+  .timelineRow h3,
+
+  .timelineRow time,
+
+  .sessionSpeakers span,
+
+  .themeList button,
+
+  .themeList span,
+
+  .themeList strong,
+
+  .focusCard,
+
+  .focusCard img {
+
+    animation: none;
+
+    opacity: 1;
+
+    transform: none;
+
+    transition: none;
+
+  }
+
+}
+
+ 

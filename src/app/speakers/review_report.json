@@ -1,0 +1,62 @@
+[
+  {
+    "id": "shamsul-izhan",
+    "name": "Shamsul Izhan Bin Abdul Majid",
+    "designation": "Head",
+    "company": "National AI Office",
+    "imageFile": "Sam Majid.png",
+    "matched": false,
+    "reviewRequired": true,
+    "reviewReason": "Matched image file 'Sam Majid.png' with 'Shamsul Izhan Bin Abdul Majid'. Name spelling differs significantly. Please review."
+  },
+  {
+    "id": "rohit-churi",
+    "name": "Rohit Churi",
+    "designation": "Director Regional Head of Platforms",
+    "company": "CIMB",
+    "imageFile": null,
+    "matched": false,
+    "reviewRequired": true,
+    "reviewReason": "No matching image file found for 'Rohit Churi'."
+  },
+  {
+    "id": "shi-ying-lau",
+    "name": "Shi Ying Lau",
+    "designation": "Managing Partner",
+    "company": "Adaptive Capital Partners",
+    "imageFile": "Shi Yang Lau-Photoroom.png",
+    "matched": false,
+    "reviewRequired": true,
+    "reviewReason": "Matched image file 'Shi Yang Lau-Photoroom.png' with name 'Shi Ying Lau'. Spelling discrepancy (Yang vs Ying). Please review."
+  },
+  {
+    "id": "asif-muhammad-iqbal",
+    "name": "Asif Muhammad Iqbal",
+    "designation": "Independent Data and AI Advisor",
+    "company": "Malaysia",
+    "imageFile": null,
+    "matched": false,
+    "reviewRequired": true,
+    "reviewReason": "No matching image file found for 'Asif Muhammad Iqbal'."
+  },
+  {
+    "id": "adrian-chew",
+    "name": "Adrian Chew",
+    "designation": "Partner and Malaysia AI, Data and Technology Consulting Leader",
+    "company": "EY",
+    "imageFile": null,
+    "matched": false,
+    "reviewRequired": true,
+    "reviewReason": "No matching image file found for 'Adrian Chew'."
+  },
+  {
+    "id": "francis-chan",
+    "name": "Francis Chan",
+    "designation": "Past Speaker (Listed in image folder but not explicit C-Suite on Page 13)",
+    "company": "Malaysia",
+    "imageFile": "Francis Chan-Photoroom.png",
+    "matched": false,
+    "reviewRequired": true,
+    "reviewReason": "Image file 'Francis Chan-Photoroom.png' exists in folder but name is not found in the main C-Suite/Past Speakers list of the PDF. Please review."
+  }
+]

@@ -1,0 +1,21 @@
+Options -Indexes
+RewriteEngine On
+
+# Remove trailing slashes
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ $1 [L,R=301]
+
+# Clean URLs — map virtual paths to .php files
+RewriteRule ^speakers$       speakers.php   [L]
+RewriteRule ^agenda$         agenda.php     [L]
+RewriteRule ^sponsors$       sponsors.php        [L]
+RewriteRule ^partners$       partners.php        [L]
+RewriteRule ^register$       register.php        [L]
+RewriteRule ^enquire$        enquire.php    [L]
+RewriteRule ^knowledge-hub$              knowledge-hub.php         [L]
+RewriteRule ^knowledge-hub/([^/]+)$      knowledge-hub.php?slug=$1 [L,QSA]
+
+# Serve existing files/dirs as-is
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]

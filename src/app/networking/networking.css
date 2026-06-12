@@ -1,0 +1,36 @@
+/* ── Networking Pages — Hero Banner Spacing ─────────────────────────── */
+/*
+  The header is: fixed top-5 (20px) + nav h-[61px] + subnav h-[41px] = ~122px total.
+  We add extra breathing room so the hero title sits comfortably below the nav.
+
+  Applied to:
+    - .net-networking-hero  → /networking/ main overview page inline hero
+    - .net-inner-hero       → all 4 sub-pages (attendee-app, ai-matchmaking,
+                               photo-gallery, whatsapp-networking)
+*/
+
+/* ── Main networking overview page hero ── */
+.net-networking-hero {
+  padding-top: 140px;
+}
+
+/* ── Sub-page hero sections (net-inner-hero) ── */
+.net-inner-hero {
+  padding-top: 140px !important;
+}
+
+/* ── Tablet (≤ 980px) ── */
+@media (max-width: 980px) {
+  .net-networking-hero,
+  .net-inner-hero {
+    padding-top: 120px !important;
+  }
+}
+
+/* ── Mobile (≤ 640px) ── */
+@media (max-width: 640px) {
+  .net-networking-hero,
+  .net-inner-hero {
+    padding-top: 100px !important;
+  }
+}

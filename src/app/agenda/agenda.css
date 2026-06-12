@@ -1,0 +1,6 @@
+/* ── Agenda Page Layout Overrides ─────────────────────────── */
+
+.page-agenda .pt-\[200px\],
+.page-agenda .pt-\[220px\] {
+  padding-top: 0px !important;
+}
