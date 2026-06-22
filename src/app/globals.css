@@ -131,26 +131,7 @@ img {
   100% { transform: scale(1); }
 }
 
-@keyframes labelPop {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
 
-.animate-label-35 {
-  animation: labelPop 700ms ease-out 1250ms forwards;
-}
-.animate-label-20 {
-  animation: labelPop 700ms ease-out 1250ms forwards;
-}
-.animate-label-45 {
-  animation: labelPop 700ms ease-out 1250ms forwards;
-}
 
 /* Speakers Grid Micro-Interactions */
 .speaker-grid:hover .speaker-card-inner {

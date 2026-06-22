@@ -112,17 +112,17 @@ export function EcosystemSection() {
 
               {/* Data Labels - pops in only on scroll reveal */}
               <span className={`absolute z-4 text-[#020712] font-black text-[28px] top-[28%] left-[8%] select-none transition-all duration-300 ${
-                isVisible ? "animate-label-35 opacity-100 scale-100" : "opacity-0 scale-95"
+                isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}>
                 35%
               </span>
               <span className={`absolute z-4 text-[#020712] font-black text-[28px] top-[15%] right-[19%] select-none transition-all duration-300 ${
-                isVisible ? "animate-label-20 opacity-100 scale-100" : "opacity-0 scale-95"
+                isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}>
                 20%
               </span>
               <span className={`absolute z-4 text-[#020712] font-black text-[28px] bottom-[12%] right-[24%] select-none transition-all duration-300 ${
-                isVisible ? "animate-label-45 opacity-100 scale-100" : "opacity-0 scale-95"
+                isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}>
                 45%
               </span>
