@@ -75,6 +75,8 @@ const CATEGORY_HEX: Record<string, { color: string; rgb: string }> = {
   "Media Partners":        { color: "#00ceff", rgb: "0,206,255" },
   "Supporting Partner":    { color: "#9a6cff", rgb: "154,108,255" },
   "Supporting Partners":   { color: "#9a6cff", rgb: "154,108,255" },
+  "Global Innovation Partner":  { color: "#00ceff", rgb: "0,206,255" },
+  "Global Innovation Partners": { color: "#00ceff", rgb: "0,206,255" },
   "Community Partner":     { color: "#C0F43C", rgb: "192,244,60" },
   "Community Partners":    { color: "#C0F43C", rgb: "192,244,60" },
   default:                 { color: "#9a6cff", rgb: "154,108,255" },
@@ -296,33 +298,111 @@ function PartnerCTA() {
   );
 }
 
-function getCategoryTab(catName: string): "sponsors" | "media" | "associations" {
-  const name = catName.toLowerCase();
-  if (name.includes("media") || name.includes("press")) {
-    return "media";
-  }
-  if (name.includes("association") || name.includes("community") || name.includes("supporting") || name.includes("governing")) {
-    return "associations";
-  }
-  return "sponsors";
+/* ── Split section for supporting, innovation, association, and media ── */
+function PartnerSplitSection({
+  title,
+  desc,
+  dotColor,
+  dotRgb,
+  items,
+  onCardClick,
+}: {
+  title: string;
+  desc: string;
+  dotColor: string;
+  dotRgb: string;
+  items: SponsorItem[];
+  onCardClick: (item: SponsorItem) => void;
+}) {
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Section Header */}
+      <div className="flex flex-col gap-2">
+        <h3 className="m-0 text-white font-[850] text-[22px] flex items-center gap-2.5">
+          <span 
+            className="w-2.5 h-2.5 rounded-full" 
+            style={{ 
+              backgroundColor: dotColor,
+              boxShadow: `0 0 10px ${dotColor}`
+            }}
+          />
+          {title}
+        </h3>
+        <p className="m-0 text-white/50 text-[14px] leading-relaxed">
+          {desc}
+        </p>
+      </div>
+
+      {/* Grid or Available placeholder */}
+      {items.length > 0 ? (
+        <div className="grid grid-cols-3 gap-5 max-[1200px]:grid-cols-2 max-sm:grid-cols-1 w-full">
+          {items.map((item, i) => (
+            <SponsorCard
+              key={item.id ?? `${title}-${i}`}
+              item={item}
+              catColor={{ color: dotColor, rgb: dotRgb }}
+              onClick={() => onCardClick(item)}
+            />
+          ))}
+        </div>
+      ) : (
+        <a 
+          href="/malaysia/sponsorship-enquiry"
+          className="flex flex-col gap-1.5 p-6 border border-dashed rounded-[20px] transition-all duration-300 hover:bg-white/[0.02]"
+          style={{
+            borderColor: `rgba(${dotRgb}, 0.25)`,
+            background: `rgba(${dotRgb}, 0.02)`
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <span 
+              className="w-2 h-2 rounded-full animate-pulse" 
+              style={{ backgroundColor: dotColor }}
+            />
+            <span className="text-[14px] font-extrabold" style={{ color: dotColor }}>
+              Slots Available
+            </span>
+          </div>
+          <p className="m-0 text-white/40 text-[12px] leading-relaxed">
+            Secure this strategic partnership slot and align your brand with regional leaders.
+          </p>
+          <span className="text-[12px] font-bold text-white/70 hover:underline mt-2 flex items-center gap-1.5">
+            Enquire Now <span className="font-mono">→</span>
+          </span>
+        </a>
+      )}
+    </div>
+  );
 }
 
 /* ── Main component ─────────────────────────────────────────── */
-export function SponsorsGrid({ 
-  initialData, 
-  filterType = "all" 
-}: { 
-  initialData: { sponsors: Record<string, SponsorItem[]>; partners: Record<string, SponsorItem[]> };
-  filterType?: "all" | "sponsors" | "media" | "associations" 
-}) {
+export function SponsorsGrid() {
+  const [data, setData] = useState<ApiResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedSponsor, setSelectedSponsor] = useState<SponsorItem | null>(null);
+  const [activeTab, setActiveTab] = useState<"sponsors-exhibitors" | "associations-media">("sponsors-exhibitors");
+
+  useEffect(() => {
+    fetch("/malaysia/api/konfhub-sponsors")
+      .then((r) => r.json())
+      .then((json: ApiResponse) => {
+        if (json.error) {
+          setError(json.error);
+        } else {
+          setData(json);
+        }
+      })
+      .catch(() => setError("Failed to load sponsor data"))
+      .finally(() => setLoading(false));
+  }, []);
 
   /* merge sponsors + partners into one flat category map */
   const allCategories: Record<string, SponsorItem[]> = {};
 
-  if (initialData) {
+  if (data) {
     // Sponsors
-    for (const [cat, items] of Object.entries(initialData.sponsors ?? {})) {
+    for (const [cat, items] of Object.entries(data.sponsors ?? {})) {
       const mapped: SponsorItem[] = items.map((s: any) => ({
         id: s.id,
         name: s.name ?? "",
@@ -337,7 +417,7 @@ export function SponsorsGrid({
       allCategories[cat].push(...mapped);
     }
     // Partners
-    for (const [cat, items] of Object.entries(initialData.partners ?? {})) {
+    for (const [cat, items] of Object.entries(data.partners ?? {})) {
       const mapped: SponsorItem[] = items.map((p: any) => ({
         id: p.id,
         name: p.name ?? "",
@@ -353,6 +433,8 @@ export function SponsorsGrid({
     }
   }
 
+  const hasAnyData = Object.keys(allCategories).length > 0;
+
   // Sort categories by preferred order
   const sortedCategories = Object.keys(allCategories).sort((a, b) => {
     const ai = CATEGORY_ORDER.indexOf(a);
@@ -363,55 +445,169 @@ export function SponsorsGrid({
     return ai - bi;
   });
 
-  const filteredCategories = sortedCategories.filter((cat) => {
-    if (filterType === "all") return true;
-    const tab = getCategoryTab(cat);
-    return tab === filterType;
+  // Filter second tab categories out from the first tab
+  const getSlug = (cat: string) => cat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+  const supportingKeys = ["supporting-partner", "supporting-partners"];
+  const innovationKeys = ["global-innovation-partner", "global-innovation-partners"];
+  const associationKeys = ["association-partner", "association-partners"];
+  const mediaKeys = ["media-partner", "media-partners"];
+
+  const mainCategories = sortedCategories.filter(cat => {
+    const slug = getSlug(cat);
+    return !supportingKeys.includes(slug) &&
+           !innovationKeys.includes(slug) &&
+           !associationKeys.includes(slug) &&
+           !mediaKeys.includes(slug);
   });
 
-  const hasAnyData = filteredCategories.length > 0;
+  const supportingItems: SponsorItem[] = [];
+  const innovationItems: SponsorItem[] = [];
+  const associationItems: SponsorItem[] = [];
+  const mediaItems: SponsorItem[] = [];
+
+  sortedCategories.forEach(cat => {
+    const slug = getSlug(cat);
+    const items = allCategories[cat] || [];
+    if (supportingKeys.includes(slug)) {
+      supportingItems.push(...items);
+    } else if (innovationKeys.includes(slug)) {
+      innovationItems.push(...items);
+    } else if (associationKeys.includes(slug)) {
+      associationItems.push(...items);
+    } else if (mediaKeys.includes(slug)) {
+      mediaItems.push(...items);
+    }
+  });
 
   return (
     <section className="relative py-[92px] bg-[#020b1c]" id="sponsors">
       <div className="w-[min(1114px,calc(100%-48px))] mx-auto max-sm:w-[min(100%-32px,1114px)]">
 
         {/* Section intro */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <span className="inline-flex items-center mb-5 px-3.5 py-1.5 border border-cyan/30 rounded-full text-cyan font-mono text-[12px] uppercase tracking-[2px] bg-cyan/5">
             Our Ecosystem
           </span>
           <h2 className="font-[850] text-white leading-tight tracking-[-1.5px] text-[clamp(36px,4.5vw,54px)] max-w-[800px] mx-auto">
-            {filterType === "sponsors" ? (
-              <>Our <GradientText>Sponsors</GradientText></>
-            ) : filterType === "media" ? (
-              <>Media <GradientText>Partners</GradientText></>
-            ) : filterType === "associations" ? (
-              <>Association <GradientText>Partners</GradientText></>
-            ) : (
-              <>Sponsors &amp; <GradientText>Partners</GradientText></>
-            )}
+            Sponsors &amp; <GradientText>Partners</GradientText>
           </h2>
 
-          {!hasAnyData && (
+          {!loading && !hasAnyData && !error && (
             <p className="mt-4 max-w-[600px] mx-auto text-white/55 text-[16px] leading-relaxed">
-              {filterType === "media"
-                ? "Media partner announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026."
-                : filterType === "associations"
-                ? "Association partner announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026."
-                : "Sponsor announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026."}
+              Sponsor announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026.
             </p>
           )}
         </div>
 
-        {/* Dynamic sponsor categories from KonfHub */}
-        {hasAnyData && filteredCategories.map((cat) => (
-          <CategorySection 
-            key={cat} 
-            category={cat} 
-            items={allCategories[cat]} 
-            onCardClick={(item) => setSelectedSponsor(item)}
-          />
-        ))}
+        {/* Secondary Navigation Tab Bar (Finance2045 / Indonesia style) */}
+        {!loading && hasAnyData && (
+          <div className="flex justify-center mb-16 max-sm:mb-10">
+            <div className="inline-flex p-1 bg-[#050c1d]/90 border border-white/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+              <button
+                onClick={() => setActiveTab("sponsors-exhibitors")}
+                className={`px-8 py-3 max-sm:px-4 max-sm:py-2.5 rounded-full text-sm max-sm:text-xs font-extrabold transition-all duration-300 ${
+                  activeTab === "sponsors-exhibitors"
+                    ? "bg-[#C0F43C] text-black shadow-[0_0_20px_rgba(192,244,60,0.2)]"
+                    : "text-white/60 hover:text-white"
+                }`}
+              >
+                Sponsors &amp; Exhibitors
+              </button>
+              <button
+                onClick={() => setActiveTab("associations-media")}
+                className={`px-8 py-3 max-sm:px-4 max-sm:py-2.5 rounded-full text-sm max-sm:text-xs font-extrabold transition-all duration-300 ${
+                  activeTab === "associations-media"
+                    ? "bg-[#C0F43C] text-black shadow-[0_0_20px_rgba(192,244,60,0.2)]"
+                    : "text-white/60 hover:text-white"
+                }`}
+              >
+                Association Partners &amp; Media Partners
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Loading state */}
+        {loading && (
+          <div>
+            <LoadingSkeleton />
+            <LoadingSkeleton />
+          </div>
+        )}
+
+        {/* Error state */}
+        {!loading && error && (
+          <div className="text-center py-16">
+            <p className="text-white/40 text-[15px]">
+              Sponsor data temporarily unavailable. Please check back shortly.
+            </p>
+          </div>
+        )}
+
+        {/* Tab 1: Sponsors & Exhibitors Panel */}
+        {!loading && hasAnyData && activeTab === "sponsors-exhibitors" && (
+          <div className="flex flex-col gap-2">
+            {mainCategories.map((cat) => (
+              <CategorySection 
+                key={cat} 
+                category={cat} 
+                items={allCategories[cat]} 
+                onCardClick={(item) => setSelectedSponsor(item)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Tab 2: Association & Media Partners Panel (Indonesia style split sections) */}
+        {!loading && hasAnyData && activeTab === "associations-media" && (
+          <div className="grid grid-cols-1 gap-16 mt-4">
+            
+            {/* Supporting Partners */}
+            <PartnerSplitSection
+              title="Supporting Partners"
+              desc="Key government departments, research institutes, and regional councils collaborating to support Southeast Asia's AI ambition."
+              dotColor="#C0F43C"
+              dotRgb="192, 244, 60"
+              items={supportingItems}
+              onCardClick={(item) => setSelectedSponsor(item)}
+            />
+
+            {/* Global Innovation Partners */}
+            <PartnerSplitSection
+              title="Global Innovation Partners"
+              desc="International technology parks, sandbox spaces, and borderless accelerator networks driving startup growth."
+              dotColor="#00ceff"
+              dotRgb="0, 206, 255"
+              items={innovationItems}
+              onCardClick={(item) => setSelectedSponsor(item)}
+            />
+
+            {/* Association Partners */}
+            <PartnerSplitSection
+              title="Association Partners"
+              desc="Key government ministries, regional innovation boards, and industry councils steering regulatory framework adoption and national AI strategies."
+              dotColor="#18d4ff"
+              dotRgb="24, 212, 255"
+              items={associationItems}
+              onCardClick={(item) => setSelectedSponsor(item)}
+            />
+
+            {/* Media Partners */}
+            <PartnerSplitSection
+              title="Media Partners"
+              desc="Leading global and domestic tech outlets, digital broadcasts, and publications amplifying show highlights, insights, and market briefings."
+              dotColor="#00ceff"
+              dotRgb="0, 206, 255"
+              items={mediaItems}
+              onCardClick={(item) => setSelectedSponsor(item)}
+            />
+
+          </div>
+        )}
+
+        {/* Call to Action at bottom */}
+        {!loading && hasAnyData && <PartnerCTA />}
       </div>
 
       {/* SVG Filter to remove solid white backgrounds dynamically from sponsor logo images */}

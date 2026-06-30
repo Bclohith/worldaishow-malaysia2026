@@ -10,7 +10,6 @@ const navItems = ["Home", "Attend", "Agenda", "Speakers", "Partner", "Networking
 const subMenus: Record<string, string[]> = {
   Attend: ["Overview", "Delegate", "Sponsor", "Media Partner", "Association Partner"],
   Agenda: ["Overview", "The 2030 Vision", "Themes", "Call for Speakers"],
-  Partner: ["Overview", "Sponsors", "Media Partners", "Association Partners"],
   Networking: ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery", "WhatsApp Networking"],
 };
 
@@ -75,11 +74,6 @@ function getSubNavItemFromPath(pathname: string): string {
   if (cleanPath.startsWith("/networking/photo-gallery"))        return "Photo Gallery";
   if (cleanPath.startsWith("/networking/whatsapp-networking"))  return "WhatsApp Networking";
   if (cleanPath.startsWith("/networking"))                      return "Overview";
-  // Partners sub-pages
-  if (cleanPath.startsWith("/partners/sponsors"))    return "Sponsors";
-  if (cleanPath.startsWith("/partners/media"))       return "Media Partners";
-  if (cleanPath.startsWith("/partners/associations")) return "Association Partners";
-  if (cleanPath.startsWith("/partners"))             return "Overview";
   return "";
 }
 
@@ -110,35 +104,21 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
   }, [currentActiveItem]);
 
   useEffect(() => {
-    const EVENT_URL = "world-ai-show-malaysia26";
-    const API_BASE = "https://api.konfhub.com/event/public";
-
-    Promise.allSettled([
-      fetch(`${API_BASE}/${EVENT_URL}/entity/1`),
-      fetch(`${API_BASE}/${EVENT_URL}/entity/2`)
-    ])
-      .then(async ([sponsorsRes, partnersRes]) => {
-        let sponsorsData: any = { categorized: [] };
-        let partnersData: any = { categorized: [] };
-
-        if (sponsorsRes.status === "fulfilled" && sponsorsRes.value.ok) {
-          sponsorsData = await sponsorsRes.value.json();
-        }
-        if (partnersRes.status === "fulfilled" && partnersRes.value.ok) {
-          partnersData = await partnersRes.value.json();
-        }
-
-        const checkCategory = (data: any, name: string) => {
-          if (!data || !Array.isArray(data.categorized)) return false;
-          return data.categorized.some((cat: any) => {
-            const catName = (cat.category_name || "").toLowerCase();
-            return catName.includes(name.toLowerCase()) && cat.entity?.length > 0;
-          });
-        };
-
-        const hasExhibitors = checkCategory(sponsorsData, "exhibitor") || checkCategory(partnersData, "exhibitor");
-        const hasMedia = checkCategory(sponsorsData, "media") || checkCategory(partnersData, "media");
-        const hasAssociations = checkCategory(sponsorsData, "association") || checkCategory(partnersData, "association");
+    fetch("/malaysia/api/konfhub-sponsors")
+      .then((r) => r.json())
+      .then((json) => {
+        const hasExhibitors = Boolean(
+          (json.sponsors && (json.sponsors["Exhibitors"]?.length > 0 || json.sponsors["Exhibitor"]?.length > 0)) ||
+          (json.partners && (json.partners["Exhibitors"]?.length > 0 || json.partners["Exhibitor"]?.length > 0))
+        );
+        const hasMedia = Boolean(
+          (json.partners && (json.partners["Media Partners"]?.length > 0 || json.partners["Media Partner"]?.length > 0)) ||
+          (json.sponsors && (json.sponsors["Media Partners"]?.length > 0 || json.sponsors["Media Partner"]?.length > 0))
+        );
+        const hasAssociations = Boolean(
+          (json.partners && (json.partners["Association Partners"]?.length > 0 || json.partners["Association Partner"]?.length > 0)) ||
+          (json.sponsors && (json.sponsors["Association Partners"]?.length > 0 || json.sponsors["Association Partner"]?.length > 0))
+        );
 
         setAvailableSections({
           sponsors: true,
@@ -160,10 +140,18 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
     const hash = subItem.toLowerCase().replaceAll(" ", "-");
 
     if (parentItem === "Partner") {
-      if (hash === "overview") return "/malaysia/partners/";
-      if (hash === "sponsors") return "/malaysia/partners/sponsors/";
-      if (hash === "media-partners" || hash === "media") return "/malaysia/partners/media/";
-      if (hash === "association-partners" || hash === "associations") return "/malaysia/partners/associations/";
+      if (hash === "overview") return "/malaysia/partners";
+      if (hash === "sponsors") return "/malaysia/partners#sponsors";
+
+      if (hash === "exhibitors" && !availableSections.exhibitors) {
+        return "/malaysia/partners#sponsors";
+      }
+      if (hash === "media" && !availableSections.media) {
+        return "/malaysia/partners#sponsors";
+      }
+      if (hash === "associations" && !availableSections.associations) {
+        return "/malaysia/partners#sponsors";
+      }
     }
 
     return `${parentPath}#${hash}`;
