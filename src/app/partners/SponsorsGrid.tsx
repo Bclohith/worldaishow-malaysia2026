@@ -384,14 +384,95 @@ export function SponsorsGrid() {
   const [activeTab, setActiveTab] = useState<"sponsors-exhibitors" | "associations-media">("sponsors-exhibitors");
 
   useEffect(() => {
-    fetch("/malaysia/api/konfhub-sponsors")
-      .then((r) => r.json())
-      .then((json: ApiResponse) => {
-        if (json.error) {
-          setError(json.error);
-        } else {
-          setData(json);
+    const API_BASE = "https://api.konfhub.com/event/public/world-ai-show-malaysia26";
+    
+    Promise.all([
+      fetch(`${API_BASE}/entity/1`),
+      fetch(`${API_BASE}/entity/2`)
+    ])
+      .then(async ([sponsorsRes, partnersRes]) => {
+        let rawSponsors: any = { categorized: [] };
+        let rawPartners: any = { categorized: [] };
+
+        if (sponsorsRes.ok) {
+          rawSponsors = await sponsorsRes.json();
         }
+        if (partnersRes.ok) {
+          rawPartners = await partnersRes.json();
+        }
+
+        const sponsorsByCategory: Record<string, SponsorItem[]> = {};
+        const partnersByCategory: Record<string, SponsorItem[]> = {};
+
+        const cleanCategoryName = (catName: string) => {
+          const trimmed = catName.trim();
+          const prefix = "World AI Show";
+          if (trimmed.startsWith(prefix)) {
+            return trimmed.substring(prefix.length).replace(/^\s*\|\|\s*/, "").trim();
+          }
+          return trimmed;
+        };
+
+        // Process Sponsors
+        if (Array.isArray(rawSponsors?.categorized)) {
+          for (const cat of rawSponsors.categorized) {
+            const rawName = cat.category_name || "Sponsors";
+            const cleanName = cleanCategoryName(rawName);
+            const entities = Array.isArray(cat.entity) ? cat.entity : [];
+
+            if (entities.length > 0) {
+              if (!sponsorsByCategory[cleanName]) {
+                sponsorsByCategory[cleanName] = [];
+              }
+              sponsorsByCategory[cleanName].push(
+                ...entities.map((e: any) => ({
+                  id: e.id,
+                  name: e.entity_name || "",
+                  logo: e.image_url || "",
+                  website: e.website_url || "#",
+                  category: cleanName,
+                  description: e.description || "",
+                  location: e.location || "",
+                  booth: e.booth_number || "",
+                }))
+              );
+            }
+          }
+        }
+
+        // Process Partners
+        if (Array.isArray(rawPartners?.categorized)) {
+          for (const cat of rawPartners.categorized) {
+            const rawName = cat.category_name || "Partners";
+            const cleanName = cleanCategoryName(rawName);
+            const entities = Array.isArray(cat.entity) ? cat.entity : [];
+
+            if (entities.length > 0) {
+              if (!partnersByCategory[cleanName]) {
+                partnersByCategory[cleanName] = [];
+              }
+              partnersByCategory[cleanName].push(
+                ...entities.map((e: any) => ({
+                  id: e.id,
+                  name: e.entity_name || "",
+                  logo: e.image_url || "",
+                  website: e.website_url || "#",
+                  category: cleanName,
+                  description: e.description || "",
+                  location: e.location || "",
+                  booth: e.booth_number || "",
+                }))
+              );
+            }
+          }
+        }
+
+        setData({
+          sponsors: sponsorsByCategory,
+          partners: partnersByCategory,
+          rawSponsors: [],
+          rawPartners: []
+        });
       })
       .catch(() => setError("Failed to load sponsor data"))
       .finally(() => setLoading(false));
