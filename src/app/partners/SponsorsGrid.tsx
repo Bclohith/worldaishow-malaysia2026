@@ -296,8 +296,19 @@ function PartnerCTA() {
   );
 }
 
+function getCategoryTab(catName: string): "sponsors" | "media" | "associations" {
+  const name = catName.toLowerCase();
+  if (name.includes("media") || name.includes("press")) {
+    return "media";
+  }
+  if (name.includes("association") || name.includes("community") || name.includes("supporting") || name.includes("governing")) {
+    return "associations";
+  }
+  return "sponsors";
+}
+
 /* ── Main component ─────────────────────────────────────────── */
-export function SponsorsGrid() {
+export function SponsorsGrid({ filterType = "all" }: { filterType?: "all" | "sponsors" | "media" | "associations" }) {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -433,8 +444,6 @@ export function SponsorsGrid() {
     }
   }
 
-  const hasAnyData = Object.keys(allCategories).length > 0;
-
   // Sort categories by preferred order
   const sortedCategories = Object.keys(allCategories).sort((a, b) => {
     const ai = CATEGORY_ORDER.indexOf(a);
@@ -444,6 +453,14 @@ export function SponsorsGrid() {
     if (bi === -1) return -1;
     return ai - bi;
   });
+
+  const filteredCategories = sortedCategories.filter((cat) => {
+    if (filterType === "all") return true;
+    const tab = getCategoryTab(cat);
+    return tab === filterType;
+  });
+
+  const hasAnyData = filteredCategories.length > 0;
 
   return (
     <section className="relative py-[92px] bg-[#020b1c]" id="sponsors">
@@ -455,12 +472,24 @@ export function SponsorsGrid() {
             Our Ecosystem
           </span>
           <h2 className="font-[850] text-white leading-tight tracking-[-1.5px] text-[clamp(36px,4.5vw,54px)] max-w-[800px] mx-auto">
-            Sponsors &amp; <GradientText>Partners</GradientText>
+            {filterType === "sponsors" ? (
+              <>Our <GradientText>Sponsors</GradientText></>
+            ) : filterType === "media" ? (
+              <>Media <GradientText>Partners</GradientText></>
+            ) : filterType === "associations" ? (
+              <>Association <GradientText>Partners</GradientText></>
+            ) : (
+              <>Sponsors &amp; <GradientText>Partners</GradientText></>
+            )}
           </h2>
 
           {!loading && !hasAnyData && !error && (
             <p className="mt-4 max-w-[600px] mx-auto text-white/55 text-[16px] leading-relaxed">
-              Sponsor announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026.
+              {filterType === "media"
+                ? "Media partner announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026."
+                : filterType === "associations"
+                ? "Association partner announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026."
+                : "Sponsor announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026."}
             </p>
           )}
         </div>
@@ -483,7 +512,7 @@ export function SponsorsGrid() {
         )}
 
         {/* Dynamic sponsor categories from KonfHub */}
-        {!loading && hasAnyData && sortedCategories.map((cat) => (
+        {!loading && hasAnyData && filteredCategories.map((cat) => (
           <CategorySection 
             key={cat} 
             category={cat} 

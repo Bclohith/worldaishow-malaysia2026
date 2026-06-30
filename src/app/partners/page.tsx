@@ -16,9 +16,13 @@ const subNav = ["Overview", "Sponsors", "Exhibitors", "Media", "Associations"];
 export default function PartnersPage() {
   return (
     <main className="page-partners relative min-h-screen bg-gradient-to-b from-[#020814] via-[#031022] to-[#020a18] text-white font-space-grotesk overflow-x-hidden">
-      <Header activeItem="Partner" />
+      <Header 
+        activeItem="Partner" 
+        subNavItems={["Overview", "Sponsors", "Media Partners", "Association Partners"]} 
+        activeSubNavItem="Overview" 
+      />
       <PartnersHero />
-      <SponsorsGrid />
+      <SponsorsGrid filterType="all" />
       <PartnerShowcase />
       <FooterSection />
     </main>

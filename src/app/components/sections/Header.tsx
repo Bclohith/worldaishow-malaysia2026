@@ -10,6 +10,7 @@ const navItems = ["Home", "Attend", "Agenda", "Speakers", "Partner", "Networking
 const subMenus: Record<string, string[]> = {
   Attend: ["Overview", "Delegate", "Sponsor", "Media Partner", "Association Partner"],
   Agenda: ["Overview", "The 2030 Vision", "Themes", "Call for Speakers"],
+  Partner: ["Overview", "Sponsors", "Media Partners", "Association Partners"],
   Networking: ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery", "WhatsApp Networking"],
 };
 
@@ -74,6 +75,11 @@ function getSubNavItemFromPath(pathname: string): string {
   if (cleanPath.startsWith("/networking/photo-gallery"))        return "Photo Gallery";
   if (cleanPath.startsWith("/networking/whatsapp-networking"))  return "WhatsApp Networking";
   if (cleanPath.startsWith("/networking"))                      return "Overview";
+  // Partners sub-pages
+  if (cleanPath.startsWith("/partners/sponsors"))    return "Sponsors";
+  if (cleanPath.startsWith("/partners/media"))       return "Media Partners";
+  if (cleanPath.startsWith("/partners/associations")) return "Association Partners";
+  if (cleanPath.startsWith("/partners"))             return "Overview";
   return "";
 }
 
@@ -154,18 +160,10 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
     const hash = subItem.toLowerCase().replaceAll(" ", "-");
 
     if (parentItem === "Partner") {
-      if (hash === "overview") return "/malaysia/partners";
-      if (hash === "sponsors") return "/malaysia/partners#sponsors";
-
-      if (hash === "exhibitors" && !availableSections.exhibitors) {
-        return "/malaysia/partners#sponsors";
-      }
-      if (hash === "media" && !availableSections.media) {
-        return "/malaysia/partners#sponsors";
-      }
-      if (hash === "associations" && !availableSections.associations) {
-        return "/malaysia/partners#sponsors";
-      }
+      if (hash === "overview") return "/malaysia/partners/";
+      if (hash === "sponsors") return "/malaysia/partners/sponsors/";
+      if (hash === "media-partners" || hash === "media") return "/malaysia/partners/media/";
+      if (hash === "association-partners" || hash === "associations") return "/malaysia/partners/associations/";
     }
 
     return `${parentPath}#${hash}`;
