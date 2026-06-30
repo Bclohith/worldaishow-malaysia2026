@@ -104,21 +104,35 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
   }, [currentActiveItem]);
 
   useEffect(() => {
-    fetch("/malaysia/api/konfhub-sponsors")
-      .then((r) => r.json())
-      .then((json) => {
-        const hasExhibitors = Boolean(
-          (json.sponsors && (json.sponsors["Exhibitors"]?.length > 0 || json.sponsors["Exhibitor"]?.length > 0)) ||
-          (json.partners && (json.partners["Exhibitors"]?.length > 0 || json.partners["Exhibitor"]?.length > 0))
-        );
-        const hasMedia = Boolean(
-          (json.partners && (json.partners["Media Partners"]?.length > 0 || json.partners["Media Partner"]?.length > 0)) ||
-          (json.sponsors && (json.sponsors["Media Partners"]?.length > 0 || json.sponsors["Media Partner"]?.length > 0))
-        );
-        const hasAssociations = Boolean(
-          (json.partners && (json.partners["Association Partners"]?.length > 0 || json.partners["Association Partner"]?.length > 0)) ||
-          (json.sponsors && (json.sponsors["Association Partners"]?.length > 0 || json.sponsors["Association Partner"]?.length > 0))
-        );
+    const EVENT_URL = "world-ai-show-malaysia26";
+    const API_BASE = "https://api.konfhub.com/event/public";
+
+    Promise.allSettled([
+      fetch(`${API_BASE}/${EVENT_URL}/entity/1`),
+      fetch(`${API_BASE}/${EVENT_URL}/entity/2`)
+    ])
+      .then(async ([sponsorsRes, partnersRes]) => {
+        let sponsorsData: any = { categorized: [] };
+        let partnersData: any = { categorized: [] };
+
+        if (sponsorsRes.status === "fulfilled" && sponsorsRes.value.ok) {
+          sponsorsData = await sponsorsRes.value.json();
+        }
+        if (partnersRes.status === "fulfilled" && partnersRes.value.ok) {
+          partnersData = await partnersRes.value.json();
+        }
+
+        const checkCategory = (data: any, name: string) => {
+          if (!data || !Array.isArray(data.categorized)) return false;
+          return data.categorized.some((cat: any) => {
+            const catName = (cat.category_name || "").toLowerCase();
+            return catName.includes(name.toLowerCase()) && cat.entity?.length > 0;
+          });
+        };
+
+        const hasExhibitors = checkCategory(sponsorsData, "exhibitor") || checkCategory(partnersData, "exhibitor");
+        const hasMedia = checkCategory(sponsorsData, "media") || checkCategory(partnersData, "media");
+        const hasAssociations = checkCategory(sponsorsData, "association") || checkCategory(partnersData, "association");
 
         setAvailableSections({
           sponsors: true,

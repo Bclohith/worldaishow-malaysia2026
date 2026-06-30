@@ -102,9 +102,9 @@ export default function NetworkingPage() {
   return (
     <main className="page-networking relative min-h-screen bg-gradient-to-b from-[#020814] via-[#031022] to-[#020a18] text-white font-space-grotesk overflow-x-hidden">
       <Header activeItem="Networking" subNavItems={subNav} activeSubNavItem="Overview" />
-      
+
       {/* ── Section 1: Hero ── */}
-      <section 
+      <section
         className="relative pt-[220px] pb-[120px] overflow-hidden bg-cover bg-center flex items-center min-h-[700px] max-md:pt-[170px]"
         style={{
           backgroundImage: `linear-gradient(90deg, rgba(2, 7, 19, 0.96) 0%, rgba(2, 7, 19, 0.8) 45%, rgba(2, 7, 19, 0.25) 100%), url('/malaysia/images/networking/networking-hero-bg.webp')`
@@ -120,7 +120,7 @@ export default function NetworkingPage() {
             <p className="m-0 mt-6 text-white/70 text-[18px] leading-relaxed max-sm:text-[15px]">
               400+ of Asia-Pacific&apos;s most senior AI decision-makers. One room. Smart tools built to ensure every handshake, every conversation, and every connection you make is worth your time.
             </p>
-            
+
             {/* Quick links buttons */}
             <div className="flex items-center gap-4 mt-9 max-sm:flex-col max-sm:items-stretch">
               <a
@@ -167,7 +167,7 @@ export default function NetworkingPage() {
       {/* ── Section 2: The Four Powerful Ways to Connect ── */}
       <section className="relative py-24 bg-[#030b19]">
         <div className="w-[min(1114px,calc(100%-48px))] mx-auto">
-          
+
           {/* Header */}
           <div className="text-center mb-16 max-w-[760px] mx-auto">
             <span className="px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[2px] bg-[#18d4ff]/10 text-[#18d4ff] border border-[#18d4ff]/20 mb-5 inline-block">
@@ -192,14 +192,14 @@ export default function NetworkingPage() {
                 <div>
                   <div className="flex justify-between items-center mb-6">
                     <span className={`w-12 h-12 rounded-2xl flex items-center justify-center ${way.badgeBg}`}>
-                      <img 
-                        src="/malaysia/images/networking/Icon.webp" 
-                        alt="Icon" 
-                        className="w-[18px] h-[18px] object-contain brightness-0 invert-0 select-none" 
+                      <img
+                        src="/malaysia/images/networking/Icon.webp"
+                        alt="Icon"
+                        className="w-[18px] h-[18px] object-contain brightness-0 invert-0 select-none"
                       />
                     </span>
                   </div>
-                  
+
                   <h3 className={`m-0 text-white font-extrabold text-[19px] tracking-tight ${way.hoverTitle} transition-colors`}>
                     {way.title}
                   </h3>
@@ -207,7 +207,7 @@ export default function NetworkingPage() {
                     {way.desc}
                   </p>
                 </div>
-                
+
                 <div className="mt-8 border-t border-white/10 pt-4">
                   <span className={`inline-flex items-center gap-1.5 text-[14px] font-bold transition-all ${way.actionColor}`}>
                     {way.action} <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">➔</span>
@@ -223,24 +223,24 @@ export default function NetworkingPage() {
       {/* ── Section 3: 400+ Leaders. One Room. ── */}
       <section className="relative py-24 bg-[#020814]">
         <div className="w-[min(1114px,calc(100%-48px))] mx-auto">
-          
+
           <div className="grid grid-cols-[1.1fr_0.9fr] gap-12 max-[980px]:grid-cols-1 max-[980px]:gap-12">
-            
+
             {/* Left Column: Heading and Roles List */}
             <div className="flex flex-col">
               <span className="text-white/40 text-[13px] font-bold font-mono tracking-[2px] uppercase mb-3 block">
                 In the Room
               </span>
               <h2 className="font-[850] text-white leading-[1.1] tracking-[-2px] text-[clamp(36px,4.5vw,52px)] m-0 mb-8">
-                400+ Leaders.<br />
+                1000+ Leaders.<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ceff] to-[#C0F43C]">One Room.</span>
               </h2>
-              
+
               {/* Roles List */}
               <div className="flex flex-col gap-3">
                 {roles.map((role) => (
-                  <div 
-                    key={role} 
+                  <div
+                    key={role}
                     className="px-6 py-4 text-[14.5px] font-bold text-white/80 border border-[#2a2c4e] rounded-[14px] bg-[#050c1c]/10 hover:border-cyan/30 hover:bg-[#050c1c]/30 hover:text-white transition-all duration-200"
                   >
                     {role}
@@ -251,7 +251,7 @@ export default function NetworkingPage() {
 
             {/* Right Column: Industries represented & Starts Before Day One panel */}
             <div className="flex flex-col gap-8">
-              
+
               {/* Industry Represented tags (No outer panel border, directly on page background) */}
               <div>
                 <h3 className="m-0 mb-5 text-white font-extrabold text-[18px] tracking-tight">
@@ -274,7 +274,7 @@ export default function NetworkingPage() {
               </div>
 
               {/* Starts Before Day One Panel */}
-              <div 
+              <div
                 className="p-8 border border-[#926DFF]/30 rounded-[24px] shadow-[0_12px_32px_rgba(146,109,255,0.04)] relative overflow-hidden group hover:border-[#926DFF]/50 transition-all duration-300"
                 style={{
                   background: "linear-gradient(135deg, rgba(146, 109, 255, 0.12) 0%, rgba(146, 109, 255, 0.02) 100%), #040b1e"
@@ -300,7 +300,7 @@ export default function NetworkingPage() {
       <section className="relative py-24 bg-[#030b19] border-t border-white/5">
         <div className="w-[min(820px,calc(100%-48px))] mx-auto relative overflow-hidden p-12 border border-[#C0F43C]/20 rounded-[28px] bg-gradient-to-br from-[#040d1f] to-[#020713] text-center shadow-[0_24px_62px_rgba(0,0,0,0.5)] max-sm:p-8">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#C0F43C]/60 to-transparent"></div>
-          
+
           <h2 className="font-[850] text-white leading-tight tracking-[-1.5px] text-[clamp(28px,3.5vw,38px)] m-0">
             One Pass. <GradientText>Every Connection.</GradientText>
           </h2>

@@ -304,14 +304,94 @@ export function SponsorsGrid() {
   const [selectedSponsor, setSelectedSponsor] = useState<SponsorItem | null>(null);
 
   useEffect(() => {
-    fetch("/malaysia/api/konfhub-sponsors")
-      .then((r) => r.json())
-      .then((json: ApiResponse) => {
-        if (json.error) {
-          setError(json.error);
-        } else {
-          setData(json);
+    const EVENT_URL = "world-ai-show-malaysia26";
+    const API_BASE = "https://api.konfhub.com/event/public";
+
+    Promise.allSettled([
+      fetch(`${API_BASE}/${EVENT_URL}/entity/1`),
+      fetch(`${API_BASE}/${EVENT_URL}/entity/2`)
+    ])
+      .then(async ([sponsorsRes, partnersRes]) => {
+        let sponsorsData: any = { categorized: [] };
+        let partnersData: any = { categorized: [] };
+
+        if (sponsorsRes.status === "fulfilled" && sponsorsRes.value.ok) {
+          sponsorsData = await sponsorsRes.value.json();
         }
+        if (partnersRes.status === "fulfilled" && partnersRes.value.ok) {
+          partnersData = await partnersRes.value.json();
+        }
+
+        const cleanCategoryName = (catName: string) => {
+          const trimmed = catName.trim();
+          const prefix = "World AI Show";
+          if (trimmed.startsWith(prefix)) {
+            return trimmed.substring(prefix.length).replace(/^\s*\|\|\s*/, "").trim();
+          }
+          return trimmed;
+        };
+
+        const sponsorsByCategory: Record<string, any[]> = {};
+        const partnersByCategory: Record<string, any[]> = {};
+
+        // Format sponsors (entity type 1)
+        if (Array.isArray(sponsorsData?.categorized)) {
+          for (const cat of sponsorsData.categorized) {
+            const rawName = cat.category_name || "Sponsors";
+            const cleanName = cleanCategoryName(rawName);
+            const entities = Array.isArray(cat.entity) ? cat.entity : [];
+
+            if (entities.length > 0) {
+              if (!sponsorsByCategory[cleanName]) {
+                sponsorsByCategory[cleanName] = [];
+              }
+              sponsorsByCategory[cleanName].push(
+                ...entities.map((e: any) => ({
+                  id: e.id,
+                  name: e.entity_name || "",
+                  logo: e.image_url || "",
+                  website: e.website_url || "#",
+                  description: e.description || "",
+                  location: e.location || "",
+                  booth: e.booth_number || "",
+                }))
+              );
+            }
+          }
+        }
+
+        // Format partners (entity type 2)
+        if (Array.isArray(partnersData?.categorized)) {
+          for (const cat of partnersData.categorized) {
+            const rawName = cat.category_name || "Partners";
+            const cleanName = cleanCategoryName(rawName);
+            const entities = Array.isArray(cat.entity) ? cat.entity : [];
+
+            if (entities.length > 0) {
+              if (!partnersByCategory[cleanName]) {
+                partnersByCategory[cleanName] = [];
+              }
+              partnersByCategory[cleanName].push(
+                ...entities.map((e: any) => ({
+                  id: e.id,
+                  name: e.entity_name || "",
+                  logo: e.image_url || "",
+                  website: e.website_url || "#",
+                  description: e.description || "",
+                  location: e.location || "",
+                  booth: e.booth_number || "",
+                }))
+              );
+            }
+          }
+        }
+
+        setData({
+          sponsors: sponsorsByCategory,
+          partners: partnersByCategory,
+          rawSponsors: sponsorsData?.categorized ?? [],
+          rawPartners: partnersData?.categorized ?? [],
+        });
       })
       .catch(() => setError("Failed to load sponsor data"))
       .finally(() => setLoading(false));
