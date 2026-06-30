@@ -308,112 +308,21 @@ function getCategoryTab(catName: string): "sponsors" | "media" | "associations" 
 }
 
 /* ── Main component ─────────────────────────────────────────── */
-export function SponsorsGrid({ filterType = "all" }: { filterType?: "all" | "sponsors" | "media" | "associations" }) {
-  const [data, setData] = useState<ApiResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export function SponsorsGrid({ 
+  initialData, 
+  filterType = "all" 
+}: { 
+  initialData: { sponsors: Record<string, SponsorItem[]>; partners: Record<string, SponsorItem[]> };
+  filterType?: "all" | "sponsors" | "media" | "associations" 
+}) {
   const [selectedSponsor, setSelectedSponsor] = useState<SponsorItem | null>(null);
-
-  useEffect(() => {
-    const EVENT_URL = "world-ai-show-malaysia26";
-    const API_BASE = "https://api.konfhub.com/event/public";
-
-    Promise.allSettled([
-      fetch(`${API_BASE}/${EVENT_URL}/entity/1`),
-      fetch(`${API_BASE}/${EVENT_URL}/entity/2`)
-    ])
-      .then(async ([sponsorsRes, partnersRes]) => {
-        let sponsorsData: any = { categorized: [] };
-        let partnersData: any = { categorized: [] };
-
-        if (sponsorsRes.status === "fulfilled" && sponsorsRes.value.ok) {
-          sponsorsData = await sponsorsRes.value.json();
-        }
-        if (partnersRes.status === "fulfilled" && partnersRes.value.ok) {
-          partnersData = await partnersRes.value.json();
-        }
-
-        const cleanCategoryName = (catName: string) => {
-          const trimmed = catName.trim();
-          const prefix = "World AI Show";
-          if (trimmed.startsWith(prefix)) {
-            return trimmed.substring(prefix.length).replace(/^\s*\|\|\s*/, "").trim();
-          }
-          return trimmed;
-        };
-
-        const sponsorsByCategory: Record<string, any[]> = {};
-        const partnersByCategory: Record<string, any[]> = {};
-
-        // Format sponsors (entity type 1)
-        if (Array.isArray(sponsorsData?.categorized)) {
-          for (const cat of sponsorsData.categorized) {
-            const rawName = cat.category_name || "Sponsors";
-            const cleanName = cleanCategoryName(rawName);
-            const entities = Array.isArray(cat.entity) ? cat.entity : [];
-
-            if (entities.length > 0) {
-              if (!sponsorsByCategory[cleanName]) {
-                sponsorsByCategory[cleanName] = [];
-              }
-              sponsorsByCategory[cleanName].push(
-                ...entities.map((e: any) => ({
-                  id: e.id,
-                  name: e.entity_name || "",
-                  logo: e.image_url || "",
-                  website: e.website_url || "#",
-                  description: e.description || "",
-                  location: e.location || "",
-                  booth: e.booth_number || "",
-                }))
-              );
-            }
-          }
-        }
-
-        // Format partners (entity type 2)
-        if (Array.isArray(partnersData?.categorized)) {
-          for (const cat of partnersData.categorized) {
-            const rawName = cat.category_name || "Partners";
-            const cleanName = cleanCategoryName(rawName);
-            const entities = Array.isArray(cat.entity) ? cat.entity : [];
-
-            if (entities.length > 0) {
-              if (!partnersByCategory[cleanName]) {
-                partnersByCategory[cleanName] = [];
-              }
-              partnersByCategory[cleanName].push(
-                ...entities.map((e: any) => ({
-                  id: e.id,
-                  name: e.entity_name || "",
-                  logo: e.image_url || "",
-                  website: e.website_url || "#",
-                  description: e.description || "",
-                  location: e.location || "",
-                  booth: e.booth_number || "",
-                }))
-              );
-            }
-          }
-        }
-
-        setData({
-          sponsors: sponsorsByCategory,
-          partners: partnersByCategory,
-          rawSponsors: sponsorsData?.categorized ?? [],
-          rawPartners: partnersData?.categorized ?? [],
-        });
-      })
-      .catch(() => setError("Failed to load sponsor data"))
-      .finally(() => setLoading(false));
-  }, []);
 
   /* merge sponsors + partners into one flat category map */
   const allCategories: Record<string, SponsorItem[]> = {};
 
-  if (data) {
+  if (initialData) {
     // Sponsors
-    for (const [cat, items] of Object.entries(data.sponsors ?? {})) {
+    for (const [cat, items] of Object.entries(initialData.sponsors ?? {})) {
       const mapped: SponsorItem[] = items.map((s: any) => ({
         id: s.id,
         name: s.name ?? "",
@@ -428,7 +337,7 @@ export function SponsorsGrid({ filterType = "all" }: { filterType?: "all" | "spo
       allCategories[cat].push(...mapped);
     }
     // Partners
-    for (const [cat, items] of Object.entries(data.partners ?? {})) {
+    for (const [cat, items] of Object.entries(initialData.partners ?? {})) {
       const mapped: SponsorItem[] = items.map((p: any) => ({
         id: p.id,
         name: p.name ?? "",
@@ -483,7 +392,7 @@ export function SponsorsGrid({ filterType = "all" }: { filterType?: "all" | "spo
             )}
           </h2>
 
-          {!loading && !hasAnyData && !error && (
+          {!hasAnyData && (
             <p className="mt-4 max-w-[600px] mx-auto text-white/55 text-[16px] leading-relaxed">
               {filterType === "media"
                 ? "Media partner announcements coming soon. Contact us to secure your spot at World AI Show Malaysia 2026."
@@ -494,25 +403,8 @@ export function SponsorsGrid({ filterType = "all" }: { filterType?: "all" | "spo
           )}
         </div>
 
-        {/* Loading state */}
-        {loading && (
-          <div>
-            <LoadingSkeleton />
-            <LoadingSkeleton />
-          </div>
-        )}
-
-        {/* Error state */}
-        {!loading && error && (
-          <div className="text-center py-16">
-            <p className="text-white/40 text-[15px]">
-              Sponsor data temporarily unavailable. Please check back shortly.
-            </p>
-          </div>
-        )}
-
         {/* Dynamic sponsor categories from KonfHub */}
-        {!loading && hasAnyData && filteredCategories.map((cat) => (
+        {hasAnyData && filteredCategories.map((cat) => (
           <CategorySection 
             key={cat} 
             category={cat} 

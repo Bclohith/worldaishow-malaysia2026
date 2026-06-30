@@ -11,7 +11,11 @@ export const metadata: Metadata = {
     "Meet our association, community, and support partners at World AI Show Malaysia 2026. Discover ecosystem collaboration opportunities.",
 };
 
-export default function AssociationsPage() {
+import { getKonfHubSponsors } from "../../api/konfhub-sponsors/route";
+
+export default async function AssociationsPage() {
+  const sponsorsData = await getKonfHubSponsors();
+
   return (
     <main className="page-partners relative min-h-screen bg-gradient-to-b from-[#020814] via-[#031022] to-[#020a18] text-white font-space-grotesk overflow-x-hidden">
       <Header 
@@ -20,7 +24,7 @@ export default function AssociationsPage() {
         activeSubNavItem="Association Partners" 
       />
       <PartnersHero />
-      <SponsorsGrid filterType="associations" />
+      <SponsorsGrid initialData={sponsorsData} filterType="associations" />
       <PartnerShowcase />
       <FooterSection />
     </main>
