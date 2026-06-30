@@ -86,10 +86,7 @@ function getCategoryColor(cat: string) {
   return CATEGORY_HEX[cat] ?? CATEGORY_HEX.default;
 }
 
-const LOCAL_LOGO_OVERLAYS: Record<string, string> = {
-  "Data Dog": "/malaysia/images/sponsors/gold/datadog.webp",
-  "Magure": "/malaysia/images/sponsors/gold/Magure.webp",
-};
+const LOCAL_LOGO_OVERLAYS: Record<string, string> = {};
 
 /* ── Single sponsor card ────────────────────────────────────── */
 function SponsorCard({
