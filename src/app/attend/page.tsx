@@ -687,7 +687,7 @@ export function AttendDelegateSection() {
 
               <div className="mt-8">
                 <a
-                  href="https://konfhub.com/checkout/world-ai-show-malaysia26?ticketId=97610%7C1%3B&selectedCode=MKTWEBSITE"
+                  href="https://konfhub.com/checkout/world-ai-show-malaysia26?ticketId=97610%7C1%3B"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center w-full px-[32px] py-[15px] rounded-full text-[15px] font-extrabold text-[#06111f] [color:#06111f!important] bg-[#C0F43C] shadow-[0_8px_24px_rgba(192,244,60,0.25)] hover:shadow-[0_12px_32px_rgba(192,244,60,0.4)] transition-all duration-200 cursor-pointer"
