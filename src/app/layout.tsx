@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Orbitron } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ScrollToTop } from "./components/ScrollToTop";
 
@@ -7,12 +7,6 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-space-grotesk",
-});
-
-const orbitron = Orbitron({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-orbitron",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +21,6 @@ export const metadata: Metadata = {
     description:
       "Where Malaysia's AI decisions get made. Invitation-only, Kuala Lumpur.",
     type: "website",
-    url: "https://worldaishow.com/malaysia",
   },
 };
 
@@ -37,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${orbitron.variable} h-full antialiased`}>
+    <html lang="en" className={`${spaceGrotesk.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-space-grotesk bg-bg text-text">
         {children}
         <ScrollToTop />
