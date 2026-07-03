@@ -146,7 +146,7 @@ export default function NetworkingPage() {
           <div className="grid grid-cols-3 gap-8 max-md:grid-cols-2 max-sm:grid-cols-1 text-center divide-x divide-white/10">
             <div className="flex flex-col">
               <span className="text-[44px] font-[900] text-[#C0F43C] tracking-tight">
-                <Counter end={1000} suffix="+" />
+                <Counter end={700} suffix="+" />
               </span>
               <span className="text-[12.5px] text-white/50 uppercase tracking-widest font-mono font-bold mt-1.5">Senior Attendees</span>
             </div>
@@ -232,7 +232,7 @@ export default function NetworkingPage() {
                 In the Room
               </span>
               <h2 className="font-[850] text-white leading-[1.1] tracking-[-2px] text-[clamp(36px,4.5vw,52px)] m-0 mb-8">
-                1000+ Leaders.<br />
+                700+ Decision Makers.<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ceff] to-[#C0F43C]">One Room.</span>
               </h2>
 

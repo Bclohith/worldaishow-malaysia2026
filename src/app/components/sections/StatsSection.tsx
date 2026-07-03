@@ -59,9 +59,9 @@ function Counter({ end, suffix = "", duration = 1500 }: CounterProps) {
 const statsData = [
   {
     icon: "/malaysia/icons/stats/1.svg",
-    number: 1000,
+    number: 700,
     suffix: "+",
-    label: "Business and Tech Leaders",
+    label: "Pre Qualified Decision Makers",
     index: "01",
   },
   {
