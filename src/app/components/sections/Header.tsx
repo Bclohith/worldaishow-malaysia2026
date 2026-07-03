@@ -208,7 +208,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
           <Logo />
 
           {/* Desktop Navigation Links */}
-          <div className="flex justify-center gap-[31px] text-[14px] text-white/58 max-[980px]:hidden h-full items-center">
+          <div className="flex justify-center gap-[31px] text-[15px] font-bold tracking-[1.2px] uppercase text-white/58 max-[980px]:hidden h-full items-center">
             {navItems.map((item) => {
               const isActive = item === currentActiveItem;
               return (
@@ -219,7 +219,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
                   <a
                     href={getNavHref(item)}
                     className={`transition-colors duration-200 hover:text-white ${
-                      isActive ? "text-[#c0f43c] font-bold" : ""
+                      isActive ? "text-[#c0f43c] font-extrabold" : ""
                     }`}
                   >
                     {item}
@@ -233,15 +233,15 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-[26px] whitespace-nowrap text-[14px] font-semibold max-[980px]:justify-end max-[980px]:mr-2">
+          <div className="flex items-center gap-[26px] whitespace-nowrap text-[15px] font-bold tracking-[1.2px] uppercase max-[980px]:justify-end max-[980px]:mr-2">
             <a
               href="/malaysia/sponsorship-enquiry"
-              className="transition-colors duration-200 hover:text-cyan max-sm:hidden"
+              className="transition-colors duration-200 hover:text-cyan max-sm:hidden normal-case tracking-normal font-semibold text-[14px]"
             >
               Sponsor Enquiry
             </a>
             <a
-              className="px-[23px] py-[15px] rounded-full !text-black [color:#06111f!important] bg-[#C0F43C] shadow-[0_0_24px_rgba(192,244,60,0.24)] hover:shadow-[0_0_32px_rgba(192,244,60,0.4)] transition-all duration-200 hover:-translate-y-0.5 max-sm:px-3.5 max-sm:py-3"
+              className="px-[23px] py-[15px] rounded-full !text-black [color:#06111f!important] bg-[#C0F43C] shadow-[0_0_24px_rgba(192,244,60,0.24)] hover:shadow-[0_0_32px_rgba(192,244,60,0.4)] transition-all duration-200 hover:-translate-y-0.5 max-sm:px-3.5 max-sm:py-3 normal-case font-extrabold text-[14px] tracking-normal"
               href="/malaysia/attend/delegate#passes"
             >
               Get Your Pass
@@ -323,8 +323,8 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
                       <a
                         href={getNavHref(item)}
                         onClick={() => handleMobileNavClick(item)}
-                        className={`hover:text-white transition-all duration-200 ${
-                          item === currentActiveItem ? "text-[#c0f43c] font-bold" : "text-white/70"
+                        className={`hover:text-white transition-all duration-200 uppercase tracking-[1px] font-bold ${
+                          item === currentActiveItem ? "text-[#c0f43c]" : "text-white/70"
                         }`}
                       >
                         {item}

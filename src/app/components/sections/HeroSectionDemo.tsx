@@ -314,20 +314,20 @@ export function HeroSectionDemo() {
           
           {/* Column 1: Dates */}
           <div className="pr-6 border-r border-white/27 text-center max-[980px]:border-r-0 max-[980px]:pr-0 max-sm:w-full max-sm:pb-4 max-sm:border-b max-sm:border-white/20">
-            <strong className="block text-[30px] font-[850] text-white leading-none">
+            <strong className="block text-[36px] font-[850] text-white leading-none max-sm:text-[30px]">
               9-<GradientText>10</GradientText>
             </strong>
-            <span className="block mt-2 text-[14px] text-white/70 uppercase tracking-[1px]">
+            <span className="block mt-2.5 text-[15px] font-bold text-white/80 uppercase tracking-[1.5px]">
               Sep 2026
             </span>
           </div>
 
           {/* Column 2: Venue */}
           <div className="text-left max-[980px]:text-center max-sm:w-full">
-            <strong className="block text-[30px] font-[850] text-white leading-none">
+            <strong className="block text-[36px] font-[850] text-white leading-none max-sm:text-[30px]">
               DoubleTree by <GradientText>Hilton</GradientText>
             </strong>
-            <span className="block mt-2 text-[14px] text-white/70 uppercase tracking-[1px]">
+            <span className="block mt-2.5 text-[15px] font-bold text-white/80 uppercase tracking-[1.5px]">
               Kuala Lumpur, Malaysia
             </span>
           </div>
