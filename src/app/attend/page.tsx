@@ -442,7 +442,7 @@ export function AttendOverviewSection() {
       {/* Hero Section */}
       <section
         className="relative min-h-[720px] -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:min-h-[690px] max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
-        style={{ backgroundImage: 'linear-gradient(90deg, rgba(2, 7, 19, 0.9) 0%, rgba(2, 7, 19, 0.7) 40%, rgba(2, 7, 19, 0.25) 100%), url("/malaysia/images/Attend/Attend-Hero-bg.webp")' }}
+        style={{ backgroundImage: 'url("/malaysia/images/Attend/Attend-Hero-bg.webp")' }}
         id="overview"
       >
         <div className="heroBackdrop absolute bottom-0 right-[-3%] w-[58%] h-[84%] opacity-0 pointer-events-none" />
@@ -514,7 +514,7 @@ export function AttendDelegateSection() {
       {/* Hero Section */}
       <section
         className="relative -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
-        style={{ backgroundImage: 'linear-gradient(90deg, rgba(2, 7, 19, 0.9) 0%, rgba(2, 7, 19, 0.7) 40%, rgba(2, 7, 19, 0.25) 100%), url("/malaysia/images/Attend/Delegates-banner.webp")' }}
+        style={{ backgroundImage: 'url("/malaysia/images/Attend/Delegates-banner.webp")' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
         {/* Soft Spotlights */}
@@ -715,7 +715,7 @@ export function AttendSponsorSection() {
       {/* Hero Section */}
       <section
         className="relative -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
-        style={{ backgroundImage: 'linear-gradient(90deg, rgba(2, 7, 19, 0.9) 0%, rgba(2, 7, 19, 0.7) 40%, rgba(2, 7, 19, 0.25) 100%), url("/malaysia/images/Attend/Sponsor-banner.webp")' }}
+        style={{ backgroundImage: 'url("/malaysia/images/Attend/Sponsor-banner.webp")' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
         {/* Soft Spotlights */}
@@ -777,7 +777,7 @@ export function AttendMediaSection() {
       {/* Hero Section */}
       <section
         className="relative -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
-        style={{ backgroundImage: 'linear-gradient(90deg, rgba(2, 7, 19, 0.9) 0%, rgba(2, 7, 19, 0.7) 40%, rgba(2, 7, 19, 0.25) 100%), url("/malaysia/images/Attend/Media-banner.webp")' }}
+        style={{ backgroundImage: 'url("/malaysia/images/Attend/Media-banner.webp")' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
         {/* Soft Spotlights */}
@@ -832,7 +832,7 @@ export function AttendAssociationSection() {
       {/* Hero Section */}
       <section
         className="relative -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
-        style={{ backgroundImage: 'linear-gradient(90deg, rgba(2, 7, 19, 0.9) 0%, rgba(2, 7, 19, 0.7) 40%, rgba(2, 7, 19, 0.25) 100%), url("/malaysia/images/Attend/Association-banner.webp")' }}
+        style={{ backgroundImage: 'url("/malaysia/images/Attend/Association-banner.webp")' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
         {/* Soft Spotlights */}
