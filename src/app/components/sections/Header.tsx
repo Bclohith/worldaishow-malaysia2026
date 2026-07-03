@@ -202,13 +202,13 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
 
       <header className="group fixed top-5 left-0 right-0 z-30 w-full px-6 max-sm:top-2.5 max-sm:px-3">
         <nav
-          className="relative grid grid-cols-[205px_1fr_auto] items-center gap-[22px] max-w-[1172px] w-full h-[61px] mx-auto px-[22px] pl-[25px] border border-[#7eacd9]/14 rounded-[34px] bg-[#04080f]/88 shadow-[0_22px_62px_rgba(0,0,0,0.45),inset_0_0_26px_rgba(33,173,255,0.07)] backdrop-blur-[18px] max-[1140px]:grid-cols-[auto_1fr_auto] max-[1140px]:h-auto max-[1140px]:min-h-[61px] max-sm:grid-cols-[1fr_auto_auto] max-sm:py-2 max-sm:px-2.5 max-sm:pl-[18px] max-sm:rounded-[26px]"
+          className="relative grid grid-cols-[180px_1fr_auto] items-center gap-[16px] max-w-[1172px] w-full h-[61px] mx-auto px-[22px] pl-[25px] border border-[#7eacd9]/14 rounded-[34px] bg-[#04080f]/88 shadow-[0_22px_62px_rgba(0,0,0,0.45),inset_0_0_26px_rgba(33,173,255,0.07)] backdrop-blur-[18px] max-[1200px]:grid-cols-[auto_1fr_auto] max-[1200px]:h-auto max-[1200px]:min-h-[61px] max-sm:grid-cols-[1fr_auto_auto] max-sm:py-2 max-sm:px-2.5 max-sm:pl-[18px] max-sm:rounded-[26px]"
           aria-label="Primary navigation"
         >
           <Logo />
 
           {/* Desktop Navigation Links */}
-          <div className="flex justify-center gap-[24px] text-[15px] font-bold tracking-[1.2px] uppercase text-white/58 max-[1140px]:hidden h-full items-center">
+          <div className="flex justify-center gap-[18px] text-[15px] font-bold tracking-[1.2px] uppercase text-white/58 max-[1200px]:hidden h-full items-center">
             {navItems.map((item) => {
               const isActive = item === currentActiveItem;
               return (
@@ -233,7 +233,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-[26px] whitespace-nowrap text-[15px] font-bold tracking-[1.2px] uppercase max-[1140px]:justify-end max-[1140px]:mr-2 ml-4">
+          <div className="flex items-center gap-[18px] whitespace-nowrap text-[15px] font-bold tracking-[1.2px] uppercase max-[1200px]:justify-end max-[1200px]:mr-2 ml-2">
             <a
               href="/malaysia/sponsorship-enquiry"
               className="transition-colors duration-200 hover:text-cyan max-sm:hidden uppercase tracking-[1.2px] font-bold text-[15px]"
@@ -251,7 +251,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
           {/* Mobile Hamburger Toggle Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="hidden max-[1140px]:flex flex-col justify-center items-center w-10 h-10 rounded-full border border-[#7eacd9]/20 hover:border-cyan/50 bg-[#04080f]/80 text-white transition-all duration-200 outline-none cursor-pointer shadow-[inset_0_0_12px_rgba(33,173,255,0.05)]"
+            className="hidden max-[1200px]:flex flex-col justify-center items-center w-10 h-10 rounded-full border border-[#7eacd9]/20 hover:border-cyan/50 bg-[#04080f]/80 text-white transition-all duration-200 outline-none cursor-pointer shadow-[inset_0_0_12px_rgba(33,173,255,0.05)]"
             aria-label="Toggle navigation menu"
             aria-expanded={isOpen}
           >
@@ -277,7 +277,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
 
         {/* ── Dropdown Sub-Nav (Attend, Agenda, etc.) ── */}
         <nav
-          className={`absolute left-1/2 top-[61px] -translate-x-1/2 flex justify-around w-[min(1008px,calc(100%-108px))] h-[41px] px-[34px] items-center rounded-b-[24px] text-[#101727] bg-white/92 shadow-[0_16px_38px_rgba(0,0,0,0.16)] text-[12px] font-semibold tracking-[1.6px] uppercase transition-all duration-300 ease-out max-[1140px]:hidden ${
+          className={`absolute left-1/2 top-[61px] -translate-x-1/2 flex justify-around w-[min(1008px,calc(100%-108px))] h-[41px] px-[34px] items-center rounded-b-[24px] text-[#101727] bg-white/92 shadow-[0_16px_38px_rgba(0,0,0,0.16)] text-[12px] font-semibold tracking-[1.6px] uppercase transition-all duration-300 ease-out max-[1200px]:hidden ${
             currentActiveItem && subMenus[currentActiveItem]
               ? "opacity-100 translate-y-0 pointer-events-auto visible"
               : "opacity-0 -translate-y-2 pointer-events-none invisible"
