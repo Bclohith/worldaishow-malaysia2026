@@ -238,7 +238,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
               href="/malaysia/sponsorship-enquiry"
               className="transition-colors duration-200 hover:text-cyan max-sm:hidden uppercase tracking-[1.2px] font-bold text-[15px]"
             >
-              Sponsor Enquiry
+              Enquire Now
             </a>
             <a
               className="px-[23px] py-[15px] rounded-full !text-black [color:#06111f!important] bg-[#C0F43C] shadow-[0_0_24px_rgba(192,244,60,0.24)] hover:shadow-[0_0_32px_rgba(192,244,60,0.4)] transition-all duration-200 hover:-translate-y-0.5 max-sm:px-3.5 max-sm:py-3 uppercase font-extrabold text-[14px] tracking-[1.2px]"
@@ -405,11 +405,11 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
             {/* Mobile Actions */}
             <div className="flex flex-col gap-3 mt-2 sm:hidden">
               <a
-                href="#partners"
+                href="/malaysia/sponsorship-enquiry"
                 onClick={() => setIsOpen(false)}
                 className="text-[14px] font-semibold text-white/80 hover:text-cyan transition-colors py-3 text-center border border-[#7eacd9]/20 rounded-full bg-white/5 shadow-[inset_0_0_12px_rgba(33,173,255,0.03)]"
               >
-                Sponsor Enquiry
+                Enquire Now
               </a>
             </div>
           </div>
