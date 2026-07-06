@@ -8,12 +8,6 @@ export function HeroSectionDemo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    // Add Orbitron font dynamically
-    const link = document.createElement("link");
-    link.href = "https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-
     const container = containerRef.current;
     const canvas = canvasRef.current;
     if (!container || !canvas) return;
@@ -28,219 +22,246 @@ export function HeroSectionDemo() {
 
     let animationFrameId: number;
 
-    // Grid Configuration
-    const fontSize = 12;
-    const fontName = "Courier New";
-    const codeLines: Array<{
-      text: string;
-      y: number;
-      x: number;
-      speed: number;
-      brightness: number;
-    }> = [];
-
-    // Code snippets to populate the background
-    const codeSnippets = [
-      "function initAI() {", "return neuralNet.forward(input);", "const weights = tf.randomNormal([784, 256]);",
-      "import tensorflow as tf;", "import torch.nn as nn", "model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')",
-      "ctx.fillStyle = '#00ffcc';", "window.addEventListener('mousemove', (e) => {", "const matrix = Array(100).fill(0);",
-      "epochs=50, batch_size=32", "loss, accuracy = model.evaluate(x_test, y_test)", "for layer in model.layers:",
-      "const gradient = ctx.createRadialGradient(x, y, 0, x, y, r);", "optimizer.step()", "outputs = model(images)",
-      "self.hidden = nn.Linear(input_size, hidden_size)", "def forward(self, x):", "return F.relu(self.hidden(x))",
-      "grid[x][y] = Math.random() > 0.5 ? 1 : 0;", "const distance = Math.hypot(dx, dy);", "if (dist < revealRadius) {"
+    // ---------- palette ----------
+    const COLORS = [
+      '#c0f43c', // lime
+      '#064789'  // deep blue
     ];
+    const rand = (a: number, b: number) => a + Math.random() * (b - a);
+    const pick = <T,>(arr: T[]): T => arr[(Math.random() * arr.length) | 0];
 
-    // Track mouse coordinates relative to container
-    let mouse = { x: -1000, y: -1000, active: false };
-    let smoothMouse = { x: -1000, y: -1000 };
-    let glowIntensity = 0;
+    // ---------- particle model ----------
+    class Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      color: string;
+      life: number;
+      maxLife: number;
+      text: string | null;
+      gravity: number;
+      friction: number;
 
-    const pushRadius = 210;
-    const lightRadius = 340;
-    const maxPush = 46;
-    const aiFontSize = 120;
+      constructor(x: number, y: number, opts: {
+        angle?: number;
+        speed?: number;
+        drift?: number;
+        size?: number;
+        color?: string;
+        maxLife?: number;
+        text?: string | null;
+        gravity?: number;
+        friction?: number;
+      } = {}) {
+        this.x = x;
+        this.y = y;
+        const angle = opts.angle ?? rand(0, Math.PI * 2);
+        const speed = opts.speed ?? rand(0.4, 2.2);
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed - (opts.drift ?? 0);
+        this.size = opts.size ?? rand(1.2, 3.2);
+        this.color = opts.color ?? pick(COLORS);
+        this.life = 0;
+        this.maxLife = opts.maxLife ?? rand(50, 110);
+        this.text = opts.text ?? null;
+        this.gravity = opts.gravity ?? 0;
+        this.friction = opts.friction ?? 0.985;
+      }
 
-    const aiCanvasW = Math.round(aiFontSize * 2.6);
-    const aiCanvasH = Math.round(aiFontSize * 1.6);
-    const aiCanvas = document.createElement("canvas");
-    aiCanvas.width = aiCanvasW;
-    aiCanvas.height = aiCanvasH;
-    const aiCtx = aiCanvas.getContext("2d");
+      update() {
+        this.vx *= this.friction;
+        this.vy *= this.friction;
+        this.vy += this.gravity;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life++;
+        return this.life < this.maxLife;
+      }
 
-    function renderAIGlass() {
-      if (!aiCtx) return;
-      aiCtx.clearRect(0, 0, aiCanvasW, aiCanvasH);
-      aiCtx.textAlign = "center";
-      aiCtx.textBaseline = "middle";
-      aiCtx.font = `800 ${aiFontSize}px 'Orbitron', 'Courier New', sans-serif`;
-      const cx = aiCanvasW / 2;
-      const cy = aiCanvasH / 2;
+      draw(c: CanvasRenderingContext2D) {
+        const t = this.life / this.maxLife;
+        const alpha = Math.sin((1 - t) * Math.PI * 0.5);
+        c.save();
+        c.globalAlpha = Math.max(alpha, 0);
+        c.shadowBlur = this.text ? 14 : 10;
+        c.shadowColor = this.color;
 
-      aiCtx.lineWidth = 3;
-      aiCtx.shadowColor = "rgba(90, 190, 245, 0.6)";
-      aiCtx.shadowBlur = 14;
-      aiCtx.strokeStyle = "rgba(140, 210, 255, 0.5)";
-      aiCtx.strokeText("AI", cx, cy);
-
-      aiCtx.shadowBlur = 0;
-      aiCtx.lineWidth = 1.2;
-      aiCtx.strokeStyle = "rgba(255, 255, 255, 0.85)";
-      aiCtx.strokeText("AI", cx, cy);
-
-      aiCtx.fillStyle = "rgba(200, 230, 255, 0.05)";
-      aiCtx.fillText("AI", cx, cy);
-
-      aiCtx.save();
-      aiCtx.globalCompositeOperation = "source-atop";
-      const streak = aiCtx.createLinearGradient(0, 0, aiCanvasW, aiCanvasH);
-      streak.addColorStop(0, "rgba(255, 255, 255, 0)");
-      streak.addColorStop(0.42, "rgba(255, 255, 255, 0)");
-      streak.addColorStop(0.5, "rgba(255, 255, 255, 0.45)");
-      streak.addColorStop(0.58, "rgba(255, 255, 255, 0)");
-      streak.addColorStop(1, "rgba(255, 255, 255, 0)");
-      aiCtx.fillStyle = streak;
-      aiCtx.fillRect(0, 0, aiCanvasW, aiCanvasH);
-      aiCtx.restore();
+        if (this.text) {
+          c.fillStyle = this.color;
+          c.font = `900 ${this.size}px Arial, sans-serif`;
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillText(this.text, this.x, this.y);
+        } else {
+          c.fillStyle = this.color;
+          c.beginPath();
+          c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          c.fill();
+        }
+        c.restore();
+      }
     }
 
-    renderAIGlass();
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(renderAIGlass);
-    }
+    let particles: Particle[] = [];
+    let W = activeCanvas.width;
+    let H = activeCanvas.height;
 
     function resizeCanvas() {
       const rect = activeContainer.getBoundingClientRect();
-      activeCanvas.width = rect.width;
-      activeCanvas.height = rect.height;
-      initializeGrid();
+      W = activeCanvas.width = rect.width;
+      H = activeCanvas.height = rect.height;
     }
 
-    function initializeGrid() {
-      codeLines.length = 0;
-      const rows = Math.ceil(activeCanvas.height / (fontSize + 12));
-      
-      for(let i = 0; i < rows; i++) {
-        let fullRowText = "";
-        while(activeCtx.measureText(fullRowText).width < activeCanvas.width * 2) {
-          fullRowText += codeSnippets[Math.floor(Math.random() * codeSnippets.length)] + "    ";
-        }
+    // ---------- ambient floating background particles ----------
+    function spawnAmbient() {
+      for (let i = 0; i < 3; i++) {
+        particles.push(new Particle(
+          rand(0, W), H + 10,
+          {
+            angle: -Math.PI / 2 + rand(-0.25, 0.25),
+            speed: rand(0.3, 0.9),
+            size: rand(1, 2.6),
+            color: pick(COLORS),
+            maxLife: rand(260, 420),
+            friction: 0.999
+          }
+        ));
+      }
+    }
 
-        codeLines.push({
-          text: fullRowText,
-          y: i * (fontSize + 12) + 15,
-          x: Math.random() * -activeCanvas.width,
-          speed: 0.2 + Math.random() * 0.5,
-          brightness: 0.15 + Math.random() * 0.35
-        });
+    // occasional ambient "AI" glyphs drifting up
+    function spawnAmbientGlyph() {
+      particles.push(new Particle(
+        rand(0, W), H + 20,
+        {
+          angle: -Math.PI / 2 + rand(-0.15, 0.15),
+          speed: rand(0.25, 0.5),
+          size: rand(14, 26),
+          color: pick(COLORS),
+          maxLife: rand(320, 480),
+          friction: 1,
+          text: 'AI'
+        }
+      ));
+    }
+
+    // ---------- cursor trail ----------
+    let mouseX = -9999, mouseY = -9999;
+    let lastMouseX = -9999, lastMouseY = -9999;
+    let hasMouse = false;
+
+    function spawnTrail(x: number, y: number) {
+      const dx = x - lastMouseX;
+      const dy = y - lastMouseY;
+      const dist = Math.hypot(dx, dy);
+      const count = Math.min(14, Math.max(3, Math.floor(dist / 3)));
+
+      for (let i = 0; i < count; i++) {
+        const t = i / count;
+        const px = lastMouseX + dx * t + rand(-4, 4);
+        const py = lastMouseY + dy * t + rand(-4, 4);
+        const useGlyph = Math.random() < 0.05;
+
+        particles.push(new Particle(px, py, {
+          speed: rand(0.2, 1.6),
+          size: useGlyph ? rand(11, 16) : rand(1.5, 4),
+          color: pick(COLORS),
+          maxLife: rand(35, 75),
+          friction: 0.94,
+          gravity: -0.002,
+          text: useGlyph ? 'AI' : null
+        }));
       }
     }
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = activeContainer.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-      mouse.active = true;
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      if (!hasMouse) { lastMouseX = mouseX; lastMouseY = mouseY; hasMouse = true; }
+      spawnTrail(mouseX, mouseY);
+      lastMouseX = mouseX;
+      lastMouseY = mouseY;
     };
 
     const handleMouseLeave = () => {
-      mouse.active = false;
-      mouse.x = -1000;
-      mouse.y = -1000;
+      hasMouse = false;
+      mouseX = -9999;
+      mouseY = -9999;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches[0]) {
+        const rect = activeContainer.getBoundingClientRect();
+        const t0 = e.touches[0];
+        mouseX = t0.clientX - rect.left;
+        mouseY = t0.clientY - rect.top;
+        if (!hasMouse) { lastMouseX = mouseX; lastMouseY = mouseY; hasMouse = true; }
+        spawnTrail(mouseX, mouseY);
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+      }
+    };
+
+    const handleClick = (e: MouseEvent) => {
+      const rect = activeContainer.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      const n = 70;
+      for (let i = 0; i < n; i++) {
+        const angle = (Math.PI * 2 * i) / n + rand(-0.1, 0.1);
+        particles.push(new Particle(clickX, clickY, {
+          angle,
+          speed: rand(2, 7),
+          size: rand(1.5, 4),
+          color: pick(COLORS),
+          maxLife: rand(45, 80),
+          friction: 0.93
+        }));
+      }
+      for (let i = 0; i < 8; i++) {
+        const angle = rand(0, Math.PI * 2);
+        particles.push(new Particle(clickX, clickY, {
+          angle,
+          speed: rand(1, 3.5),
+          size: rand(14, 22),
+          color: pick(COLORS),
+          maxLife: rand(50, 85),
+          friction: 0.92,
+          text: 'AI'
+        }));
+      }
     };
 
     activeContainer.addEventListener("mousemove", handleMouseMove);
     activeContainer.addEventListener("mouseleave", handleMouseLeave);
+    activeContainer.addEventListener("touchmove", handleTouchMove, { passive: true });
+    activeContainer.addEventListener("click", handleClick);
     window.addEventListener("resize", resizeCanvas);
 
     resizeCanvas();
 
+    // ---------- main loop ----------
+    let ambientTimer = 0;
+    let glyphTimer = 0;
+
     function draw() {
-      activeCtx.fillStyle = "rgba(2, 12, 33, 0.22)";
-      activeCtx.fillRect(0, 0, activeCanvas.width, activeCanvas.height);
+      activeCtx.fillStyle = 'rgba(5, 7, 13, 0.22)';
+      activeCtx.fillRect(0, 0, W, H);
 
-      smoothMouse.x += (mouse.x - smoothMouse.x) * 0.09;
-      smoothMouse.y += (mouse.y - smoothMouse.y) * 0.09;
-      const glowTarget = mouse.active ? 1 : 0;
-      glowIntensity += (glowTarget - glowIntensity) * 0.06;
+      ambientTimer++;
+      if (ambientTimer > 2) { ambientTimer = 0; spawnAmbient(); }
 
-      activeContainer.style.setProperty("--mouse-x", `${smoothMouse.x}px`);
-      activeContainer.style.setProperty("--mouse-y", `${smoothMouse.y}px`);
-      activeContainer.style.setProperty("--glow-intensity", glowIntensity.toFixed(3));
+      glyphTimer++;
+      if (glyphTimer > 55) { glyphTimer = 0; spawnAmbientGlyph(); }
 
-      activeCtx.font = `${fontSize}px ${fontName}`;
-      activeCtx.textAlign = "left";
-      activeCtx.shadowBlur = 0;
-
-      codeLines.forEach(line => {
-        let currentX = line.x;
-
-        for (let i = 0; i < line.text.length; i++) {
-          const char = line.text[i];
-          const charWidth = activeCtx.measureText(char).width;
-
-          if (currentX >= -20 && currentX <= activeCanvas.width + 20) {
-            const dx = currentX - smoothMouse.x;
-            const dy = line.y - smoothMouse.y;
-            const distance = Math.hypot(dx, dy);
-
-            let drawX = currentX;
-            let drawY = line.y;
-            let alpha = line.brightness;
-            let r = 120, g = 132, b = 150;
-
-            if (glowIntensity > 0.01 && distance < lightRadius) {
-              const lt = 1 - distance / lightRadius;
-              const lightEased = lt * lt * (3 - 2 * lt);
-              const lightFactor = lightEased * glowIntensity;
-
-              r += (100 - r) * lightFactor;
-              g += (200 - g) * lightFactor;
-              b += (255 - b) * lightFactor;
-              alpha = line.brightness + lightFactor * 0.5;
-            }
-
-            if (glowIntensity > 0.01 && distance < pushRadius) {
-              const t = 1 - distance / pushRadius;
-              const eased = t * t * (3 - 2 * t);
-              const push = eased * maxPush * glowIntensity;
-
-              const angle = Math.atan2(dy, dx);
-              drawX = currentX + Math.cos(angle) * push;
-              drawY = line.y + Math.sin(angle) * push;
-
-              alpha *= (1 - eased * 0.5);
-            }
-
-            activeCtx.fillStyle = `rgba(${r | 0}, ${g | 0}, ${b | 0}, ${alpha})`;
-            activeCtx.fillText(char, drawX, drawY);
-          }
-
-          currentX += charWidth;
-        }
-
-        line.x += line.speed;
-
-        const totalLineWidth = activeCtx.measureText(line.text).width;
-        if (line.x > 0) {
-          line.x = - (totalLineWidth / 2);
-        }
+      particles = particles.filter(p => {
+        const alive = p.update();
+        if (alive) p.draw(activeCtx);
+        return alive;
       });
-
-      if (glowIntensity > 0.01) {
-        const imgX = smoothMouse.x - aiCanvasW / 2;
-        const imgY = smoothMouse.y - aiCanvasH / 2;
-
-        activeCtx.save();
-        activeCtx.globalAlpha = glowIntensity;
-
-        activeCtx.shadowColor = "rgba(90, 190, 245, 0.55)";
-        activeCtx.shadowBlur = 35;
-        activeCtx.drawImage(aiCanvas, imgX, imgY);
-
-        activeCtx.shadowBlur = 0;
-        activeCtx.drawImage(aiCanvas, imgX, imgY);
-        activeCtx.restore();
-      }
 
       animationFrameId = requestAnimationFrame(draw);
     }
@@ -248,11 +269,12 @@ export function HeroSectionDemo() {
     draw();
 
     return () => {
-      container.removeEventListener("mousemove", handleMouseMove);
-      container.removeEventListener("mouseleave", handleMouseLeave);
+      activeContainer.removeEventListener("mousemove", handleMouseMove);
+      activeContainer.removeEventListener("mouseleave", handleMouseLeave);
+      activeContainer.removeEventListener("touchmove", handleTouchMove);
+      activeContainer.removeEventListener("click", handleClick);
       window.removeEventListener("resize", resizeCanvas);
       cancelAnimationFrame(animationFrameId);
-      document.head.removeChild(link);
     };
   }, []);
 
@@ -262,22 +284,11 @@ export function HeroSectionDemo() {
       className="relative min-h-[720px] -mt-[81px] grid place-items-center overflow-hidden text-center max-[980px]:min-h-[680px] max-sm:-mt-[71px] max-sm:min-h-[720px]" 
       id="home"
       style={{
-        background: "radial-gradient(ellipse at center, #071130 0%, #020c21 100%)"
+        background: "#05070d"
       }}
     >
       {/* Background Canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block z-0" />
-
-      {/* Ambient glow follow overlay */}
-      <div 
-        className="absolute inset-0 pointer-events-none z-1" 
-        style={{
-          background: "radial-gradient(circle 260px at var(--mouse-x, -1000px) var(--mouse-y, -1000px), rgba(90, 190, 245, 0.09) 0%, rgba(90, 190, 245, 0.05) 30%, rgba(90, 190, 245, 0.02) 55%, transparent 78%)",
-          filter: "blur(25px)",
-          opacity: "var(--glow-intensity, 0)",
-          transition: "opacity 0.15s ease"
-        }}
-      />
 
       {/* Subtle vignette for a more refined, cinematic look */}
       <div 
