@@ -644,9 +644,16 @@ export function AttendDelegateSection() {
               <span className="text-[#7cdfff] font-mono text-[12px] font-extrabold uppercase tracking-[2px] select-none">
                 Business Pass
               </span>
-              <strong className="block mt-4 mb-4 text-[#7cdfff] font-[850] text-[48px] leading-none tracking-tight">
-                $499 <em className="text-white/58 text-[16px] font-normal not-italic">/ person</em>
-              </strong>
+              <div className="flex items-baseline gap-2.5 mt-4 mb-1">
+                <span className="text-white/40 text-[24px] font-bold line-through select-none">$799</span>
+                <strong className="text-[#7cdfff] font-[850] text-[48px] leading-none tracking-tight">
+                  $499
+                </strong>
+                <em className="text-white/58 text-[16px] font-normal not-italic">/ person</em>
+              </div>
+              <span className="block text-[#C0F43C] text-[12px] font-bold font-mono uppercase tracking-[1px] mb-4">
+                Valid till 30 July 2026
+              </span>
               <p className="min-h-[58px] mb-7 text-white/63 text-[15px] leading-relaxed">
                 For technology providers, vendors and partners selling into the AI ecosystem.
               </p>
