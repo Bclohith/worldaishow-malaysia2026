@@ -645,7 +645,7 @@ export function AttendDelegateSection() {
                 Business Pass
               </span>
               <div className="flex items-baseline gap-2.5 mt-4 mb-1">
-                <span className="text-white/40 text-[24px] font-bold line-through decoration-red-500 decoration-[2.5px] select-none">$799</span>
+                <span className="text-white/40 text-[32px] font-bold line-through decoration-red-500 decoration-[2.5px] select-none">$799</span>
                 <strong className="text-[#7cdfff] font-[850] text-[48px] leading-none tracking-tight">
                   $499
                 </strong>
