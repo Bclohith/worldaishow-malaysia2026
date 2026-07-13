@@ -208,7 +208,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
           <Logo />
 
           {/* Desktop Navigation Links */}
-          <div className="flex justify-center gap-[18px] text-[15px] font-bold tracking-[1.2px] uppercase text-white/58 max-[1200px]:hidden h-full items-center">
+          <div className="flex justify-center gap-[25px] text-[15px] font-bold tracking-[1.2px] uppercase text-white/58 max-[1200px]:hidden h-full items-center">
             {navItems.map((item) => {
               const isActive = item === currentActiveItem;
               return (
@@ -233,7 +233,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-[18px] whitespace-nowrap text-[15px] font-bold tracking-[1.2px] uppercase max-[1200px]:justify-end max-[1200px]:mr-2 ml-2">
+          <div className="flex items-center gap-[25px] whitespace-nowrap text-[15px] font-bold tracking-[1.2px] uppercase max-[1200px]:justify-end max-[1200px]:mr-2 ml-2">
             <a
               href="/malaysia/sponsorship-enquiry"
               className="transition-colors duration-200 hover:text-cyan max-sm:hidden uppercase tracking-[1.2px] font-bold text-[15px]"
