@@ -137,17 +137,17 @@ export function EcosystemSection() {
             {/* Target Stakeholders Legend List */}
             <ul className="grid gap-[26px] m-0 p-0 list-none">
               <li className="flex gap-[11px] items-start text-white">
-                <i className="w-[22px] h-[22px] mt-[1px] rounded-[4px] flex-none bg-purple" />
-                <span>
-                  <strong className="text-[20px] font-bold leading-tight">Budget Owners & Final Decision-Makers</strong>
-                  <small className="block mt-1 text-muted text-[14px] leading-snug">CIOs, CTOs, CDOs, CISOs, Heads of IT & Digital</small>
-                </span>
-              </li>
-              <li className="flex gap-[11px] items-start text-white">
                 <i className="w-[22px] h-[22px] mt-[1px] rounded-[4px] flex-none bg-cyan" />
                 <span>
                   <strong className="text-[20px] font-bold leading-tight">Senior Decision Influencers</strong>
                   <small className="block mt-1 text-muted text-[14px] leading-snug">Heads of AI, Data, Cloud, Security, Architecture</small>
+                </span>
+              </li>
+              <li className="flex gap-[11px] items-start text-white">
+                <i className="w-[22px] h-[22px] mt-[1px] rounded-[4px] flex-none bg-purple" />
+                <span>
+                  <strong className="text-[20px] font-bold leading-tight">Budget Owners & Final Decision-Makers</strong>
+                  <small className="block mt-1 text-muted text-[14px] leading-snug">CIOs, CTOs, CDOs, CISOs, Heads of IT & Digital</small>
                 </span>
               </li>
               <li className="flex gap-[11px] items-start text-white">
