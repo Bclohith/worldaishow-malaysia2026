@@ -12,28 +12,28 @@ const donutSegments = [
   },
   {
     colorClass: "stroke-purple",
-    percent: 45,
+    percent: 35,
     startAngle: 72,
     delayClass: "delay-[180ms]",
   },
   {
     colorClass: "stroke-cyan",
-    percent: 35,
-    startAngle: 234,
+    percent: 45,
+    startAngle: 198,
     delayClass: "delay-[280ms]",
   },
 ];
 
 const chartItems = [
   {
-    colorClass: "text-purple",
-    title: "45% - Digital Infrastructure Expansion",
-    text: "Malaysia is witnessing rapid growth in hyperscale data centres, cloud ecosystems, fibre connectivity, and AI-ready compute infrastructure, creating the foundation for large-scale AI innovation across Southeast Asia.",
+    colorClass: "text-cyan",
+    title: "45% - Enterprise AI Transformation",
+    text: "Businesses across banking, telecom, manufacturing, retail, and public services are accelerating AI adoption to improve efficiency, automate operations, and deliver smarter customer experiences.",
   },
   {
-    colorClass: "text-cyan",
-    title: "35% - Enterprise AI Transformation",
-    text: "Businesses across banking, telecom, manufacturing, retail, and public services are accelerating AI adoption to improve efficiency, automate operations, and deliver smarter customer experiences.",
+    colorClass: "text-purple",
+    title: "35% - Digital Infrastructure Expansion",
+    text: "Malaysia is witnessing rapid growth in hyperscale data centres, cloud ecosystems, fibre connectivity, and AI-ready compute infrastructure, creating the foundation for large-scale AI innovation across Southeast Asia.",
   },
   {
     colorClass: "text-green",
@@ -114,7 +114,7 @@ export function EcosystemSection() {
               <span className={`absolute z-4 text-[#020712] font-black text-[28px] top-[28%] left-[8%] select-none transition-all duration-300 ${
                 isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}>
-                35%
+                45%
               </span>
               <span className={`absolute z-4 text-[#020712] font-black text-[28px] top-[15%] right-[19%] select-none transition-all duration-300 ${
                 isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
@@ -124,7 +124,7 @@ export function EcosystemSection() {
               <span className={`absolute z-4 text-[#020712] font-black text-[28px] bottom-[12%] right-[24%] select-none transition-all duration-300 ${
                 isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}>
-                45%
+                35%
               </span>
 
               {/* Central Text Panel */}
