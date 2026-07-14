@@ -22,89 +22,14 @@ export function HeroSectionDemo() {
 
     let animationFrameId: number;
 
-    // ---------- palette ----------
-    const COLORS = [
-      '#c0f43c', // lime
-      '#064789'  // deep blue
-    ];
-    const rand = (a: number, b: number) => a + Math.random() * (b - a);
-    const pick = <T,>(arr: T[]): T => arr[(Math.random() * arr.length) | 0];
+    const mouse = { x: 0, y: 0, active: false };
+    const particles: BioParticle[] = [];
+    
+    // ASMR Parameters: High particle count, heavy drag for silky motion
+    const PARTICLE_COUNT = 140;
+    const FRICTION = 0.94; 
+    const EASE = 0.06;
 
-    // ---------- particle model ----------
-    class Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      color: string;
-      life: number;
-      maxLife: number;
-      text: string | null;
-      gravity: number;
-      friction: number;
-
-      constructor(x: number, y: number, opts: {
-        angle?: number;
-        speed?: number;
-        drift?: number;
-        size?: number;
-        color?: string;
-        maxLife?: number;
-        text?: string | null;
-        gravity?: number;
-        friction?: number;
-      } = {}) {
-        this.x = x;
-        this.y = y;
-        const angle = opts.angle ?? rand(0, Math.PI * 2);
-        const speed = opts.speed ?? rand(0.4, 2.2);
-        this.vx = Math.cos(angle) * speed;
-        this.vy = Math.sin(angle) * speed - (opts.drift ?? 0);
-        this.size = opts.size ?? rand(1.2, 3.2);
-        this.color = opts.color ?? pick(COLORS);
-        this.life = 0;
-        this.maxLife = opts.maxLife ?? rand(50, 110);
-        this.text = opts.text ?? null;
-        this.gravity = opts.gravity ?? 0;
-        this.friction = opts.friction ?? 0.985;
-      }
-
-      update() {
-        this.vx *= this.friction;
-        this.vy *= this.friction;
-        this.vy += this.gravity;
-        this.x += this.vx;
-        this.y += this.vy;
-        this.life++;
-        return this.life < this.maxLife;
-      }
-
-      draw(c: CanvasRenderingContext2D) {
-        const t = this.life / this.maxLife;
-        const alpha = Math.sin((1 - t) * Math.PI * 0.5);
-        c.save();
-        c.globalAlpha = Math.max(alpha, 0);
-        c.shadowBlur = this.text ? 14 : 10;
-        c.shadowColor = this.color;
-
-        if (this.text) {
-          c.fillStyle = this.color;
-          c.font = `900 ${this.size}px Arial, sans-serif`;
-          c.textAlign = 'center';
-          c.textBaseline = 'middle';
-          c.fillText(this.text, this.x, this.y);
-        } else {
-          c.fillStyle = this.color;
-          c.beginPath();
-          c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          c.fill();
-        }
-        c.restore();
-      }
-    }
-
-    let particles: Particle[] = [];
     let W = activeCanvas.width;
     let H = activeCanvas.height;
 
@@ -114,165 +39,139 @@ export function HeroSectionDemo() {
       H = activeCanvas.height = rect.height;
     }
 
-    // ---------- ambient floating background particles ----------
-    function spawnAmbient() {
-      for (let i = 0; i < 3; i++) {
-        particles.push(new Particle(
-          rand(0, W), H + 10,
-          {
-            angle: -Math.PI / 2 + rand(-0.25, 0.25),
-            speed: rand(0.3, 0.9),
-            size: rand(1, 2.6),
-            color: pick(COLORS),
-            maxLife: rand(260, 420),
-            friction: 0.999
-          }
-        ));
+    // Particle blueprints
+    class BioParticle {
+      index: number;
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      hue: number;
+
+      constructor(index: number, width: number, height: number) {
+        this.index = index;
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = 0;
+        this.vy = 0;
+        this.radius = Math.random() * 2 + 1;
+        // Soft shifting color palette from deep blue to magical teal
+        this.hue = 190 + Math.random() * 30; 
+      }
+
+      update(targetX: number, targetY: number, time: number, width: number, height: number, active: boolean) {
+        // If mouse isn't on screen, drift toward center gently
+        const tx = active ? targetX : width / 2;
+        const ty = active ? targetY : height / 2;
+
+        // Calculate attraction force based on sequence index (creates a string/ribbon effect)
+        const dx = tx - this.x;
+        const dy = ty - this.y;
+        
+        // Add tiny organic micro-waves (the ASMR breathing effect)
+        const driftX = Math.sin(time + this.index * 0.1) * 0.2;
+        const driftY = Math.cos(time + this.index * 0.1) * 0.2;
+
+        this.vx += dx * EASE * (1 / (this.index * 0.05 + 1));
+        this.vy += dy * EASE * (1 / (this.index * 0.05 + 1));
+
+        // Apply velvet fluid drag
+        this.vx *= FRICTION;
+        this.vy *= FRICTION;
+
+        this.x += this.vx + driftX;
+        this.y += this.vy + driftY;
+      }
+
+      draw(c: CanvasRenderingContext2D) {
+        c.beginPath();
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        c.fillStyle = `hsla(${this.hue}, 90%, 65%, 0.7)`;
+        c.fill();
       }
     }
 
-    // occasional ambient "AI" glyphs drifting up
-    function spawnAmbientGlyph() {
-      particles.push(new Particle(
-        rand(0, W), H + 20,
-        {
-          angle: -Math.PI / 2 + rand(-0.15, 0.15),
-          speed: rand(0.25, 0.5),
-          size: rand(14, 26),
-          color: pick(COLORS),
-          maxLife: rand(320, 480),
-          friction: 1,
-          text: 'AI'
-        }
-      ));
-    }
+    resizeCanvas();
 
-    // ---------- cursor trail ----------
-    let mouseX = -9999, mouseY = -9999;
-    let lastMouseX = -9999, lastMouseY = -9999;
-    let hasMouse = false;
-
-    function spawnTrail(x: number, y: number) {
-      const dx = x - lastMouseX;
-      const dy = y - lastMouseY;
-      const dist = Math.hypot(dx, dy);
-      const count = Math.min(14, Math.max(3, Math.floor(dist / 3)));
-
-      for (let i = 0; i < count; i++) {
-        const t = i / count;
-        const px = lastMouseX + dx * t + rand(-4, 4);
-        const py = lastMouseY + dy * t + rand(-4, 4);
-        const useGlyph = Math.random() < 0.05;
-
-        particles.push(new Particle(px, py, {
-          speed: rand(0.2, 1.6),
-          size: useGlyph ? rand(11, 16) : rand(1.5, 4),
-          color: pick(COLORS),
-          maxLife: rand(35, 75),
-          friction: 0.94,
-          gravity: -0.002,
-          text: useGlyph ? 'AI' : null
-        }));
-      }
+    // Initialize particles
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(new BioParticle(i, W, H));
     }
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = activeContainer.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
-      if (!hasMouse) { lastMouseX = mouseX; lastMouseY = mouseY; hasMouse = true; }
-      spawnTrail(mouseX, mouseY);
-      lastMouseX = mouseX;
-      lastMouseY = mouseY;
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
     };
 
     const handleMouseLeave = () => {
-      hasMouse = false;
-      mouseX = -9999;
-      mouseY = -9999;
+      mouse.active = false;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches[0]) {
         const rect = activeContainer.getBoundingClientRect();
         const t0 = e.touches[0];
-        mouseX = t0.clientX - rect.left;
-        mouseY = t0.clientY - rect.top;
-        if (!hasMouse) { lastMouseX = mouseX; lastMouseY = mouseY; hasMouse = true; }
-        spawnTrail(mouseX, mouseY);
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
-      }
-    };
-
-    const handleClick = (e: MouseEvent) => {
-      const rect = activeContainer.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-      const n = 70;
-      for (let i = 0; i < n; i++) {
-        const angle = (Math.PI * 2 * i) / n + rand(-0.1, 0.1);
-        particles.push(new Particle(clickX, clickY, {
-          angle,
-          speed: rand(2, 7),
-          size: rand(1.5, 4),
-          color: pick(COLORS),
-          maxLife: rand(45, 80),
-          friction: 0.93
-        }));
-      }
-      for (let i = 0; i < 8; i++) {
-        const angle = rand(0, Math.PI * 2);
-        particles.push(new Particle(clickX, clickY, {
-          angle,
-          speed: rand(1, 3.5),
-          size: rand(14, 22),
-          color: pick(COLORS),
-          maxLife: rand(50, 85),
-          friction: 0.92,
-          text: 'AI'
-        }));
+        mouse.x = t0.clientX - rect.left;
+        mouse.y = t0.clientY - rect.top;
+        mouse.active = true;
       }
     };
 
     activeContainer.addEventListener("mousemove", handleMouseMove);
     activeContainer.addEventListener("mouseleave", handleMouseLeave);
     activeContainer.addEventListener("touchmove", handleTouchMove, { passive: true });
-    activeContainer.addEventListener("click", handleClick);
     window.addEventListener("resize", resizeCanvas);
 
-    resizeCanvas();
+    function draw(timestamp: number) {
+      const time = timestamp * 0.002;
 
-    // ---------- main loop ----------
-    let ambientTimer = 0;
-    let glyphTimer = 0;
-
-    function draw() {
-      activeCtx.fillStyle = 'rgba(5, 7, 13, 0.22)';
+      // Slow, heavy trail fade to create the visual "softness"
+      activeCtx.fillStyle = 'rgba(2, 2, 5, 0.04)';
       activeCtx.fillRect(0, 0, W, H);
 
-      ambientTimer++;
-      if (ambientTimer > 2) { ambientTimer = 0; spawnAmbient(); }
+      // Turn on blending mode that makes overlapping lines "glow" brighter
+      activeCtx.globalCompositeOperation = 'screen';
 
-      glyphTimer++;
-      if (glyphTimer > 55) { glyphTimer = 0; spawnAmbientGlyph(); }
+      activeCtx.beginPath();
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.update(mouse.x, mouse.y, time, W, H, mouse.active);
+        
+        // Draw trailing lines between adjacent particles to form ribbon strands
+        if (i > 0) {
+          const prev = particles[i - 1];
+          activeCtx.moveTo(prev.x, prev.y);
+          activeCtx.quadraticCurveTo(
+            (prev.x + p.x) / 2, 
+            (prev.y + p.y) / 2, 
+            p.x, 
+            p.y
+          );
+        }
+      }
+      
+      activeCtx.strokeStyle = 'rgba(0, 130, 255, 0.08)';
+      activeCtx.lineWidth = 2;
+      activeCtx.stroke();
 
-      particles = particles.filter(p => {
-        const alive = p.update();
-        if (alive) p.draw(activeCtx);
-        return alive;
-      });
+      // Render individual glowing tips
+      for (let i = 0; i < particles.length; i++) {
+        if (i % 3 === 0) particles[i].draw(activeCtx); 
+      }
 
+      activeCtx.globalCompositeOperation = 'source-over';
       animationFrameId = requestAnimationFrame(draw);
     }
 
-    draw();
+    animationFrameId = requestAnimationFrame(draw);
 
     return () => {
       activeContainer.removeEventListener("mousemove", handleMouseMove);
       activeContainer.removeEventListener("mouseleave", handleMouseLeave);
       activeContainer.removeEventListener("touchmove", handleTouchMove);
-      activeContainer.removeEventListener("click", handleClick);
       window.removeEventListener("resize", resizeCanvas);
       cancelAnimationFrame(animationFrameId);
     };
@@ -284,7 +183,7 @@ export function HeroSectionDemo() {
       className="relative min-h-[720px] -mt-[81px] grid place-items-center overflow-hidden text-center max-[980px]:min-h-[680px] max-sm:-mt-[71px] max-sm:min-h-[720px]" 
       id="home"
       style={{
-        background: "#05070d"
+        background: "#020205"
       }}
     >
       {/* Background Canvas */}
