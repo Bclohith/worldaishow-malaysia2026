@@ -21,7 +21,7 @@ export function WhatsAppNetworkingContent() {
       <section 
         className="relative net-inner-hero pt-[250px] pb-24 overflow-hidden"
         style={{ 
-          backgroundImage: `url('/malaysia/images/networking/whatsapp-networking-bg.webp')`,
+          backgroundImage: `url('/malaysia/images/networking/networking-bg.png')`,
           backgroundPosition: 'right center',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
