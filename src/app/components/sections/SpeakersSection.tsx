@@ -12,6 +12,7 @@ interface KonfHubSpeaker {
   organisation: string;
   image_url: string;
   speaker_order?: number;
+  about?: string;
 }
 
 export function SpeakersSection() {
@@ -21,6 +22,7 @@ export function SpeakersSection() {
     designation: string;
     company: string;
     image: string;
+    bio?: string;
   }>>([]);
 
   useEffect(() => {
@@ -52,7 +54,8 @@ export function SpeakersSection() {
             name: speaker.name || "",
             designation: speaker.designation || "",
             company: speaker.organisation || "",
-            image: speaker.image_url || "/malaysia/images/speakers/default.png"
+            image: speaker.image_url || "/malaysia/images/speakers/default.png",
+            bio: speaker.about || ""
           }));
           setDisplaySpeakers(mapped);
         } else {
@@ -100,6 +103,7 @@ export function SpeakersSection() {
               role={speaker.designation}
               company={speaker.company}
               image={speaker.image}
+              bio={speaker.bio}
               index={index}
             />
           ))}
