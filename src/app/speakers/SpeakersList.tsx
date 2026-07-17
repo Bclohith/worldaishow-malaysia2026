@@ -12,6 +12,7 @@ interface KonfHubSpeaker {
   organisation: string;
   image_url: string;
   speaker_order?: number;
+  about?: string;
 }
 
 export function SpeakersList() {
@@ -83,6 +84,7 @@ export function SpeakersList() {
                   role={speaker.designation}
                   company={speaker.organisation}
                   image={speaker.image_url || "/malaysia/images/speakers/default.png"}
+                  bio={speaker.about}
                   index={index}
                 />
               ))}
