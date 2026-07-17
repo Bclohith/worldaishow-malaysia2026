@@ -303,6 +303,7 @@ function PartnerSplitSection({
   dotRgb,
   items,
   onCardClick,
+  gridCols,
 }: {
   title: string;
   desc: string;
@@ -310,6 +311,7 @@ function PartnerSplitSection({
   dotRgb: string;
   items: SponsorItem[];
   onCardClick: (item: SponsorItem) => void;
+  gridCols?: number;
 }) {
   return (
     <div className="flex flex-col gap-6">
@@ -332,7 +334,11 @@ function PartnerSplitSection({
 
       {/* Grid or Available placeholder */}
       {items.length > 0 ? (
-        <div className="grid grid-cols-3 gap-5 max-[1200px]:grid-cols-2 max-sm:grid-cols-1 w-full">
+        <div className={`grid gap-5 w-full max-sm:grid-cols-1 ${
+          gridCols === 4 
+            ? "grid-cols-4 max-[1200px]:grid-cols-3 max-[980px]:grid-cols-2" 
+            : "grid-cols-3 max-[1200px]:grid-cols-2"
+        }`}>
           {items.map((item, i) => (
             <SponsorCard
               key={item.id ?? `${title}-${i}`}
@@ -640,36 +646,6 @@ export function SponsorsGrid() {
         {/* Tab 2: Association & Media Partners Panel (Indonesia style split sections) */}
         {!loading && hasAnyData && activeTab === "associations-media" && (
           <div className="grid grid-cols-1 gap-16 mt-4">
-            
-            {/* Supporting Partners */}
-            <PartnerSplitSection
-              title="Supporting Partners"
-              desc="Key government departments, research institutes, and regional councils collaborating to support Southeast Asia's AI ambition."
-              dotColor="#C0F43C"
-              dotRgb="192, 244, 60"
-              items={supportingItems}
-              onCardClick={(item) => setSelectedSponsor(item)}
-            />
-
-            {/* Global Innovation Partners */}
-            <PartnerSplitSection
-              title="Global Innovation Partners"
-              desc="International technology parks, sandbox spaces, and borderless accelerator networks driving startup growth."
-              dotColor="#00ceff"
-              dotRgb="0, 206, 255"
-              items={innovationItems}
-              onCardClick={(item) => setSelectedSponsor(item)}
-            />
-
-            {/* Association Partners */}
-            <PartnerSplitSection
-              title="Association Partners"
-              desc="Key government ministries, regional innovation boards, and industry councils steering regulatory framework adoption and national AI strategies."
-              dotColor="#18d4ff"
-              dotRgb="24, 212, 255"
-              items={associationItems}
-              onCardClick={(item) => setSelectedSponsor(item)}
-            />
 
             {/* Media Partners */}
             <PartnerSplitSection
@@ -679,6 +655,7 @@ export function SponsorsGrid() {
               dotRgb="0, 206, 255"
               items={mediaItems}
               onCardClick={(item) => setSelectedSponsor(item)}
+              gridCols={4}
             />
 
           </div>
