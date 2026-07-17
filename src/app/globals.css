@@ -134,16 +134,6 @@ img {
 
 
 /* Speakers Grid Micro-Interactions */
-.speaker-grid:hover .speaker-card-inner {
-  border-color: rgba(36, 143, 255, 0.24);
-}
-.speaker-grid:hover .speaker-card-inner img {
-  opacity: 0.34;
-  filter: saturate(0.72);
-}
-.speaker-grid:hover .speaker-card-inner::after {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.24) 0%, rgba(0, 0, 0, 0.95) 100%);
-}
 
 .speaker-card-inner:hover {
   z-index: 2 !important;
