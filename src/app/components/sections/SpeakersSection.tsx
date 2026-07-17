@@ -1,11 +1,80 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { GradientText } from "../Shared";
 import { SpeakerCard } from "../../speakers/SpeakerCard";
-import { speakers } from "../../speakers/data";
+import { speakers as fallbackSpeakers } from "../../speakers/data";
+
+interface KonfHubSpeaker {
+  speaker_id: number;
+  name: string;
+  designation: string;
+  organisation: string;
+  image_url: string;
+  speaker_order?: number;
+}
 
 export function SpeakersSection() {
-  const firstSixSpeakers = speakers.slice(0, 6);
+  const [displaySpeakers, setDisplaySpeakers] = useState<Array<{
+    id: string | number;
+    name: string;
+    designation: string;
+    company: string;
+    image: string;
+  }>>([]);
+
+  useEffect(() => {
+    fetch("/malaysia/api/konfhub-speakers")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch speakers");
+        return res.json();
+      })
+      .then((data) => {
+        const list: KonfHubSpeaker[] = [];
+        if (data.categorized && Array.isArray(data.categorized)) {
+          for (const cat of data.categorized) {
+            const entities = cat.entity || cat.speakers || [];
+            if (Array.isArray(entities)) {
+              list.push(...entities);
+            }
+          }
+        }
+        if (data.uncategorized && Array.isArray(data.uncategorized)) {
+          list.push(...data.uncategorized);
+        }
+
+        // Sort by speaker_order
+        list.sort((a, b) => (a.speaker_order || 999) - (b.speaker_order || 999));
+
+        if (list.length > 0) {
+          const mapped = list.slice(0, 6).map((speaker) => ({
+            id: speaker.speaker_id,
+            name: speaker.name || "",
+            designation: speaker.designation || "",
+            company: speaker.organisation || "",
+            image: speaker.image_url || "/malaysia/images/speakers/default.png"
+          }));
+          setDisplaySpeakers(mapped);
+        } else {
+          useFallback();
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load live speakers for homepage:", err);
+        useFallback();
+      });
+
+    function useFallback() {
+      const mapped = fallbackSpeakers.slice(0, 6).map((speaker) => ({
+        id: speaker.id,
+        name: speaker.name,
+        designation: speaker.designation,
+        company: speaker.company,
+        image: speaker.image
+      }));
+      setDisplaySpeakers(mapped);
+    }
+  }, []);
 
   return (
     <section className="relative py-[104px] bg-gradient-to-b from-[#051224]/70 to-[#020a18]/96 max-sm:py-[72px]" id="speakers">
@@ -24,7 +93,7 @@ export function SpeakersSection() {
 
         {/* Speakers Grid Container */}
         <div className="speaker-grid grid grid-cols-3 gap-[22px] max-[980px]:grid-cols-2 max-sm:grid-cols-1">
-          {firstSixSpeakers.map((speaker, index) => (
+          {displaySpeakers.map((speaker, index) => (
             <SpeakerCard
               key={speaker.id}
               name={speaker.name}
