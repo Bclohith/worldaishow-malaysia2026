@@ -90,28 +90,27 @@ export function SpeakersList() {
               ))}
             </div>
           </div>
-        ) : null}
-
-        {/* Past Speakers Heading */}
-        <div className="mb-12 border-b border-white/10 pb-8">
-          <h2 className="font-[850] text-white leading-tight tracking-[-1.5px] text-[clamp(32px,4vw,44px)] m-0 uppercase">
-            Past <GradientText>Speakers</GradientText>
-          </h2>
-        </div>
-
-        {/* Speakers Grid */}
-        <div className="speaker-grid grid grid-cols-3 gap-[22px] max-[980px]:grid-cols-2 max-sm:grid-cols-1">
-          {filteredPastSpeakers.map((speaker, index) => (
-            <SpeakerCard
-              key={speaker.id}
-              name={speaker.name}
-              role={speaker.designation}
-              company={speaker.company}
-              image={speaker.image}
-              index={index}
-            />
-          ))}
-        </div>
+        ) : (
+          <div className="mb-16">
+            <div className="mb-12 border-b border-white/10 pb-8">
+              <h2 className="font-[850] text-white leading-tight tracking-[-1.5px] text-[clamp(32px,4vw,44px)] m-0 uppercase">
+                Speakers
+              </h2>
+            </div>
+            <div className="speaker-grid grid grid-cols-3 gap-[22px] max-[980px]:grid-cols-2 max-sm:grid-cols-1">
+              {filteredPastSpeakers.map((speaker, index) => (
+                <SpeakerCard
+                  key={speaker.id}
+                  name={speaker.name}
+                  role={speaker.designation}
+                  company={speaker.company}
+                  image={speaker.image}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
