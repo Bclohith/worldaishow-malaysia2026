@@ -37,14 +37,12 @@ export function SpeakerCard({ name, role, company, image, index, bio }: SpeakerC
 
         {cleanBio && (
           <div className="absolute inset-0 z-20 flex flex-col justify-end p-5 bg-[#050b16]/95 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 border border-[#248fff]/40 rounded-[16px] backdrop-blur-[4px]">
-            <h4 className="m-0 text-white font-[850] text-[20px] mb-1 leading-tight">{name}</h4>
+            <h4 className="m-0 text-white font-[850] text-[20px] mb-0.5 leading-tight">{name}</h4>
+            <span className="block text-white/60 text-[13px] font-medium leading-tight mb-1.5">{role}</span>
             <span className="block text-[#18d4ff] font-mono text-[10px] uppercase tracking-[1.5px] font-bold mb-3">{company}</span>
             <p className="m-0 text-white/80 text-[13px] leading-relaxed overflow-y-auto max-h-[200px] pr-1.5 scrollbar-thin">
               {cleanBio}
             </p>
-            <div className="mt-4 pt-3 border-t border-white/10 text-left">
-              <span className="text-white/60 text-[12px] font-medium block leading-tight">{role}</span>
-            </div>
           </div>
         )}
       </div>
