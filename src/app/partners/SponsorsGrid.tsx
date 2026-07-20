@@ -536,19 +536,22 @@ export function SponsorsGrid() {
   const innovationKeys = ["global-innovation-partner", "global-innovation-partners"];
   const associationKeys = ["association-partner", "association-partners"];
   const mediaKeys = ["media-partner", "media-partners"];
+  const ticketingKeys = ["ticketing-partner", "ticketing-partners"];
 
   const mainCategories = sortedCategories.filter(cat => {
     const slug = getSlug(cat);
     return !supportingKeys.includes(slug) &&
            !innovationKeys.includes(slug) &&
            !associationKeys.includes(slug) &&
-           !mediaKeys.includes(slug);
+           !mediaKeys.includes(slug) &&
+           !ticketingKeys.includes(slug);
   });
 
   const supportingItems: SponsorItem[] = [];
   const innovationItems: SponsorItem[] = [];
   const associationItems: SponsorItem[] = [];
   const mediaItems: SponsorItem[] = [];
+  const ticketingItems: SponsorItem[] = [];
 
   sortedCategories.forEach(cat => {
     const slug = getSlug(cat);
@@ -561,6 +564,8 @@ export function SponsorsGrid() {
       associationItems.push(...items);
     } else if (mediaKeys.includes(slug)) {
       mediaItems.push(...items);
+    } else if (ticketingKeys.includes(slug)) {
+      ticketingItems.push(...items);
     }
   });
 
@@ -646,6 +651,16 @@ export function SponsorsGrid() {
         {/* Tab 2: Association & Media Partners Panel (Indonesia style split sections) */}
         {!loading && hasAnyData && activeTab === "associations-media" && (
           <div className="grid grid-cols-1 gap-16 mt-4">
+
+            {/* Ticketing Partner */}
+            <PartnerSplitSection
+              title="Ticketing Partner"
+              desc="Official ticketing and registration platform powering seamless attendee experiences at World AI Show Malaysia."
+              dotColor="#9a6cff"
+              dotRgb="154, 108, 255"
+              items={ticketingItems}
+              onCardClick={(item) => setSelectedSponsor(item)}
+            />
 
             {/* Media Partners */}
             <PartnerSplitSection
