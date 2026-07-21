@@ -202,7 +202,7 @@ export function HeroSectionDemo() {
       <div className="hero-grid-pattern absolute bottom-0 left-[-6%] right-[-6%] h-[245px] z-1 opacity-70 blur-[1px]" aria-hidden="true" />
 
       {/* Hero Content */}
-      <div className="container relative z-10 mx-auto px-6 pt-[116px] max-sm:pt-[100px] max-sm:px-4 flex flex-col items-center">
+      <div className="container relative z-10 mx-auto px-6 pt-[126px] max-sm:pt-[110px] max-sm:px-4 flex flex-col items-center">
         {/* Glow Status Pill */}
         <p className="inline-flex items-center h-8 px-3.5 mb-[25px] border border-[#b9f82d]/72 rounded-full text-white/82 text-[14px] uppercase tracking-[1px] font-medium shadow-[0_0_12px_rgba(185,248,45,0.15)] bg-black/40">
           By invitation only
@@ -214,9 +214,9 @@ export function HeroSectionDemo() {
         </h1>
 
         {/* Supporting Partner Card */}
-        <div className="mt-[28px] mb-[6px] flex justify-center">
-          <div className="inline-flex flex-col items-center gap-3 px-10 py-5 rounded-[14px] border border-white/20 bg-[#2a3444]/80 backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] max-sm:px-7 max-sm:py-4">
-            <span className="inline-block px-4 py-1.5 rounded-md bg-[#1a2636] text-white text-[12px] font-bold tracking-[0.5px]">Supporting Partner</span>
+        <div className="mt-[28px] mb-[8px] flex justify-center">
+          <div className="w-[336px] h-[132px] flex flex-col justify-center items-center gap-3 rounded-[15px] border border-white/20 bg-[#d9d9d9]/[0.13] backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] max-sm:w-[280px] max-sm:h-auto max-sm:py-5">
+            <span className="inline-block px-4 py-1.5 rounded-md bg-[#0f1a28] text-white text-[12px] font-bold tracking-[0.5px]">Supporting Partner</span>
             <img 
               src="/malaysia/images/partners/cyber-malaysia.png" 
               alt="CyberSecurity Malaysia - Supporting Partner" 
@@ -225,14 +225,8 @@ export function HeroSectionDemo() {
           </div>
         </div>
 
-        {/* Hero CTA Actions */}
-        <div className="flex justify-center gap-3 mt-[22px] max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:w-full max-sm:max-w-[280px]">
-          <Button href="https://worldaishow.com/malaysia/attend/delegate/#passes" showArrow={true}>Get Your Pass</Button>
-          <Button variant="outline" href="/malaysia/sponsorship-enquiry/">Enquire Now</Button>
-        </div>
-
         {/* Event Meta Footer */}
-        <div className="grid grid-cols-[max-content_max-content] justify-center items-center gap-6 w-full max-w-[650px] mx-auto mt-[18px] pt-6 border-t border-white/25 text-center max-[980px]:grid-cols-1 max-sm:gap-3 max-sm:pt-5">
+        <div className="grid grid-cols-[max-content_max-content] justify-center items-center gap-6 w-full max-w-[650px] mx-auto mt-[14px] pt-5 border-t border-white/25 text-center max-[980px]:grid-cols-1 max-sm:gap-3 max-sm:pt-4">
           
           {/* Column 1: Dates */}
           <div className="pr-6 border-r border-white/27 text-center max-[980px]:border-r-0 max-[980px]:pr-0 max-sm:w-full max-sm:pb-3 max-sm:border-b max-sm:border-white/20">
@@ -254,6 +248,12 @@ export function HeroSectionDemo() {
             </span>
           </div>
 
+        </div>
+
+        {/* Hero CTA Actions */}
+        <div className="flex justify-center gap-3 mt-[22px] max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:w-full max-sm:max-w-[280px]">
+          <Button href="https://worldaishow.com/malaysia/attend/delegate/#passes" showArrow={true}>Buy a Pass</Button>
+          <Button variant="outline" href="/malaysia/sponsorship-enquiry/">Enquire Now</Button>
         </div>
       </div>
     </section>

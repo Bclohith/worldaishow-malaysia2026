@@ -31,9 +31,9 @@ export function HeroSection() {
         </h1>
 
         {/* Supporting Partner Card */}
-        <div className="mt-[28px] mb-[6px] flex justify-center">
-          <div className="inline-flex flex-col items-center gap-3 px-10 py-5 rounded-[14px] border border-white/20 bg-[#2a3444]/80 backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] max-sm:px-7 max-sm:py-4">
-            <span className="inline-block px-4 py-1.5 rounded-md bg-[#1a2636] text-white text-[12px] font-bold tracking-[0.5px]">Supporting Partner</span>
+        <div className="mt-[28px] mb-[8px] flex justify-center">
+          <div className="w-[336px] h-[132px] flex flex-col justify-center items-center gap-3 rounded-[15px] border border-white/20 bg-[#d9d9d9]/[0.13] backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] max-sm:w-[280px] max-sm:h-auto max-sm:py-5">
+            <span className="inline-block px-4 py-1.5 rounded-md bg-[#0f1a28] text-white text-[12px] font-bold tracking-[0.5px]">Supporting Partner</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src="/malaysia/images/partners/cyber-malaysia.png" 
@@ -43,14 +43,8 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Hero CTA Actions */}
-        <div className="flex justify-center gap-3 mt-[22px] max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:w-full max-sm:max-w-[280px]">
-          <Button href="https://worldaishow.com/malaysia/attend/delegate/#passes" showArrow={true}>Get Your Pass</Button>
-          <Button variant="outline" href="/malaysia/sponsorship-enquiry/">Enquire Now</Button>
-        </div>
-
         {/* Event Meta Footer */}
-        <div className="grid grid-cols-[max-content_max-content] justify-center items-center gap-6 w-full max-w-[650px] mx-auto mt-[18px] pt-6 border-t border-white/25 text-center max-[980px]:grid-cols-1 max-sm:gap-3 max-sm:pt-5">
+        <div className="grid grid-cols-[max-content_max-content] justify-center items-center gap-6 w-full max-w-[650px] mx-auto mt-[14px] pt-5 border-t border-white/25 text-center max-[980px]:grid-cols-1 max-sm:gap-3 max-sm:pt-4">
           
           {/* Column 1: Dates */}
           <div className="pr-6 border-r border-white/27 text-center max-[980px]:border-r-0 max-[980px]:pr-0 max-sm:w-full max-sm:pb-3 max-sm:border-b max-sm:border-white/20">
@@ -72,6 +66,12 @@ export function HeroSection() {
             </span>
           </div>
 
+        </div>
+
+        {/* Hero CTA Actions */}
+        <div className="flex justify-center gap-3 mt-[22px] max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:w-full max-sm:max-w-[280px]">
+          <Button href="https://worldaishow.com/malaysia/attend/delegate/#passes" showArrow={true}>Buy a Pass</Button>
+          <Button variant="outline" href="/malaysia/sponsorship-enquiry/">Enquire Now</Button>
         </div>
       </div>
     </section>
