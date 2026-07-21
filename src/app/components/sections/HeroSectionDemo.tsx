@@ -216,11 +216,10 @@ export function HeroSectionDemo() {
         {/* Supporting Partner Card */}
         <div className="mt-[28px] mb-[6px] flex justify-center">
           <div className="inline-flex flex-col items-center gap-2.5 px-8 py-4 rounded-[16px] border border-white/15 bg-white/[0.06] backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.3)] max-sm:px-6 max-sm:py-3">
-            <span className="text-white/80 text-[11px] font-bold uppercase tracking-[2px]">Supporting Partner</span>
             <img 
               src="/malaysia/images/partners/cyber-malaysia.png" 
-              alt="CyberSecurity Malaysia" 
-              className="h-[44px] w-auto object-contain max-sm:h-[36px]"
+              alt="CyberSecurity Malaysia - Supporting Partner" 
+              className="h-[56px] w-auto object-contain max-sm:h-[46px]"
             />
           </div>
         </div>
