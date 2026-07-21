@@ -202,7 +202,7 @@ export function HeroSectionDemo() {
       <div className="hero-grid-pattern absolute bottom-0 left-[-6%] right-[-6%] h-[245px] z-1 opacity-70 blur-[1px]" aria-hidden="true" />
 
       {/* Hero Content */}
-      <div className="container relative z-10 mx-auto px-6 pt-[170px] max-sm:pt-[140px] max-sm:px-4 flex flex-col items-center">
+      <div className="container relative z-10 mx-auto px-6 pt-[210px] max-sm:pt-[180px] max-sm:px-4 flex flex-col items-center">
         {/* Glow Status Pill */}
         <p className="inline-flex items-center h-8 px-3.5 mb-[25px] border border-[#b9f82d]/72 rounded-full text-white/82 text-[14px] uppercase tracking-[1px] font-medium shadow-[0_0_12px_rgba(185,248,45,0.15)] bg-black/40">
           By invitation only
