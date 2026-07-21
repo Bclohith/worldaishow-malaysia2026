@@ -222,7 +222,7 @@ export function HeroSectionDemo() {
             <img 
               src="/malaysia/images/partners/cyber-malaysia.png" 
               alt="CyberSecurity Malaysia - Supporting Partner" 
-              className="h-[50px] w-auto object-contain max-sm:h-[40px] mt-1"
+              className="h-[50px] w-auto object-contain px-6 max-sm:px-4 max-sm:h-[40px] mt-1"
             />
           </div>
         </div>
