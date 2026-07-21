@@ -26,25 +26,29 @@ export function HeroSection() {
         </p>
 
         {/* Hero Title */}
-        <h1 className="max-w-[1030px] mx-auto text-white font-[850] leading-[1.04] tracking-[-2px] text-[clamp(42px,7.2vw,94px)] text-center">
+        <h1 className="max-w-[1030px] mx-auto text-white font-[850] leading-[1.04] tracking-[-2px] text-[clamp(42px,7.2vw,94px)] text-center mb-8">
           Where Malaysia&apos;s <GradientText>AI Decisions</GradientText> Get Made.
         </h1>
 
+        <div className="w-full max-w-[900px] border-t border-white/20 opacity-60"></div>
+
         {/* Supporting Partner Card */}
-        <div className="mt-[28px] mb-[8px] flex justify-center">
-          <div className="w-[336px] h-[132px] flex flex-col justify-center items-center gap-3 rounded-[15px] border border-white/20 bg-[#d9d9d9]/[0.13] backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] max-sm:w-[280px] max-sm:h-auto max-sm:py-5">
-            <span className="inline-block px-4 py-1.5 rounded-md bg-[#0f1a28] text-white text-[12px] font-bold tracking-[0.5px]">Supporting Partner</span>
+        <div className="mt-8 mb-8 flex justify-center w-full">
+          <div className="w-[336px] h-[132px] flex flex-col justify-center items-center gap-2 rounded-[15px] border border-white/20 bg-[#d9d9d9]/[0.13] backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] max-sm:w-[280px] max-sm:h-auto max-sm:py-5">
+            <span className="text-white text-[13px] font-bold tracking-[0.5px]">Supporting Partner</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src="/malaysia/images/partners/cyber-malaysia.png" 
               alt="CyberSecurity Malaysia - Supporting Partner" 
-              className="h-[50px] w-auto object-contain max-sm:h-[40px]"
+              className="h-[50px] w-auto object-contain max-sm:h-[40px] mt-1"
             />
           </div>
         </div>
 
+        <div className="w-full max-w-[900px] border-t border-white/20 opacity-60"></div>
+
         {/* Event Meta Footer */}
-        <div className="grid grid-cols-[max-content_max-content] justify-center items-center gap-6 w-full max-w-[650px] mx-auto mt-[14px] pt-5 border-t border-white/25 text-center max-[980px]:grid-cols-1 max-sm:gap-3 max-sm:pt-4">
+        <div className="grid grid-cols-[max-content_max-content] justify-center items-center gap-6 w-full max-w-[650px] mx-auto mt-8 text-center max-[980px]:grid-cols-1 max-sm:gap-3 max-sm:mt-6">
           
           {/* Column 1: Dates */}
           <div className="pr-6 border-r border-white/27 text-center max-[980px]:border-r-0 max-[980px]:pr-0 max-sm:w-full max-sm:pb-3 max-sm:border-b max-sm:border-white/20">
@@ -52,7 +56,7 @@ export function HeroSection() {
               9-<GradientText>10</GradientText>
             </strong>
             <span className="block mt-2 text-[15px] font-bold text-white/80 uppercase tracking-[1.5px] max-sm:text-[13px] max-sm:mt-1.5">
-              Sep 2026
+              SEP 2026
             </span>
           </div>
 
@@ -62,14 +66,14 @@ export function HeroSection() {
               DoubleTree by <GradientText>Hilton</GradientText>
             </strong>
             <span className="block mt-2 text-[15px] font-bold text-white/80 uppercase tracking-[1.5px] max-sm:text-[13px] max-sm:mt-1.5">
-              Kuala Lumpur, Malaysia
+              KUALA LUMPUR, MALAYSIA
             </span>
           </div>
 
         </div>
 
         {/* Hero CTA Actions */}
-        <div className="flex justify-center gap-3 mt-[22px] max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:w-full max-sm:max-w-[280px]">
+        <div className="flex justify-center gap-3 mt-[32px] max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:w-full max-sm:max-w-[280px]">
           <Button href="https://worldaishow.com/malaysia/attend/delegate/#passes" showArrow={true}>Buy a Pass</Button>
           <Button variant="outline" href="/malaysia/sponsorship-enquiry/">Enquire Now</Button>
         </div>
