@@ -652,26 +652,66 @@ export function SponsorsGrid() {
         {!loading && hasAnyData && activeTab === "associations-media" && (
           <div className="grid grid-cols-1 gap-16 mt-4">
 
+            {/* Supporting Partners */}
+            {supportingItems.length > 0 && (
+              <PartnerSplitSection
+                title="Supporting Partners"
+                desc="Key industry bodies and organizational partners providing essential backing to the World AI Show ecosystem."
+                dotColor="#9a6cff"
+                dotRgb="154, 108, 255"
+                items={supportingItems}
+                onCardClick={(item) => setSelectedSponsor(item)}
+              />
+            )}
+
+            {/* Global Innovation Partners */}
+            {innovationItems.length > 0 && (
+              <PartnerSplitSection
+                title="Global Innovation Partners"
+                desc="International organizations fostering cross-border technological collaboration and AI advancement."
+                dotColor="#00ceff"
+                dotRgb="0, 206, 255"
+                items={innovationItems}
+                onCardClick={(item) => setSelectedSponsor(item)}
+              />
+            )}
+
+            {/* Association Partners */}
+            {associationItems.length > 0 && (
+              <PartnerSplitSection
+                title="Association Partners"
+                desc="Industry chambers, startup accelerators, and academic institutions driving ecosystem connectivity and research."
+                dotColor="#18d4ff"
+                dotRgb="24, 212, 255"
+                items={associationItems}
+                onCardClick={(item) => setSelectedSponsor(item)}
+              />
+            )}
+
             {/* Ticketing Partner */}
-            <PartnerSplitSection
-              title="Ticketing Partner"
-              desc="Official ticketing and registration platform powering seamless attendee experiences at World AI Show Malaysia."
-              dotColor="#9a6cff"
-              dotRgb="154, 108, 255"
-              items={ticketingItems}
-              onCardClick={(item) => setSelectedSponsor(item)}
-            />
+            {ticketingItems.length > 0 && (
+              <PartnerSplitSection
+                title="Ticketing Partner"
+                desc="Official ticketing and registration platform powering seamless attendee experiences at World AI Show Malaysia."
+                dotColor="#9a6cff"
+                dotRgb="154, 108, 255"
+                items={ticketingItems}
+                onCardClick={(item) => setSelectedSponsor(item)}
+              />
+            )}
 
             {/* Media Partners */}
-            <PartnerSplitSection
-              title="Media Partners"
-              desc="Leading global and domestic tech outlets, digital broadcasts, and publications amplifying show highlights, insights, and market briefings."
-              dotColor="#00ceff"
-              dotRgb="0, 206, 255"
-              items={mediaItems}
-              onCardClick={(item) => setSelectedSponsor(item)}
-              gridCols={4}
-            />
+            {mediaItems.length > 0 && (
+              <PartnerSplitSection
+                title="Media Partners"
+                desc="Leading global and domestic tech outlets, digital broadcasts, and publications amplifying show highlights, insights, and market briefings."
+                dotColor="#00ceff"
+                dotRgb="0, 206, 255"
+                items={mediaItems}
+                onCardClick={(item) => setSelectedSponsor(item)}
+                gridCols={4}
+              />
+            )}
 
           </div>
         )}
