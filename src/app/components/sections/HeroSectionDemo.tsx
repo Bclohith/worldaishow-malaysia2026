@@ -255,7 +255,7 @@ export function HeroSectionDemo() {
         </div>
 
         {/* Hero CTA Actions */}
-        <div className="flex justify-center gap-3 mt-[32px] max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:w-full max-sm:max-w-[280px]">
+        <div className="flex justify-center gap-3 mt-[32px] mb-16 max-sm:mb-10 max-sm:flex-col max-sm:items-center max-sm:gap-4 max-sm:w-full max-sm:max-w-[280px]">
           <Button href="https://worldaishow.com/malaysia/attend/delegate/#passes" showArrow={true}>Buy a Pass</Button>
           <Button variant="outline" href="/malaysia/sponsorship-enquiry/">Enquire Now</Button>
         </div>
