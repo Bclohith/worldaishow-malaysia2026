@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-// ISR: regenerate this route every 1 hour (3600 seconds)
-export const revalidate = 3600;
+// ISR: regenerate this route every 60 seconds (1 minute)
+export const revalidate = 60;
 
 export async function GET() {
   try {
@@ -13,7 +13,7 @@ export async function GET() {
           "user-agent": "Mozilla/5.0",
         },
         // Upstream fetch cache aligned with the route revalidation window
-        next: { revalidate: 3600 },
+        next: { revalidate: 60 },
       }
     );
 
@@ -27,10 +27,10 @@ export async function GET() {
     const data = await response.json();
 
     // Set Cache-Control so CDN / browser serves cached response
-    // but revalidates in the background every hour
+    // but revalidates in the background every minute
     return NextResponse.json(data, {
       headers: {
-        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=1800",
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30",
       },
     });
   } catch (err) {
