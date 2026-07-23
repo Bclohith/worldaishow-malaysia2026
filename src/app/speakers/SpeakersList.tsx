@@ -20,7 +20,7 @@ export function SpeakersList() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/malaysia/api/konfhub-speakers")
+    fetch("https://api.konfhub.com/event/public/world-ai-show-malaysia26/speakers")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch speakers");
         return res.json();
