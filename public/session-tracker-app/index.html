@@ -1297,13 +1297,37 @@ document.addEventListener('keydown',e=>{
 
 /* ─── Start ─── */
 boot();
+
+  function playBeep() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    } catch(e) { /* silent fail if audio not supported */ }
+  }
 </script>
 
 <!-- SETUP SCREEN OVERLAY -->
 <div id="setup-screen">
   <div class="setup-card">
     <h2>🔌 Firebase Setup</h2>
-    <p>Paste your <b>const firebaseConfig = { ... };</b> code below to connect to your database. This is saved locally on your device.</p>
+    <p>Paste your <b>const firebaseConfig = {
+  apiKey: "AIzaSyBdYx15xOQhH9nYOQPKOSg1dEqodo2EmIQ",
+  authDomain: "session-count-master-bd340.firebaseapp.com",
+  databaseURL: "https://session-count-master-bd340-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "session-count-master-bd340",
+  storageBucket: "session-count-master-bd340.firebasestorage.app",
+  messagingSenderId: "390320826",
+  appId: "1:390320826:web:5342a19b460ae5dd19e883"
+};</b> code below to connect to your database. This is saved locally on your device.</p>
     <textarea id="setup-input" class="setup-textarea" placeholder="const firebaseConfig = {&#10;  apiKey: '...',&#10;  ...&#10;};"></textarea>
     <button class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:16px;" onclick="saveConfigAndInit()">💾 Save & Connect</button>
     <button id="setup-cancel-btn" class="btn btn-outline" style="width:100%; justify-content:center; padding:14px; font-size:16px; margin-top:10px; display:none;" onclick="closeSetup()">Cancel</button>
