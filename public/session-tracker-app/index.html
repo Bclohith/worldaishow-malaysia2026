@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session Attendance Tracker</title>
+  <meta name="description" content="Smart QR-based session attendance tracker with real-time Firebase sync and lucky draw." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- Firebase v9 compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface2: #f1f5f9;
+      --border: #e2e8f0;
+      --accent: #6c63ff;
+      --accent2: #8b5cf6;
+      --green: #10b981;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --gold: #f59e0b;
+      --text: #0f172a;
+      --muted: #64748b;
+      --card-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+
+    html { height: -webkit-fill-available; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; min-height: -webkit-fill-available; overflow-x: hidden; -webkit-overflow-scrolling: touch; overflow-y: auto; }
+
+    /* ════════════════════════════
+       SETUP SCREEN
+    ════════════════════════════ */
+    #setup-screen {
+      display: none;
+      position: fixed; inset: 0; z-index: 20000;
+      background: var(--bg);
+      align-items: flex-start; justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #setup-screen.show { display: flex; }
+
+    .setup-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+    .setup-card h2 {
+      font-size: 24px; font-weight: 800;
+      background: linear-gradient(135deg, var(--text), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .setup-card .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+
+    .setup-steps { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+    .setup-step {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+    }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: white;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .step-content p { font-size: 13px; color: var(--text); line-height: 1.6; }
+    .step-content a { color: var(--accent2); text-decoration: none; }
+    .step-content a:hover { text-decoration: underline; }
+    .step-content code {
+      background: rgba(108,99,255,0.12); color: var(--accent2);
+      padding: 1px 6px; border-radius: 4px; font-size: 12px;
+    }
+
+    .config-paste {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px; margin-bottom: 20px;
+    }
+    .config-paste label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 10px; display: block; }
+    .config-paste textarea {
+      width: 100%; min-height: 160px;
+      background: var(--surface2); color: var(--text); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px; color: #4ade80;
+      font-family: 'Courier New', monospace; font-size: 12px;
+      outline: none; resize: vertical; line-height: 1.6;
+    }
+    .config-paste textarea:focus { border-color: var(--accent); }
+    .config-error { color: var(--red); font-size: 12px; margin-top: 6px; display: none; }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .logo h1 {
+      font-size: 18px; font-weight: 700;
+      background: linear-gradient(135deg, var(--text), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .logo p { font-size: 12px; color: var(--muted); }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .stat-pill {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 16px; font-size: 13px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .stat-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+
+    /* Sync status badge */
+    .sync-badge {
+      display: flex; align-items: center; gap: 7px;
+      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      border: 1px solid; transition: all 0.4s;
+    }
+    .sync-badge.synced  { background: rgba(34,197,94,0.1);  border-color: rgba(34,197,94,0.3);  color: var(--green); }
+    .sync-badge.offline { background: rgba(239,68,68,0.1);  border-color: rgba(239,68,68,0.3);  color: var(--red); }
+    .sync-badge.syncing { background: rgba(108,99,255,0.1); border-color: rgba(108,99,255,0.3); color: var(--accent2); }
+    .sync-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .sync-badge.synced  .sync-dot { background: var(--green);   animation: pulse 2s infinite; }
+    .sync-badge.offline .sync-dot { background: var(--red); }
+    .sync-badge.syncing .sync-dot { background: var(--accent2); animation: spin 1s linear infinite; }
+
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+    @keyframes spin  { to { transform: rotate(360deg); } }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 1280px; margin: 0 auto; padding: 28px 24px;
+      display: grid; grid-template-columns: 380px 1fr; gap: 24px;
+    }
+
+    /* ── CARDS ── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: var(--card-shadow); }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+    /* ── FORM ── */
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+    select, input[type="text"] {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 14px; color: var(--text);
+      font-family: inherit; font-size: 14px; outline: none; transition: border-color .2s;
+    }
+    select:focus, input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,99,255,.15); }
+    select option { background: var(--surface2); }
+    .add-session-row { display: flex; gap: 8px; margin-top: 10px; }
+    .add-session-row input { flex: 1; }
+
+    /* ── BUTTONS ── */
+    .btn { border:none; border-radius:10px; padding:10px 18px; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; transition:all .2s; display:inline-flex; align-items:center; gap:8px; }
+    .btn-primary { background: linear-gradient(135deg,var(--accent),#8b5cf6); color:var(--text); box-shadow:0 4px 14px rgba(108,99,255,.35); }
+    .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(108,99,255,.5); }
+    .btn-green { background: linear-gradient(135deg,#16a34a,var(--green)); color:var(--text); box-shadow:0 4px 14px rgba(34,197,94,.3); }
+    .btn-green:hover { transform:translateY(-1px); }
+    .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+    .btn-outline:hover { background:var(--surface2); border-color:var(--accent); }
+    .btn-danger { background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.3); color:var(--red); padding:6px 12px; font-size:12px; border-radius:8px; }
+    .btn-danger:hover { background:rgba(239,68,68,.2); }
+    .btn-sm { padding:7px 12px; font-size:13px; border-radius:8px; }
+    .btn-purple { background: #A855F7; color: white; box-shadow: 0 4px 20px rgba(168,85,247,0.4); border: none; }
+    .btn-purple:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(168,85,247,0.6); }
+    .btn-gold { background:linear-gradient(135deg,#d97706,var(--gold)); color:#0a0c14; font-weight:800; box-shadow:0 4px 20px rgba(251,191,36,.4); border:none; }
+    .btn-gold:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(251,191,36,.6); }
+
+    /* ── SCANNER ── */
+    .scanner-wrap { position:relative; background:var(--surface2); border:2px dashed var(--border); border-radius:14px; overflow:hidden; transition:border-color .3s; min-height:240px; display:flex; align-items:center; justify-content:center; }
+    .scanner-wrap.scanning { border-color:var(--accent); border-style:solid; }
+    #qr-reader { width:100% !important; }
+    #qr-reader > div, #qr-reader__scan_region { max-width: 100% !important; }
+    #qr-reader video, #qr-reader canvas { max-width: 100% !important; height: auto !important; }
+    #qr-reader__header_message, #qr-reader__status_span { display:none !important; }
+    #qr-reader__dashboard_section_csr span { color:var(--muted) !important; font-size:12px; }
+    #qr-reader__dashboard_section_csr button { background:linear-gradient(135deg,var(--accent),#8b5cf6) !important; border:none !important; border-radius:10px !important; padding:10px 20px !important; font-family:inherit !important; font-weight:600 !important; cursor:pointer !important; color:white !important; }
+    .scanner-idle { text-align:center; padding:40px 24px; }
+    .scanner-idle .scan-icon { font-size:48px; margin-bottom:12px; display:block; }
+    .scanner-idle p { color:var(--muted); font-size:14px; line-height:1.6; }
+    .scan-controls { display:flex; gap:10px; margin-top:14px; }
+    .scan-controls .btn { flex:1; justify-content:center; }
+    .manual-entry { margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+    .manual-row { display:flex; gap:8px; }
+    .manual-row input { flex:1; }
+
+    /* ── TOAST ── */
+    #toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:12px 20px; display:flex; align-items:center; gap:10px; font-size:14px; font-weight:500; box-shadow:0 8px 32px rgba(0,0,0,.5); z-index:9999; transition:transform .3s cubic-bezier(.34,1.56,.64,1); white-space:nowrap; }
+    #toast.show { transform:translateX(-50%) translateY(0); }
+    #toast.success .toast-icon::before { content:'✅'; }
+    #toast.error   .toast-icon::before { content:'❌'; }
+    #toast.warn    .toast-icon::before { content:'⚠️'; }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel { display:flex; flex-direction:column; gap:20px; }
+    .summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:4px; }
+    .summary-card { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center; }
+    .summary-card .num { font-size:28px; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .summary-card .lbl { font-size:12px; color:var(--muted); margin-top:4px; }
+
+    /* ── TABLE ── */
+    .table-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .search-input-wrap { position:relative; }
+    .search-input-wrap input { width:220px; padding-left:36px; }
+    .search-input-wrap .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; }
+    .attendance-table-wrap { border-radius:12px; overflow:hidden; border:1px solid var(--border); max-height:420px; overflow-y:auto; }
+    table { width:100%; border-collapse:collapse; font-size:13.5px; }
+    thead { background:var(--surface2); position:sticky; top:0; z-index:1; }
+    th { padding:12px 16px; text-align:left; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; border-bottom:1px solid var(--border); }
+    tbody tr { border-bottom:1px solid rgba(37,42,61,.6); transition:background .15s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:var(--surface2); }
+    td { padding:12px 16px; color:var(--text); }
+    .badge-id { font-family:monospace; background:rgba(108,99,255,.12); color:var(--accent2); padding:2px 8px; border-radius:5px; font-size:12px; }
+    .row-num { width:36px; height:36px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:var(--muted); }
+    .session-tag { background:rgba(108,99,255,.15); color:var(--accent2); border:1px solid rgba(108,99,255,.25); border-radius:6px; padding:2px 8px; font-size:11px; font-weight:600; display:inline-block; max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; vertical-align:bottom; text-transform:none; }
+    .empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
+    .empty-state .empty-icon { font-size:40px; margin-bottom:12px; }
+
+    /* ── EXPORT BAR ── */
+    .export-bar { display:flex; align-items:center; gap:12px; padding:16px 20px; background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(167,139,250,.05)); border:1px solid rgba(108,99,255,.2); border-radius:12px; }
+    .export-bar p { flex:1; font-size:13px; color:var(--muted); }
+    .export-bar strong { color:var(--text); }
+
+    /* ── LUCKY DRAW CARD ── */
+    .lucky-draw-card { background:linear-gradient(135deg,rgba(251,191,36,.07),rgba(217,119,6,.04)); border:1px solid rgba(251,191,36,.25); border-radius:16px; padding:24px; box-shadow:0 4px 24px rgba(251,191,36,.08); }
+    .lucky-draw-card .card-title { color:#fbbf24; }
+    .draw-meta { display:flex; align-items:flex-end; gap:14px; margin-bottom:16px; }
+    .draw-meta > div { flex:1; }
+    .winner-log { margin-top:16px; }
+    .winner-item { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:10px; background:rgba(251,191,36,.06); border:1px solid rgba(251,191,36,.15); margin-bottom:8px; animation:slideUp .4s ease; }
+    @keyframes slideUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .winner-item .trophy { font-size:20px; }
+    .winner-item .winner-name { font-weight:700; color:var(--gold); flex:1; font-size:15px; }
+    .winner-item .winner-meta { font-size:11px; color:var(--muted); }
+
+    /* ── NEW ROW ANIMATION ── */
+    @keyframes rowIn { from{opacity:0;transform:translateX(-12px);background:rgba(108,99,255,.15)} to{opacity:1;transform:translateX(0);background:transparent} }
+    .new-row { animation:rowIn .5s ease forwards; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:var(--surface); }
+    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+    ::-webkit-scrollbar-thumb:hover { background:var(--muted); }
+    .section-divider { height:1px; background:var(--border); margin:16px 0; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){ main{grid-template-columns:1fr} }
+    @media(max-width:600px){ header{padding:14px 16px} main{padding:16px;gap:16px} .header-right .stat-pill{display:none} }
+
+    /* ════════════════════════════════════════
+       LUCKY DRAW OVERLAY
+    ════════════════════════════════════════ */
+    #draw-overlay { display:none; position:fixed; inset:0; z-index:10000; background:#f8fafc; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+    #draw-overlay.active { display:flex; }
+    #names-cloud { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .floating-name { position:absolute; font-family:'Inter',sans-serif; font-weight:700; white-space:nowrap; border-radius:8px; padding:6px 14px; animation:floatAcross linear forwards; }
+    @keyframes floatAcross { 0%{transform:translateX(0) scale(1);opacity:0} 5%{opacity:1} 95%{opacity:1} 100%{transform:translateX(var(--travel)) scale(1);opacity:0} }
+    .draw-spotlight { position:relative; z-index:2; text-align:center; display:flex; flex-direction:column; align-items:center; gap:24px; }
+    .draw-session-label { font-size:14px; font-weight:600; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
+    .slot-machine { position:relative; width:min(700px,90vw); height:130px; overflow:hidden; border-radius:20px; background:rgba(0,0,0,.03); border:2px solid rgba(251,191,36,.3); box-shadow:0 0 60px rgba(251,191,36,.12),inset 0 0 40px rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; }
+    .slot-machine::before,.slot-machine::after { content:''; position:absolute; left:0; right:0; height:35px; z-index:3; pointer-events:none; }
+    .slot-machine::before { top:0; background:linear-gradient(to bottom,#f8fafc,transparent); }
+    .slot-machine::after  { bottom:0; background:linear-gradient(to top,#f8fafc,transparent); }
+    #slot-name { font-size:clamp(28px,5vw,56px); font-weight:900; background:linear-gradient(135deg,#fff 0%,#fbbf24 50%,#f59e0b 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-.02em; transition:none; text-align:center; padding:0 32px; line-height:1.1; }
+    .slot-machine.revealed { border-color:var(--gold); box-shadow:0 0 0 4px rgba(251,191,36,.15),0 0 80px rgba(251,191,36,.35),0 0 140px rgba(251,191,36,.15); }
+    .winner-reveal { display:none; flex-direction:column; align-items:center; gap:12px; }
+    .winner-reveal.show { display:flex; }
+    .winner-trophy-big { font-size:64px; animation:bounceIn .6s cubic-bezier(.34,1.56,.64,1) forwards; }
+    @keyframes bounceIn { 0%{transform:scale(0);opacity:0} 100%{transform:scale(1);opacity:1} }
+    .winner-announce { font-size:18px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; }
+    .draw-actions { display:flex; gap:14px; margin-top:8px; }
+    #confetti-canvas { position:fixed; inset:0; pointer-events:none; z-index:10001; }
+    .close-draw-btn { position:absolute; top:24px; right:28px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.12); color:var(--muted); border-radius:50%; width:40px; height:40px; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+    .close-draw-btn:hover { background:rgba(0,0,0,.12); color:var(--text); }
+    .spin-progress { width:min(700px,90vw); height:3px; background:rgba(0,0,0,.06); border-radius:3px; overflow:hidden; }
+    .spin-progress-bar { height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--gold)); border-radius:3px; transition:width .1s linear; }
+
+    /* ════════════════════════════════════════
+       MOBILE / SAFARI FIXES
+    ════════════════════════════════════════ */
+
+    /* Fix main layout for phones */
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
+      .right-panel { order: -1; } /* show summary/table first on mobile */
+      .summary-grid { grid-template-columns: repeat(3,1fr); }
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
+      .header-right { gap: 8px; }
+      .header-right .stat-pill:last-child { display: none; }
+      .sync-badge span:last-child { font-size: 11px; }
+      main { padding: 12px; gap: 12px; }
+      .card { padding: 16px; border-radius: 12px; }
+      .lucky-draw-card { padding: 16px; }
+      .setup-card { padding: 24px 18px; }
+      .setup-card h2 { font-size: 20px; }
+
+      /* Table scrolls horizontally on small screens */
+      .attendance-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-height: 340px; }
+      table { min-width: 480px; }
+
+      /* Table header stacks on mobile */
+      .table-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .search-input-wrap input { width: 100%; }
+
+      /* Export bar stacks */
+      .export-bar { flex-direction: column; align-items: stretch; text-align: center; }
+      .export-bar > div { text-align: left; }
+
+      /* Scanner bigger on mobile */
+      .scanner-wrap { min-height: 280px; }
+
+      /* Draw overlay text size */
+      .draw-session-label { font-size: 12px; }
+      .winner-announce { font-size: 14px; letter-spacing: 0.06em; }
+      .winner-trophy-big { font-size: 48px; }
+      .draw-actions { flex-direction: column; width: 90vw; }
+      .draw-actions .btn { justify-content: center; }
+
+      /* Summary cards */
+      .summary-card { padding: 12px 8px; }
+      .summary-card .num { font-size: 22px; }
+      .summary-card .lbl { font-size: 10px; }
+
+      /* Buttons full width on mobile */
+      .scan-controls { flex-direction: column; }
+      .btn-gold { font-size: 14px; padding: 12px; }
+    }
+
+    /* Prevent iOS bounce on fixed elements */
+    #draw-overlay, #setup-screen {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: none;
+    }
+
+    /* Fix iOS input zoom (prevents page zoom on focus) */
+    @media (max-width: 768px) {
+      select, input[type="text"], textarea {
+        font-size: 16px !important;
+      }
+    }
+
+    /* ── SCAN CONFIRM MODAL ── */
+    #scan-confirm-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 15000;
+      background: rgba(0,0,0,0.75);
+      align-items: center; justify-content: center;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+    }
+    #scan-confirm-overlay.show { display: flex; }
+    .scan-confirm-card {
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      animation: popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+    .scan-confirm-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .scan-confirm-raw {
+      font-size: 11px; color: var(--muted);
+      background: var(--surface2); border-radius: 8px;
+      padding: 8px 12px; margin-bottom: 16px;
+      word-break: break-all; line-height: 1.5;
+      border: 1px solid var(--border);
+    }
+    .scan-confirm-label { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+    .scan-confirm-input {
+      width: 100%; background: var(--surface2);
+      border: 2px solid var(--accent);
+      border-radius: 10px; padding: 12px 14px;
+      color: var(--text); font-family: inherit;
+      font-size: 16px; outline: none;
+      box-shadow: 0 0 0 3px rgba(108,99,255,0.15);
+      margin-bottom: 16px;
+    }
+    .scan-confirm-btns { display: flex; gap: 10px; }
+    .scan-confirm-btns .btn { flex: 1; justify-content: center; }
+  
+    /* SETUP SCREEN */
+    #setup-screen { position:fixed; inset:0; background:rgba(15,23,42,0.95); z-index:99999; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(8px); }
+    #setup-screen.active { display:flex; }
+    .setup-card { background:var(--surface); border-radius:20px; padding:32px; width:100%; max-width:500px; box-shadow:0 24px 48px rgba(0,0,0,0.4); text-align:center; }
+    .setup-card h2 { font-size:24px; font-weight:800; margin-bottom:12px; color:var(--text); }
+    .setup-card p { color:var(--muted); font-size:14px; margin-bottom:24px; line-height:1.6; }
+    .setup-textarea { width:100%; height:180px; padding:16px; border-radius:12px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:monospace; font-size:13px; resize:vertical; margin-bottom:16px; }
+    .setup-textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(108,99,255,0.2); }
+    .settings-btn { background:none; border:none; font-size:20px; cursor:pointer; padding:8px; border-radius:50%; transition:background 0.2s; }
+    .settings-btn:hover { background:var(--surface2); }
+</style>
+
+</head>
+<body>
+
+<!-- ── DUPLICATE SCAN OVERLAY ── -->
+<div id="duplicate-scan-overlay" style="display:none; position:fixed; inset:0; z-index:20000; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; backdrop-filter:blur(10px);">
+  <div style="background:var(--red); padding:40px; border-radius:24px; text-align:center; box-shadow:0 20px 60px rgba(239,68,68,0.4); max-width:400px; width:90%; animation: popIn 0.25s;">
+    <div style="font-size:60px; margin-bottom:16px;">⚠️</div>
+    <h2 style="color:var(--text); font-size:28px; font-weight:800; margin-bottom:12px;">ALREADY SCANNED!</h2>
+    <p style="color:rgba(255,255,255,0.9); font-size:16px; margin-bottom:24px;" id="duplicate-scan-msg"></p>
+    <button class="btn btn-outline" style="width:100%; background:white; color:var(--red); border:none; justify-content:center; font-size:18px; font-weight:700; padding:16px;" onclick="document.getElementById('duplicate-scan-overlay').style.display='none'">Dismiss</button>
+  </div>
+</div>
+
+<!-- ── SCAN CONFIRM MODAL ── -->
+<div id="scan-confirm-overlay">
+  <div class="scan-confirm-card">
+    <h3>✅ Badge Scanned!</h3>
+    <div class="scan-confirm-raw" id="scan-raw-value">—</div>
+    
+    <div class="scan-confirm-label">Checking in:</div>
+    <input class="scan-confirm-input" type="text" id="scan-confirm-name" placeholder="Full Name..." style="margin-bottom:8px;" />
+
+    <div class="scan-confirm-actions" style="margin-top:16px; display:flex; gap:12px;">
+      <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="confirmScan(currentSession)">Check In</button>
+      <button class="btn btn-danger" style="flex:1; justify-content:center;" onclick="document.getElementById('scan-confirm-overlay').classList.remove('show')">Cancel</button>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+<header>
+  <div class="header-left">
+    <img src="/malaysia/logos/datadog-wais-logo-1.png" alt="Datadog WAIS Logo" height="50" style="object-fit:contain;" />
+  </div>
+  <div class="header-right">
+    <button class="settings-btn" onclick="openSetup()" title="Update Firebase Config">⚙️</button>
+    <div class="sync-badge syncing" id="sync-badge" style="display: none;">
+      <span class="sync-dot"></span>
+      <span id="sync-label">Connecting…</span>
+    </div>
+    <div class="stat-pill">
+      <span class="dot"></span>
+      <span id="live-count">0 checked in</span>
+    </div>
+    <div class="stat-pill" style="gap:6px;">
+      🕐 <span id="live-time"></span>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main>
+  <!-- LEFT PANEL -->
+  <div style="display:flex;flex-direction:column;gap:20px;">
+
+    <div class="card">
+      <div class="card-title">📅 Session</div>
+      <div style="margin-bottom:20px;">
+        <label for="session-select">Active Session</label>
+        <select id="session-select" onchange="switchSession()"></select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📷 QR Scanner</div>
+      <div class="scanner-wrap" id="scanner-wrap" style="position:relative; width:100%; min-height:240px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--surface2); border:2px dashed var(--border); border-radius:14px; overflow:hidden;">
+        <div class="scanner-idle" id="scanner-idle" style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; width:100%; padding:20px;">
+          <div style="font-size:48px; margin-bottom:12px;">📱</div>
+          <p style="color:var(--muted); font-size:14px; line-height:1.6; margin:0; width:100%;">Point the camera at a<br/>badge QR code to check in.</p>
+        </div>
+        <div id="qr-reader" style="display:none;width:100%;"></div>
+        <canvas id="hybrid-canvas" style="display:none;"></canvas>
+        <div id="ocr-loading" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.85); color:var(--text); align-items:center; justify-content:center; flex-direction:column; border-radius:12px; z-index:100;">
+           <div style="font-size:32px; margin-bottom:10px; animation: spin 1s linear infinite;">⏳</div>
+           <div style="font-weight:600;">QR Found! Extracting Text...</div>
+           <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+        </div>
+      </div>
+      <div class="scan-controls" style="margin-top:14px; display:flex; gap:10px;">
+        <button class="btn btn-primary" id="start-btn" style="flex:1; justify-content:center;" onclick="startScanner()">▶️ Start Camera</button>
+        <button class="btn btn-outline" id="stop-btn" style="display:none; flex:1; justify-content:center;" onclick="stopScanner()">🛑 Stop</button>
+      </div>
+      <div class="section-divider"></div>
+      <div class="manual-entry">
+        <div class="card-title" style="margin-bottom:10px;">✍️ Manual Entry</div>
+        <div class="manual-row" style="flex-direction:column; gap:8px;">
+          <input type="text" id="manual-name" placeholder="Full Name..." style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text);" />
+          <button class="btn btn-primary" onclick="manualAdd()">Add Attendee</button>
+        </div>
+      </div>
+    </div>
+      
+    <!-- LUCKY DRAW CARD -->
+    <div class="lucky-draw-card" style="margin-top:20px;">
+      <div class="card-title" style="margin-bottom:12px;">🎰 LUCKY DRAW</div>
+      <p style="color:var(--muted); font-size:14px; line-height:1.5; margin-bottom:16px;">
+        Pick a surprise winner from any session. Names spin on screen — perfect for projectors!
+      </p>
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:13px; font-weight:600; color:var(--muted); margin-bottom:6px;">Draw from Session</label>
+        <select id="draw-session-select" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:inherit;"></select>
+      </div>
+      <button class="btn" style="width:100%; justify-content:center; background:#a855f7; color:white; font-size:16px; padding:14px; border-radius:12px; font-weight:700;" onclick="openDraw()">🎰 Launch Lucky Draw</button>
+    </div>
+      
+  <!-- END LEFT PANEL -->
+  </div>
+
+<!-- RIGHT PANEL -->
+      <div class="right-panel">
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="num" id="total-count">0</div>
+            <div class="lbl">In Current Session</div>
+          </div>
+          <div class="summary-card">
+            <div class="num" id="all-sessions-count">0</div>
+            <div class="lbl">Across All Sessions</div>
+          </div>
+          <div class="summary-card">
+            <div class="num" id="session-count">0</div>
+            <div class="lbl">Total Sessions</div>
+          </div>
+        </div>
+
+        <div class="card" style="flex:1;">
+          <div class="table-header">
+            <div class="card-title" style="display:flex;align-items:center;gap:10px;">👫 ATTENDANCE LIST <span id="current-session-tag" class="session-tag"></span></div>
+            <div class="search-input-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" placeholder="Search attendees..." oninput="renderTable()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 12px 8px 36px;" />
+            </div>
+          </div>
+
+      <div class="attendance-table-wrap">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">📭</div>
+          <p>No attendees checked in yet.<br/>Start scanning or use manual entry.</p>
+        </div>
+        <table id="attendance-table" style="width:100%; text-align:left; border-collapse:collapse; display:none;">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Full Name</th>
+              
+              <th>Session</th>
+              <th>Checked In At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="attendance-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="export-bar">
+      <div>
+        <strong>Export Attendance</strong>
+        <p>Download all sessions as a formatted Excel file or CSV.</p>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="exportCSV()">📄 CSV</button>
+      <button class="btn btn-purple btn-sm" onclick="exportExcel()">📊 Export Excel</button>
+    </div>
+
+  </div>
+</main>
+
+<div id="toast">
+  <span class="toast-icon"></span>
+  <span id="toast-msg"></span>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   FIREBASE CONFIG — saved in localStorage
+═══════════════════════════════════════════════════ */
+let db = null;
+let attendees = [];
+let winners   = [];
+let currentSession = `9th September | Keynote`;
+let scanner = null, scanning = false;
+let lastScanned = null, lastScannedTime = 0;
+let spinTimeout = null;
+let drawNames = [], winnerName = '';
+let floatTimers = [], confettiAnimId = null;
+
+const SESSIONS_DEFAULT = [
+  `9th September | Keynote`,
+  `10th September  | Panel Discussion`
+];
+
+/* ═══════════════════════════════════════════════════
+   SETUP SCREEN
+═══════════════════════════════════════════════════ */
+
+
+// DYNAMIC FIREBASE INIT
+
+function openSetup() {
+  const saved = localStorage.getItem('userFirebaseConfigRaw');
+  if (saved) document.getElementById('setup-input').value = saved;
+  document.getElementById('setup-screen').classList.add('active');
+  document.getElementById('setup-cancel-btn').style.display = db ? 'flex' : 'none';
+}
+
+function closeSetup() {
+  document.getElementById('setup-screen').classList.remove('active');
+}
+
+function saveConfigAndInit() {
+  const rawText = document.getElementById('setup-input').value.trim();
+  if (!rawText) return showToast('Please paste your config code!', 'warn');
+
+  try {
+    // Extract just the object { ... } from the pasted text
+    let objStr = rawText;
+    const match = rawText.match(/const\s+firebaseConfig\s*=\s*(\{[\s\S]*?\});?/);
+    if (match) objStr = match[1];
+
+    // Safely evaluate the object string into a JS object
+    const configObj = new Function('return ' + objStr)();
+
+    if (!configObj.apiKey || !configObj.databaseURL || !configObj.projectId) {
+      throw new Error('Missing required Firebase fields.');
+    }
+
+    // Save for future reloads
+    localStorage.setItem('userFirebaseConfigRaw', rawText);
+    localStorage.setItem('userFirebaseConfig', JSON.stringify(configObj));
+
+    // Initialize or Re-initialize
+    if (!firebase.apps.length) {
+      firebase.initializeApp(configObj);
+    } else {
+      // Re-init requires deleting the old app, but for simplicity we reload the page
+      location.reload();
+      return;
+    }
+    
+    db = firebase.database();
+    closeSetup();
+    setupFirebaseListeners();
+    showToast('Connected to Firebase!', 'success');
+
+  } catch (e) {
+    console.error(e);
+    showToast('Invalid config format! Check your code.', 'error');
+  }
+}
+
+function initApp() {
+  const savedConfig = localStorage.getItem('userFirebaseConfig');
+  if (savedConfig) {
+    try {
+      const configObj = JSON.parse(savedConfig);
+      firebase.initializeApp(configObj);
+      db = firebase.database();
+      setupFirebaseListeners();
+    } catch (e) {
+      openSetup();
+    }
+  } else {
+    // Show setup screen immediately on first load
+    openSetup();
+  }
+}
+
+// Wrap all existing firebase DB logic inside setupFirebaseListeners
+function setupFirebaseListeners() {
+  // Existing Firebase listeners are now moved here
+  
+}
+
+// Ensure the new initApp starts the boot sequence
+initApp();
+
+db = firebase.database();
+
+function boot() {
+  
+  initFirebase();
+}
+
+function initFirebase() {
+  
+  
+  db.ref('attendees').on('value', snap => {
+    const data = snap.val() || {};
+    attendees = Object.values(data).sort((a,b) => b.id - a.id);
+    renderTable();
+    updateStats();
+    syncAllSessionDropdowns();
+  });
+
+  db.ref('winners').on('value', snap => {
+    const data = snap.val() || {};
+    winners = Object.values(data).sort((a,b) => b.id - a.id);
+    renderWinners();
+  });
+
+  db.ref('sessions').on('value', snap => {
+    const data = snap.val() || [];
+    const allSessions = [...new Set([...SESSIONS_DEFAULT, ...data])];
+    syncAllSessionDropdowns(allSessions);
+  });
+
+  initUI();
+}
+
+function showSetupScreen() {}
+function connectFirebase() {}
+
+function setSyncState(state, label) {
+  const badge = document.getElementById('sync-badge');
+  const lbl   = document.getElementById('sync-label');
+  badge.className = 'sync-badge ' + state;
+  lbl.textContent = label;
+}
+
+/* ═══════════════════════════════════════════════════
+   UI INIT
+═══════════════════════════════════════════════════ */
+function initUI() {
+  updateTime();
+  setInterval(updateTime, 1000);
+  currentSession = SESSIONS_DEFAULT[0];
+  document.getElementById('current-session-tag').textContent = currentSession;
+  syncAllSessionDropdowns();
+}
+
+function updateTime() {
+  const now = new Date();
+  document.getElementById('live-time').textContent =
+    now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+}
+
+/* ═══════════════════════════════════════════════════
+   SESSION MANAGEMENT
+═══════════════════════════════════════════════════ */
+function syncAllSessionDropdowns(sessionList) {
+  // Always restrict to default
+  sessionList = SESSIONS_DEFAULT;
+  const mainSel = document.getElementById('session-select');
+  const drawSel = document.getElementById('draw-session-select');
+
+  [mainSel, drawSel].forEach(sel => {
+    const cur = sel.value;
+    sel.innerHTML = '';
+    sessionList.forEach(s => {
+      const display = s.length > 60 ? s.substring(0, 60) + "..." : s;
+      const opt = new Option(display, s);
+      sel.add(opt);
+    });
+    if (cur && sessionList.includes(cur)) sel.value = cur;
+  });
+}
+
+function switchSession() {
+  currentSession = document.getElementById('session-select').value;
+  document.getElementById('current-session-tag').textContent = currentSession;
+  renderTable();
+  updateStats();
+}
+
+function addSession() {
+  const dateInput = document.getElementById('new-session-date');
+  const nameInput = document.getElementById('new-session-name');
+  const dVal = dateInput.value;
+  const nVal = nameInput.value.trim();
+  
+  let name = '';
+  if (dVal && nVal) name = dVal + ', ' + nVal;
+  else if (nVal) name = nVal;
+  
+  if (!name) { showToast('Enter a session name','warn'); return; }
+
+  const mainSel = document.getElementById('session-select');
+  if ([...mainSel.options].find(o=>o.value===name)) { showToast('Session already exists','warn'); return; }
+
+  // Save to Firebase
+  db.ref('sessions').once('value', snap => {
+    const existing = snap.val() || [];
+    const updated  = [...new Set([...existing, name])];
+    db.ref('sessions').set(updated);
+  });
+
+  nameInput.value = '';
+  showToast(`Session "${name}" added`, 'success');
+}
+
+/* ═══════════════════════════════════════════════════
+   QR SCANNER & SMART AGENDA PARSING
+═══════════════════════════════════════════════════ */
+let pendingScanMethod = 'QR Scan';
+
+
+
+// Levenshtein distance for fuzzy matching
+function levenshtein(a, b) {
+  const matrix = Array.from({ length: a.length + 1 }, () => []);
+  for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+  for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      if (a[i - 1] === b[j - 1]) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
+  }
+  return matrix[a.length][b.length];
+}
+
+function parseQRName(rawText) {
+  let data = { name: '', email: '', org: '', desig: '', mobile: '' };
+  
+  if (rawText.includes('n:')) {
+    const parts = rawText.split('|');
+    parts.forEach(p => {
+      if(p.startsWith('n:')) data.name = p.substring(2).trim();
+      if(p.startsWith('e:')) data.email = p.substring(2).trim();
+      if(p.startsWith('o:')) data.org = p.substring(2).trim();
+      if(p.startsWith('d:')) data.desig = p.substring(2).trim();
+      if(p.startsWith('m:')) data.mobile = p.substring(2).trim();
+    });
+  }
+  if (!data.name) {
+     const nameMatch = rawText.match(/n:([^|]+)/);
+     if (nameMatch && nameMatch[1]) data.name = nameMatch[1].trim();
+  }
+  if (!data.name) {
+    try {
+      const url = new URL(rawText);
+      if (url.searchParams.has('name')) data.name = url.searchParams.get('name');
+      if (url.searchParams.has('email')) data.email = url.searchParams.get('email');
+    } catch(e) {}
+  }
+  if (!data.name && rawText.includes('\n')) data.name = rawText.split('\n')[0].trim();
+  else if (!data.name) data.name = rawText.trim();
+  
+  return data;
+}
+
+async function processHybridScan(decodedText) {
+  if (scanner) scanner.pause(true); // Freeze scanner
+  document.getElementById('ocr-loading').style.display = 'flex';
+  
+  const qrData = parseQRName(decodedText);
+  let finalOrg = qrData.org || '';
+  let finalName = qrData.name || '';
+  let finalDesig = qrData.desig || '';
+  let finalEmail = qrData.email || '';
+  let finalMobile = qrData.mobile || '';
+  
+  try {
+    // Attempt to grab video frame
+    const video = document.querySelector('#qr-reader video');
+    if (video) {
+      const canvas = document.getElementById('hybrid-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      const result = await Tesseract.recognize(canvas, 'eng');
+      const text = result.data.text;
+      
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+      
+      // Fuzzy find Name in lines
+      let bestMatchIdx = -1;
+      let bestDist = Infinity;
+      const targetNameLower = qrName.toLowerCase();
+      
+      for (let i = 0; i < lines.length; i++) {
+        const lineLower = lines[i].toLowerCase();
+        // If line contains the name or fuzzy matches
+        if (lineLower.includes(targetNameLower)) {
+           bestMatchIdx = i; break;
+        }
+        const dist = levenshtein(targetNameLower, lineLower);
+        if (dist < bestDist && dist < (targetNameLower.length / 2)) {
+           bestDist = dist;
+           bestMatchIdx = i;
+        }
+      }
+      
+      if (bestMatchIdx !== -1) {
+         if (bestMatchIdx < lines.length - 1) finalOrg = lines[bestMatchIdx + 1];
+         if (bestMatchIdx < lines.length - 2) finalDesig = lines[bestMatchIdx + 2];
+      }
+    }
+  } catch(e) {
+    console.error('OCR failed', e);
+  }
+  
+  document.getElementById('ocr-loading').style.display = 'none';
+  if (scanner) scanner.resume(); // Unfreeze
+  
+  handleScanResult(finalName, finalEmail, finalOrg, finalDesig, finalMobile, decodedText, 'QR+OCR Scan');
+}
+
+function handleScanResult(name, email, org, designation, mobile, rawText, method) {
+  document.getElementById('scan-raw-value').textContent = rawText;
+  document.getElementById('scan-confirm-name').value = name;
+  
+  
+  
+  
+  pendingScanMethod = method;
+  
+  document.getElementById('scan-confirm-overlay').classList.add('show');
+  setTimeout(() => document.getElementById('scan-confirm-name').focus(), 100);
+}
+
+function confirmScan(sessionName) {
+  const name = document.getElementById('scan-confirm-name').value.trim();
+  const email = "";
+  const org = "";
+  const desig = "";
+  const mobile = "";
+  if (name) checkIn(name, email, org, desig, mobile, pendingScanMethod, sessionName);
+  document.getElementById('scan-confirm-overlay').classList.remove('show');
+}
+
+function cancelScan() {
+  document.getElementById('scan-confirm-overlay').classList.remove('show');
+}
+
+function startScanner() {
+  document.getElementById('scanner-idle').style.display   = 'none';
+  document.getElementById('qr-reader').style.display      = 'block';
+  document.getElementById('scanner-wrap').classList.add('scanning');
+  document.getElementById('start-btn').style.display      = 'none';
+  document.getElementById('stop-btn').style.display       = 'flex';
+
+  scanner = new Html5Qrcode("qr-reader");
+  scanner.start(
+    { facingMode:"environment" },
+    { fps:10, qrbox:{width:220,height:220} },
+    (decodedText) => {
+      const now = Date.now();
+      if (decodedText===lastScanned && now-lastScannedTime<2500) return;
+      lastScanned = decodedText; lastScannedTime = now;
+      processHybridScan(decodedText);
+    },
+    ()=>{}
+  ).catch(err=>{ showToast('Camera error: '+err,'error'); stopScanner(); });
+  scanning = true;
+}
+
+function stopScanner() {
+  if (scanner && scanning) {
+    scanner.stop().then(()=>{ scanner.clear(); scanner=null; scanning=false; });
+  }
+  document.getElementById('qr-reader').style.display      = 'none';
+  document.getElementById('scanner-idle').style.display   = 'flex';
+  document.getElementById('scanner-wrap').classList.remove('scanning');
+  document.getElementById('start-btn').style.display      = 'flex';
+  document.getElementById('stop-btn').style.display       = 'none';
+}
+
+function checkIn(name, email, org, desig, mobile, method, sessionOverride) {
+  name = (name||'').trim();
+  const session = sessionOverride || currentSession;
+  if (!name) return;
+  if (!db) { showToast('Not connected to Firebase','error'); return; }
+
+  if (attendees.find(a => a.name.toLowerCase()===name.toLowerCase() && a.session===session)) {
+    document.getElementById('duplicate-scan-msg').textContent = `"${name}" is already checked in for ${session}.`;
+    document.getElementById('duplicate-scan-overlay').style.display = 'flex';
+    return;
+  }
+
+  const id    = Date.now();
+  const entry = {
+    id, name, email: email||'', org: org||'', designation: desig||'', mobile: mobile||'', session: session, method,
+    time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}),
+    date: new Date().toLocaleDateString('en-IN'),
+  };
+
+  setSyncState('syncing','Saving...');
+  db.ref('attendees/' + id).set(entry)
+    .then(() => {
+      showToast(`${name} checked in!`,'success');
+      playBeep();
+      if (document.getElementById('scanner-wrap').classList.contains('scanning')) {
+         document.getElementById('scanner-wrap').style.borderColor = '#10b981';
+         setTimeout(() => document.getElementById('scanner-wrap').style.borderColor = 'var(--accent)', 600);
+      }
+    })
+    .catch(e => {
+      showToast('Save failed: '+e.message,'error');
+      setSyncState('offline','Offline');
+    });
+}
+
+function manualAdd() {
+  const nameInp = document.getElementById('manual-name');
+  
+  
+  
+  
+  checkIn(nameInp.value, '', '', '', '', 'Manual');
+  nameInp.value = ''; 
+}
+
+function removeEntry(id) {
+  if (!db) return;
+  db.ref('attendees/' + id).remove()
+    .then(()=>showToast('Entry removed','warn'))
+    .catch(e=>showToast('Remove failed: '+e.message,'error'));
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER TABLE
+═══════════════════════════════════════════════════ */
+function renderTable() {
+  const q    = (document.getElementById('search-input')||{value:''}).value.toLowerCase();
+  const list = attendees.filter(a=>a.session===currentSession && a.name.toLowerCase().includes(q));
+  const empty = document.getElementById('empty-state');
+  const tbl   = document.getElementById('attendance-table');
+  const tbody = document.getElementById('attendance-body');
+
+  if (!list.length) { empty.style.display='block'; tbl.style.display='none'; return; }
+  empty.style.display='none'; tbl.style.display='table';
+  tbody.innerHTML='';
+  list.forEach((a,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+            <td><div class="row-num">${list.length-i}</div></td>
+      <td><span class="badge-id">${a.name}</span>${a.method==='Manual'?'<span style="font-size:10px;color:var(--muted);margin-left:6px;">manual</span>':''}</td>
+      
+      
+      
+      
+      <td><span class="session-tag">${a.session}</span></td>
+      <td style="color:var(--muted)">${a.date} ${a.time}</td>
+      <td><button class="btn btn-danger" onclick="removeEntry(${a.id})">Remove</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('live-count').textContent=`${list.length} checked in`;
+}
+
+function updateStats() {
+  const s=attendees.filter(a=>a.session===currentSession).length;
+  document.getElementById('total-count').textContent=s;
+  document.getElementById('all-sessions-count').textContent=attendees.length;
+  document.getElementById('session-count').textContent=[...new Set(attendees.map(a=>a.session))].length;
+  document.getElementById('live-count').textContent=`${s} checked in`;
+}
+
+/* ═══════════════════════════════════════════════════
+   EXPORT
+═══════════════════════════════════════════════════ */
+function exportExcel() {
+  if (!attendees.length){showToast('No data to export','warn');return;}
+  const wb=XLSX.utils.book_new();
+  const allData=attendees.map((a,i)=>({'S.No':i+1,'Full Name':a.name,'Email Address':a.email||'','Organisation':a.org||'','Designation':a.designation||'','Mobile Number':a.mobile||'','Session':a.session,'Date':a.date,'Check-In Time':a.time,'Method':a.method}));
+  const ws1=XLSX.utils.json_to_sheet(allData);
+  ws1['!cols']=[{wch:6},{wch:28},{wch:22},{wch:14},{wch:16},{wch:10}];
+  XLSX.utils.book_append_sheet(wb,ws1,'All Sessions');
+  [...new Set(attendees.map(a=>a.session))].forEach(s=>{
+    const sData=attendees.filter(a=>a.session===s).map((a,i)=>({'S.No':i+1,'Full Name':a.name,'Email Address':a.email||'','Organisation':a.org||'','Designation':a.designation||'','Mobile Number':a.mobile||'','Date':a.date,'Check-In Time':a.time,'Method':a.method}));
+    const ws=XLSX.utils.json_to_sheet(sData);
+    ws['!cols']=[{wch:6},{wch:28},{wch:14},{wch:16},{wch:10}];
+    XLSX.utils.book_append_sheet(wb,ws,s.substring(0,31));
+  });
+  XLSX.writeFile(wb,`Attendance_${new Date().toISOString().split('T')[0]}.xlsx`);
+  showToast('Excel exported!','success');
+}
+
+function exportCSV(){
+  if(!attendees.length){showToast('No data to export','warn');return;}
+  const rows=[['S.No','Organisation','Name','Designation','Session','Date','Check-In Time','Method']];
+  attendees.forEach((a,i)=>rows.push([i+1,a.org||'',a.name,a.designation||'',a.session,a.date,a.time,a.method]));
+  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const el=document.createElement('a');
+  el.href=url; el.download=`Attendance_${new Date().toISOString().split('T')[0]}.csv`;
+  el.click(); URL.revokeObjectURL(url);
+  showToast('CSV exported!','success');
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.className=type; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+/* ═══════════════════════════════════════════════════
+   LUCKY DRAW
+═══════════════════════════════════════════════════ */
+function openDraw(){
+  const ds=document.getElementById('draw-session-select').value;
+  drawNames=attendees.filter(a=>a.session===ds).map(a=>a.name);
+  if(drawNames.length<2){showToast(`Need at least 2 attendees in "${ds}"`, 'warn');return;}
+  document.getElementById('slot-name').textContent='Ready!';
+  document.getElementById('slot-machine').classList.remove('revealed');
+  document.getElementById('winner-reveal').classList.remove('show');
+  document.getElementById('draw-again-btn').style.display='none';
+  document.getElementById('spin-progress-bar').style.width='0%';
+  document.getElementById('draw-session-label').textContent=`🎰 Lucky Draw — ${ds}`;
+  document.getElementById('names-cloud').innerHTML='';
+  document.getElementById('draw-overlay').classList.add('active');
+  document.body.style.overflow='hidden';
+  
+  // Show Pre-Spin CTA, hide progress
+  document.getElementById('draw-pre-spin').style.display='block';
+  document.getElementById('spin-progress-container').style.display='none';
+}
+
+function closeDraw(){
+  clearTimeout(spinTimeout);
+  stopConfetti(); clearFloatingNames();
+  document.getElementById('draw-overlay').classList.remove('active');
+  document.body.style.overflow='';
+}
+
+function startDraw(){
+  // Hide CTA, show progress
+  document.getElementById('draw-pre-spin').style.display='none';
+  document.getElementById('spin-progress-container').style.display='block';
+
+  const ds=document.getElementById('draw-session-select').value;
+  drawNames=attendees.filter(a=>a.session===ds).map(a=>a.name);
+  if(drawNames.length<2){showToast('Not enough attendees','warn');closeDraw();return;}
+  winnerName=drawNames[Math.floor(Math.random()*drawNames.length)];
+  document.getElementById('slot-machine').classList.remove('revealed');
+  document.getElementById('winner-reveal').classList.remove('show');
+  document.getElementById('draw-again-btn').style.display='none';
+  document.getElementById('spin-progress-bar').style.width='0%';
+  clearFloatingNames();
+  launchFloatingNames(drawNames);
+  const TOTAL=4500, S_INT=60, E_INT=520;
+  let elapsed=0, curInt=S_INT;
+  function tick(){
+    elapsed+=curInt;
+    const p=Math.min(elapsed/TOTAL,1);
+    curInt=S_INT+(E_INT-S_INT)*(1-Math.pow(1-p,3));
+    document.getElementById('slot-name').textContent=p<0.92?drawNames[Math.floor(Math.random()*drawNames.length)]:winnerName;
+    document.getElementById('spin-progress-bar').style.width=(p*100)+'%';
+    if(p<1) spinTimeout=setTimeout(tick,curInt);
+    else revealWinner();
+  }
+  clearTimeout(spinTimeout); tick();
+}
+
+function revealWinner(){
+  document.getElementById('slot-name').textContent=winnerName;
+  document.getElementById('slot-machine').classList.add('revealed');
+  setTimeout(()=>{
+    document.getElementById('winner-reveal').classList.add('show');
+    document.getElementById('draw-again-btn').style.display='inline-flex';
+    clearFloatingNames(); launchConfetti();
+    const ds=document.getElementById('draw-session-select').value;
+    const id=Date.now();
+    const w={id,name:winnerName,session:ds,
+      time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}),
+      date:new Date().toLocaleDateString('en-IN')};
+    if(db) db.ref('winners/'+id).set(w);
+  },300);
+}
+
+/* ─── Floating names ─── */
+const FLOAT_COLORS=[
+  {bg:'rgba(108,99,255,.12)',text:'#a78bfa'},
+  {bg:'rgba(251,191,36,.10)',text:'#fbbf24'},
+  {bg:'rgba(34,197,94,.10)', text:'#4ade80'},
+  {bg:'rgba(239,68,68,.10)', text:'#f87171'},
+  {bg:'rgba(56,189,248,.10)',text:'#38bdf8'},
+];
+function clearFloatingNames(){floatTimers.forEach(t=>clearTimeout(t));floatTimers=[];document.getElementById('names-cloud').innerHTML='';}
+function launchFloatingNames(names){
+  const cloud=document.getElementById('names-cloud');
+  const W=window.innerWidth,H=window.innerHeight;
+  let i=0;
+  function spawnOne(){
+    if(!document.getElementById('draw-overlay').classList.contains('active'))return;
+    if(document.getElementById('winner-reveal').classList.contains('show'))return;
+    const name=names[Math.floor(Math.random()*names.length)];
+    const c=FLOAT_COLORS[Math.floor(Math.random()*FLOAT_COLORS.length)];
+    const el=document.createElement('div');
+    el.className='floating-name';
+    const size=13+Math.random()*14,y=20+Math.random()*(H-80);
+    const fromLeft=Math.random()>.5;
+    const startX=fromLeft?-300:W+100;
+    const travel=fromLeft?(W+500):-(W+500);
+    const duration=2800+Math.random()*2200;
+    el.style.cssText=`left:${startX}px;top:${y}px;font-size:${size}px;background:${c.bg};color:${c.text};opacity:${.35+Math.random()*.45};--travel:${travel}px;animation-duration:${duration}ms;`;
+    el.textContent=name; cloud.appendChild(el);
+    const t=setTimeout(()=>{el.remove();spawnOne();},duration);
+    floatTimers.push(t);
+    i++; if(i<3){const t2=setTimeout(spawnOne,300);floatTimers.push(t2);i=0;}
+  }
+  for(let k=0;k<8;k++){const t=setTimeout(spawnOne,k*180);floatTimers.push(t);}
+}
+
+/* ─── Confetti ─── */
+let confettiParticles=[];
+function launchConfetti(){
+  const canvas=document.getElementById('confetti-canvas');
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const ctx=canvas.getContext('2d');
+  const COLS=['#6c63ff','#fbbf24','#22c55e','#f472b6','#38bdf8','#f87171','#a78bfa','#fb923c'];
+  confettiParticles=Array.from({length:160},()=>({
+    x:Math.random()*canvas.width,y:-20-Math.random()*100,
+    w:6+Math.random()*10,h:5+Math.random()*8,
+    color:COLS[Math.floor(Math.random()*COLS.length)],
+    vx:-3+Math.random()*6,vy:3+Math.random()*5,
+    rot:Math.random()*360,drot:-4+Math.random()*8,
+    life:1,decay:.004+Math.random()*.006,
+  }));
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive=false;
+    confettiParticles.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.rot+=p.drot;p.life-=p.decay;
+      if(p.life<=0||p.y>canvas.height+40)return;
+      alive=true;
+      ctx.save();ctx.globalAlpha=Math.max(0,p.life);
+      ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if(alive) confettiAnimId=requestAnimationFrame(draw);
+    else{ctx.clearRect(0,0,canvas.width,canvas.height);confettiAnimId=null;}
+  }
+  if(confettiAnimId) cancelAnimationFrame(confettiAnimId);
+  draw();
+}
+function stopConfetti(){if(confettiAnimId)cancelAnimationFrame(confettiAnimId);const c=document.getElementById('confetti-canvas');c.getContext('2d').clearRect(0,0,c.width,c.height);confettiAnimId=null;}
+
+/* ─── Winners log ─── */
+function renderWinners(){
+  const wrap=document.getElementById('winner-log-wrap');
+  const log=document.getElementById('winner-log');
+  if(!winners.length){wrap.style.display='none';return;}
+  wrap.style.display='block'; log.innerHTML='';
+  winners.slice(0,5).forEach((w,i)=>{
+    const div=document.createElement('div');
+    div.className='winner-item';
+    div.innerHTML=`<span class="trophy">${i===0?'🥇':i===1?'🥈':'🏆'}</span><div><div class="winner-name">${w.name}</div><div class="winner-meta">${w.session} · ${w.date} ${w.time}</div></div>`;
+    log.appendChild(div);
+  });
+}
+
+/* ─── Keyboard ─── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('draw-overlay').classList.contains('active')) closeDraw();
+});
+
+/* ─── Start ─── */
+boot();
+</script>
+
+<!-- SETUP SCREEN OVERLAY -->
+<div id="setup-screen">
+  <div class="setup-card">
+    <h2>🔌 Firebase Setup</h2>
+    <p>Paste your <b>const firebaseConfig = { ... };</b> code below to connect to your database. This is saved locally on your device.</p>
+    <textarea id="setup-input" class="setup-textarea" placeholder="const firebaseConfig = {&#10;  apiKey: '...',&#10;  ...&#10;};"></textarea>
+    <button class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:16px;" onclick="saveConfigAndInit()">💾 Save & Connect</button>
+    <button id="setup-cancel-btn" class="btn btn-outline" style="width:100%; justify-content:center; padding:14px; font-size:16px; margin-top:10px; display:none;" onclick="closeSetup()">Cancel</button>
+  </div>
+</div>
+</body>
+</html>
