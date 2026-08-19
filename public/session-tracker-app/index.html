@@ -697,28 +697,16 @@ function initApp() {
   }
 }
 
-// Wrap all existing firebase DB logic inside setupFirebaseListeners
+// Firebase listeners - called after db is connected
 function setupFirebaseListeners() {
-  // Existing Firebase listeners are now moved here
-  
-}
+  db.ref('.info/connected').on('value', snap => {
+    if (snap.val() === true) setSyncState('online', 'Online');
+    else setSyncState('offline', 'Offline');
+  });
 
-// Ensure the new initApp starts the boot sequence
-initApp();
-
-db = firebase.database();
-
-function boot() {
-  
-  initFirebase();
-}
-
-function initFirebase() {
-  
-  
   db.ref('attendees').on('value', snap => {
     const data = snap.val() || {};
-    attendees = Object.values(data).sort((a,b) => b.id - a.id);
+    attendees = Object.values(data).sort((a, b) => b.id - a.id);
     renderTable();
     updateStats();
     syncAllSessionDropdowns();
@@ -726,7 +714,7 @@ function initFirebase() {
 
   db.ref('winners').on('value', snap => {
     const data = snap.val() || {};
-    winners = Object.values(data).sort((a,b) => b.id - a.id);
+    winners = Object.values(data).sort((a, b) => b.id - a.id);
     renderWinners();
   });
 
@@ -738,6 +726,9 @@ function initFirebase() {
 
   initUI();
 }
+
+// Boot the app
+initApp();
 
 function showSetupScreen() {}
 function connectFirebase() {}
