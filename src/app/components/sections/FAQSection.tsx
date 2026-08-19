@@ -5,7 +5,7 @@ import { GradientText } from "../Shared";
 
 const faqs = [
   "Who is the World AI Show Malaysia for?",
-  "How do I get an invitation or buy a pass?",
+  "How do I buy a pass?",
   "When and where is the event?",
   "What does the agenda look like?",
   "Are there sponsorship and exhibition opportunities?",

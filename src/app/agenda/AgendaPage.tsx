@@ -542,93 +542,36 @@ function AgendaTabs() {
     let mounted = true;
 
     async function loadAgenda() {
-
       try {
+        const directResponse = await fetch(`https://api.konfhub.com/event/${KONFHUB_EVENT_ID}/sessions?sessions_to_return=all`, {
+          headers: {
+            accept: "application/json"
+          }
+        });
 
-        const response = await fetch("/malaysia/api/konfhub-agenda");
-
-        if (!response.ok) {
-
-          throw new Error("Unable to load agenda");
-
+        if (!directResponse.ok) {
+          throw new Error("Unable to load KonfHub sessions");
         }
 
-        const data = (await response.json()) as LiveAgendaResponse;
-
-        if (!data.sessions?.length) {
-
-          throw new Error("Agenda response is empty");
-
-        }
+        const data = normalizeKonfHubSessions((await directResponse.json()) as KonfHubSession[]);
 
         if (!mounted) {
-
           return;
-
         }
 
         setAgenda(data);
-
         setActiveDay(data.days[0]?.key || "");
-
         setLoadError("");
-
       } catch {
-
-        try {
-
-          const directResponse = await fetch(`https://api.konfhub.com/event/${KONFHUB_EVENT_ID}/sessions?sessions_to_return=all`, {
-
-            headers: {
-
-              accept: "application/json"
-
-            }
-
-          });
-
-          if (!directResponse.ok) {
-
-            throw new Error("Unable to load KonfHub sessions");
-
-          }
-
-          const data = normalizeKonfHubSessions((await directResponse.json()) as KonfHubSession[]);
-
-          if (!mounted) {
-
-            return;
-
-          }
-
-          setAgenda(data);
-
-          setActiveDay(data.days[0]?.key || "");
-
-          setLoadError("");
-
-        } catch {
-
-          if (mounted) {
-
-            setAgenda(null);
-
-            setLoadError("Unable to load the live KonfHub agenda. Please check the API route or network access.");
-
-          }
-
-        }
-
-      } finally {
-
         if (mounted) {
-
-          setIsLoading(false);
-
+          setAgenda(null);
+          setLoadError("Unable to load the live KonfHub agenda. Please check the network access.");
         }
-
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
-
     }
 
     loadAgenda();
@@ -835,7 +778,7 @@ function AgendaTabs() {
         <div className={styles.timeline}>
           <div className={styles.timelineHead}>
             <span>{dayTabs.find((day) => day.key === activeDay)?.label || "KonfHub Agenda"}</span>
-            <span>Sheraton Grand - Kuala Lumpur</span>
+            <span>DoubleTree By Hilton</span>
           </div>
 
           {isLoading ? <p className={styles.loadingState}>Loading live agenda from KonfHub...</p> : null}
@@ -889,7 +832,7 @@ function AgendaTabs() {
 
             : null}
         </div>
-        <p className={styles.note}>{agenda ? "Agenda synced from KonfHub - timings shown in GMT+08:00." : "Live agenda is not available yet."}</p>
+        {/* Note removed per user request */}
       </div>
     </section>
 
@@ -960,7 +903,7 @@ export function AgendaOverview() {
     <>
       <section className={`${styles.hero} pt-[200px]`} id="overview">
         <div className={styles.container}>
-          <h1>Two days.<br />Thirty global voices.<br /><GradientText>Countless AI Breakthroughs.</GradientText></h1>
+          <h1>Two days.<br />Fifty global voices.<br /><GradientText>Countless AI Breakthroughs.</GradientText></h1>
         </div>
       </section>
 
@@ -1027,7 +970,7 @@ export function AgendaVision() {
           <span className="inline-flex items-center mb-5 px-3.5 py-1.5 border border-[#18d4ff]/30 rounded-full text-[#18d4ff] font-mono text-[12px] uppercase tracking-[2px] bg-[#18d4ff]/5">
             AI DECISIONS GET MADE. #WAIS MALAYSIA
           </span>
-          <h1>Driving Malaysia&apos;s <br /><GradientText>AI Vision 2030.</GradientText></h1>
+          <h1>Driving Malaysia&apos;s <br /><GradientText>AI Nation 2030.</GradientText></h1>
         </div>
       </section>
 
@@ -1042,7 +985,7 @@ export function AgendaVision() {
             <p><strong>World AI Show Malaysia</strong> brings together the policymakers, enterprise leaders, investors and technology pioneers shaping this next chapter of growth and innovation.</p>
             <blockquote>
               &ldquo;AI will be a defining driver of Malaysia&apos;s digital economy and future competitiveness.&rdquo;
-              <cite className={styles.blockquoteCite}>&mdash; MALAYSIA NATIONAL AI VISION 2030</cite>
+              <cite className={styles.blockquoteCite}>&mdash; MALAYSIA NATIONAL AI NATION 2030</cite>
             </blockquote>
           </div>
         </div>
@@ -1060,7 +1003,7 @@ export function AgendaVision() {
 
       <section className={styles.accelerateSection}>
         <div className={styles.container}>
-          <h2>Accelerating <GradientText>Malaysia&apos;s AI Vision 2030</GradientText></h2>
+          <h2>Accelerating <GradientText>Malaysia&apos;s AI Nation 2030</GradientText></h2>
           <p>World AI Show Malaysia is where government leaders, global technology providers, enterprise decision-makers and investors come together to drive the next phase of AI-led growth across Southeast Asia.</p>
           <div className={styles.accelerateGrid}>
             <div>

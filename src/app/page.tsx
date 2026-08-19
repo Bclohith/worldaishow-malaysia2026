@@ -1,7 +1,7 @@
 import { Header } from "./components/sections/Header";
 import { HeroSection } from "./components/sections/HeroSection";
 import { StatsSection } from "./components/sections/StatsSection";
-import { EcosystemSection } from "./components/sections/EcosystemSection";
+import { EcosystemSectionDemo as EcosystemSection } from "./components/sections/EcosystemSectionDemo";
 import { AgendaSection } from "./components/sections/AgendaSection";
 import { SpeakersSection } from "./components/sections/SpeakersSection";
 import { NetworkingSection } from "./components/sections/NetworkingSection";

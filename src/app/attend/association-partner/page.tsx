@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Collaborate as an association or ecosystem partner with World AI Show Malaysia 2026 and connect with ASEAN's growing AI network.",
 };
 
-const subNav = ["Overview", "Delegate", "Sponsor", "Media Partner", "Association Partner"];
+const subNav = ["Overview", "Sponsor", "Media Partner", "Association Partner"];
 
 export default function AssociationPartnerPage() {
   return (

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Official Event Application of World AI Show Malaysia 2026. Browse agenda, network with delegates, and coordinate meetings.",
 };
 
-const subNav = ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery", "WhatsApp Networking"];
+const subNav = ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery"];
 
 export default function AttendeeAppPage() {
   return (

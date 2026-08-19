@@ -66,7 +66,7 @@ const statsData = [
   },
   {
     icon: "/malaysia/icons/stats/2.svg",
-    number: 30,
+    number: 50,
     suffix: "+",
     label: "Speakers",
     index: "02",

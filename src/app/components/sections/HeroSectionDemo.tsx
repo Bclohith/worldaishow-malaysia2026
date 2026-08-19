@@ -180,7 +180,7 @@ export function HeroSectionDemo() {
   return (
     <section 
       ref={containerRef}
-      className="relative min-h-[720px] -mt-[81px] grid place-items-center overflow-hidden text-center max-[980px]:min-h-[680px] max-sm:-mt-[71px] max-sm:min-h-[720px]" 
+      className="relative min-h-[720px] -mt-[102px] grid place-items-center overflow-hidden text-center max-[980px]:min-h-[680px] max-sm:-mt-[71px] max-sm:min-h-[720px]" 
       id="home"
       style={{
         background: "#020205"
@@ -202,30 +202,16 @@ export function HeroSectionDemo() {
       <div className="hero-grid-pattern absolute bottom-0 left-[-6%] right-[-6%] h-[245px] z-1 opacity-70 blur-[1px]" aria-hidden="true" />
 
       {/* Hero Content */}
-      <div className="container relative z-10 mx-auto px-6 pt-[210px] max-sm:pt-[180px] max-sm:px-4 flex flex-col items-center">
+      <div className="container relative z-10 mx-auto px-6 pt-[231px] max-sm:pt-[180px] max-sm:px-4 flex flex-col items-center">
         {/* Glow Status Pill */}
         <p className="inline-flex items-center h-8 px-3.5 mb-[25px] border border-[#b9f82d]/72 rounded-full text-white/82 text-[14px] uppercase tracking-[1px] font-medium shadow-[0_0_12px_rgba(185,248,45,0.15)] bg-black/40">
-          By invitation only
+          48th Global Edition
         </p>
 
         {/* Hero Title */}
         <h1 className="max-w-[1030px] mx-auto text-white font-[850] leading-[1.04] tracking-[-2px] text-[clamp(42px,7.2vw,94px)] text-center mb-8">
           Where Malaysia&apos;s <GradientText>AI Decisions</GradientText> Get Made.
         </h1>
-
-        <div className="w-full max-w-[900px] border-t border-white/20 opacity-60"></div>
-
-        {/* Supporting Partner Card */}
-        <div className="mt-8 mb-8 flex justify-center w-full">
-          <div className="w-[336px] h-[132px] flex flex-col justify-center items-center gap-2 rounded-[15px] border border-white/20 bg-[#d9d9d9]/[0.13] backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.4)] max-sm:w-[280px] max-sm:h-auto max-sm:py-5">
-            <span className="text-white text-[13px] font-bold tracking-[0.5px]">Supporting Partner</span>
-            <img 
-              src="/malaysia/images/partners/cyber-malaysia.png" 
-              alt="CyberSecurity Malaysia - Supporting Partner" 
-              className="h-[50px] w-auto object-contain px-6 max-sm:px-4 max-sm:h-[40px] mt-1"
-            />
-          </div>
-        </div>
 
         <div className="w-full max-w-[900px] border-t border-white/20 opacity-60"></div>
 

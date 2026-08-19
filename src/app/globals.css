@@ -716,6 +716,17 @@ button[class*="bg-[#06111f]"] {
   animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@keyframes popupZoomIn {
+  0%   { transform: scale(0.1); opacity: 0; }
+  50%  { opacity: 1; }
+  75%  { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-popup-zoom {
+  animation: popupZoomIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 
 /* ── Photo Gallery Phone Mockup ── */
 .net-phone {
@@ -907,3 +918,67 @@ button[class*="bg-[#06111f]"] {
   aspect-ratio: 3 / 4 !important;
 }
 
+/* 3D Experience Tab Animations */
+@keyframes tab-active-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(192, 244, 60, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(192, 244, 60, 0.6);
+  }
+}
+
+@keyframes tab-inactive-pulse {
+  0%, 100% {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+  }
+  50% {
+    border-color: rgba(192, 244, 60, 0.35);
+    box-shadow: 0 0 15px rgba(192, 244, 60, 0.1);
+  }
+}
+
+@keyframes tab-auto-shine {
+  0% {
+    left: -70%;
+  }
+  15%, 100% {
+    left: 120%;
+  }
+}
+
+.animate-tab-active-pulse {
+  animation: tab-active-pulse 2s infinite ease-in-out;
+}
+
+.animate-tab-inactive-pulse {
+  animation: tab-inactive-pulse 2.5s infinite ease-in-out;
+}
+
+.animate-tab-auto-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-tab-auto-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -70%;
+  width: 25%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(192, 244, 60, 0.18),
+    transparent
+  );
+  transform: rotate(30deg);
+  animation: tab-auto-shine 4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.text-\[clamp\(54px\,6\.5vw\,82px\)\] {
+    font-size: clamp(54px, 6.5vw, 82px) !important;
+}

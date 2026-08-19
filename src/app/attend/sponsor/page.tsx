@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Sponsor World AI Show Malaysia 2026. Reach 700+ AI decision-makers, generate qualified leads, and demonstrate thought leadership.",
 };
 
-const subNav = ["Overview", "Delegate", "Sponsor", "Media Partner", "Association Partner"];
+const subNav = ["Overview", "Sponsor", "Media Partner", "Association Partner"];
 
 export default function SponsorPage() {
   return (

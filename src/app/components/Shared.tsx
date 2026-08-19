@@ -66,15 +66,15 @@ export function GradientText({ children }: { children: ReactNode }) {
 export function Logo() {
   return (
     <a
-      className="flex items-center w-[118px] h-[49px] hover:opacity-90 transition-opacity duration-200"
+      className="flex items-center w-[180px] h-[60px] hover:opacity-90 transition-opacity duration-200"
       href="/malaysia/"
       aria-label="World AI Show Malaysia"
     >
       <img
-        src="/malaysia/logos/Nav-icon.svg"
-        alt="WAIS Malaysia Logo"
-        width={118}
-        height={49}
+        src="/malaysia/logos/wais-26-malaysia-header.svg"
+        alt="World AI Show Malaysia Logo"
+        width={180}
+        height={60}
         className="w-full h-full object-contain"
       />
     </a>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Apply for media accreditation for World AI Show Malaysia 2026. Cover ASEAN's leading artificial intelligence gathering.",
 };
 
-const subNav = ["Overview", "Delegate", "Sponsor", "Media Partner", "Association Partner"];
+const subNav = ["Overview", "Sponsor", "Media Partner", "Association Partner"];
 
 export default function MediaPartnerPage() {
   return (

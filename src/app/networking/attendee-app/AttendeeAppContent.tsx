@@ -47,7 +47,7 @@ export function AttendeeAppContent() {
                 href="#cta"
                 className="px-6 h-[49px] inline-flex items-center justify-center gap-2.5 rounded-full font-extrabold text-sm transition-all duration-200 bg-[#C0F43C] text-black shadow-[0_0_24px_rgba(192,244,60,0.24)] hover:shadow-[0_0_32px_rgba(192,244,60,0.4)] hover:-translate-y-0.5"
               >
-                Get Your Pass ➔
+                Buy Your Pass ➔
               </a>
               <a
                 href="#partners"

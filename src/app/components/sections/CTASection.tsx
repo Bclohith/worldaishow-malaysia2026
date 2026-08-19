@@ -34,10 +34,10 @@ export function CTASection() {
             {/* Centered Buttons Row */}
             <div className="flex flex-wrap justify-center items-center gap-4 mt-10">
               <a
-                href="/malaysia/attend#passes"
+                href="/malaysia/attend/delegate#passes"
                 className="inline-flex items-center gap-2 px-[32px] py-[15px] rounded-full text-[15px] font-extrabold text-[#06111f] bg-[#C0F43C] shadow-[0_8px_24px_rgba(192,244,60,0.25)] hover:shadow-[0_12px_32px_rgba(192,244,60,0.4)] hover:scale-[1.03] transition-all duration-200 cursor-pointer"
               >
-                Get Your Pass
+                Buy Your Pass
                 <span className="font-mono text-[16px] font-bold">→</span>
               </a>
               <a

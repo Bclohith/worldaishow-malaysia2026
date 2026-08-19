@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Register as a delegate for World AI Show Malaysia 2026. Pre-qualified free access for enterprise and government AI decision-makers.",
 };
 
-const subNav = ["Overview", "Delegate", "Sponsor", "Media Partner", "Association Partner"];
+const subNav = ["Overview", "Sponsor", "Media Partner", "Association Partner"];
 
 export default function DelegatePage() {
   return (

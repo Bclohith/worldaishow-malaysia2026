@@ -1,0 +1,1351 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World AI Show | Malaysia | Premium Pop-up Preview</title>
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+/* Modern CSS Variables & Design System Tokens */
+:root {
+    --bg-dark: #02081c;
+    --card-bg: #030d29;
+    --accent-lime: #b5f523;
+    --accent-lime-rgb: 181, 245, 35;
+    --accent-cyan: #00f3ff;
+    --accent-cyan-rgb: 0, 243, 255;
+    --text-white: #ffffff;
+    --text-muted: #8a99ad;
+    --text-muted-rgb: 138, 153, 173;
+    
+    --font-outfit: 'Outfit', sans-serif;
+    --font-inter: 'Inter', sans-serif;
+    
+    --shadow-neon: 0 0 30px rgba(0, 243, 255, 0.15), 0 0 50px rgba(181, 245, 35, 0.1);
+    --border-glow: 1px solid rgba(0, 243, 255, 0.15);
+}
+
+/* Reset and Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    font-family: var(--font-inter);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* --- MOCK PAGE STYLING (BACKDROP) --- */
+.mock-page {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: radial-gradient(circle at 50% 50%, #081635 0%, var(--bg-dark) 100%);
+    overflow: hidden;
+}
+
+.mock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 80px;
+    background: rgba(2, 8, 28, 0.4);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    z-index: 10;
+}
+
+.mock-header .logo {
+    font-family: var(--font-outfit);
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.mock-header .logo span {
+    color: var(--accent-lime);
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--text-white);
+}
+
+.nav-cta {
+    background: transparent;
+    border: 1px solid var(--accent-lime);
+    color: var(--accent-lime);
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-family: var(--font-outfit);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-cta:hover {
+    background: var(--accent-lime);
+    color: var(--bg-dark);
+    box-shadow: 0 0 15px rgba(181, 245, 35, 0.4);
+}
+
+.hero-section {
+    display: flex;
+    align-items: center;
+    padding: 120px 80px;
+    min-height: calc(100vh - 85px);
+    position: relative;
+}
+
+.hero-content {
+    max-width: 650px;
+    z-index: 2;
+}
+
+.hero-content .badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background: rgba(181, 245, 35, 0.1);
+    border: 1px solid rgba(181, 245, 35, 0.2);
+    color: var(--accent-lime);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+.hero-content h1 {
+    font-family: var(--font-outfit);
+    font-size: 56px;
+    line-height: 1.1;
+    font-weight: 800;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-content p {
+    color: var(--text-muted);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-primary {
+    background: var(--accent-lime);
+    color: var(--bg-dark);
+    border: none;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(181, 245, 35, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.hero-glow-1 {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    z-index: 1;
+}
+
+.hero-glow-2 {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(181, 245, 35, 0.05) 0%, transparent 70%);
+    bottom: -100px;
+    left: 20%;
+    z-index: 1;
+}
+
+/* --- POPUP MODAL OVERLAY --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-backdrop-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 8, 28, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.5s ease;
+}
+
+/* --- POPUP CARD --- */
+.popup-card {
+    position: relative;
+    width: 900px;
+    max-width: 90%;
+    height: 500px;
+    background: radial-gradient(circle at 80% 20%, #06173a 0%, #02081c 100%);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 243, 255, 0.15);
+    box-shadow: var(--shadow-neon);
+    overflow: hidden;
+    z-index: 10;
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+}
+
+.modal-overlay.active .popup-card {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Close Button styling */
+.close-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-lime);
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 30;
+    box-shadow: 0 0 15px rgba(181, 245, 35, 0.4);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.close-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    background: var(--text-white);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+.close-btn svg path {
+    transition: stroke 0.3s ease;
+}
+
+.close-btn:hover svg path {
+    stroke: var(--bg-dark);
+}
+
+/* Layout inner grid */
+.popup-inner {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* LEFT COLUMN - CONTENT */
+.popup-left {
+    width: 53%;
+    height: 100%;
+    padding: 48px 0 44px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    z-index: 5;
+}
+
+.accent-bar {
+    width: 50px;
+    height: 4px;
+    background: var(--accent-lime);
+    border-radius: 2px;
+}
+
+.popup-title {
+    font-family: 'Space Grotesk', var(--font-outfit), sans-serif;
+    font-size: 40px;
+    line-height: 1.15;
+    font-weight: 700;
+    text-transform: none;
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+.popup-title span {
+    display: block;
+    overflow: hidden;
+}
+
+.word-white {
+    color: var(--text-white);
+}
+
+.word-lime {
+    color: var(--accent-lime);
+    text-shadow: 0 0 10px rgba(181, 245, 35, 0.2);
+}
+
+.register-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-white);
+    flex-shrink: 0;
+}
+
+.info-text {
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* CTA Button with continuous pulses & shine sweep */
+.cta-button {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 320px;
+    padding: 16px 24px;
+    background: var(--accent-lime);
+    color: var(--bg-dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-family: var(--font-outfit);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(181, 245, 35, 0.3);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 2;
+}
+
+.cta-button span {
+    position: relative;
+    z-index: 5;
+}
+
+.cta-arrow {
+    position: relative;
+    z-index: 5;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(181, 245, 35, 0.5);
+    background: var(--text-white);
+}
+
+.cta-button:hover .cta-arrow {
+    transform: translateX(6px);
+}
+
+/* Diagonal shine animation */
+.cta-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 30%;
+    height: 200%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: rotate(25deg);
+    animation: button-shine 4s ease-in-out infinite;
+}
+
+/* Trust footer */
+.trust-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+.trust-icon {
+    color: var(--accent-lime);
+    opacity: 0.95;
+    flex-shrink: 0;
+}
+
+.trust-divider {
+    width: 1px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* RIGHT COLUMN - ANIMATION ZONE */
+.popup-right {
+    width: 47%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Particle Canvas style */
+#wave-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Ambient glow graphics */
+.ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.cyan-glow {
+    width: 250px;
+    height: 250px;
+    background: var(--accent-cyan);
+    top: 10%;
+    right: 15%;
+}
+
+.lime-glow {
+    width: 200px;
+    height: 200px;
+    background: var(--accent-lime);
+    bottom: 5%;
+    left: 10%;
+    opacity: 0.25;
+}
+
+/* 3D Holographic Tickets Perspective */
+.tickets-perspective {
+    position: relative;
+    width: 280px;
+    height: 320px;
+    z-index: 5;
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Floating bobbing loop */
+.tickets-bobbing {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    animation: float-y 6s ease-in-out infinite;
+}
+
+.tickets-tilt-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+}
+
+/* Ticket base style */
+.ticket {
+    position: absolute;
+    width: 140px;
+    height: 240px;
+    background: transparent;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.ticket-bg-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Back Ticket */
+.ticket-back {
+    z-index: 10;
+    left: 45px;
+    top: 35px;
+    transform: translateZ(-35px) rotateY(-18deg) rotateX(12deg) rotateZ(-12deg);
+    opacity: 0.65;
+}
+
+.ticket-back .ticket-content {
+    opacity: 0.5;
+}
+
+/* Front Ticket styling with premium neon details */
+.ticket-front {
+    z-index: 20;
+    left: 90px;
+    top: 20px;
+    transform: translateZ(10px) rotateY(-20deg) rotateX(10deg) rotateZ(-6deg);
+}
+
+.ticket-front .ticket-path {
+    transition: stroke 0.3s ease;
+}
+
+.ticket-front:hover .ticket-path {
+    stroke: var(--accent-lime);
+}
+
+/* Inner ticket contents */
+.ticket-content {
+    padding: 20px 14px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 4;
+}
+
+.ticket-top {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ticket-badge {
+    background: var(--accent-lime);
+    color: var(--bg-dark);
+    font-family: var(--font-outfit);
+    font-weight: 800;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 8px rgba(181, 245, 35, 0.4);
+}
+
+.ticket-back .ticket-tag {
+    color: var(--accent-cyan);
+    font-family: var(--font-outfit);
+    font-weight: 800;
+    font-size: 13px;
+    margin-bottom: 24px;
+}
+
+.ticket-main-text, .ticket-label {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.8px;
+    color: var(--text-white);
+    line-height: 1.2;
+}
+
+.ticket-sub-text {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: var(--accent-cyan);
+    margin-top: 2px;
+}
+
+.ticket-front:hover .ticket-sub-text {
+    color: var(--accent-lime);
+}
+
+/* Ticket tear divider line */
+.ticket-divider {
+    width: 100%;
+    position: absolute;
+    top: 70%;
+    left: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.divider-line {
+    width: 80%;
+    border-bottom: 1.5px dashed rgba(0, 243, 255, 0.25);
+}
+
+.ticket-front:hover .divider-line {
+    border-bottom-color: rgba(181, 245, 35, 0.25);
+}
+
+.ticket-bottom {
+    margin-bottom: 4px;
+    color: var(--accent-cyan);
+}
+
+.ticket-front:hover .ticket-bottom {
+    color: var(--accent-lime);
+    filter: drop-shadow(0 0 5px rgba(181, 245, 35, 0.5));
+}
+
+/* Neon scanner beam sweep */
+.ticket-scanner-beam {
+    position: absolute;
+    width: calc(100% - 4px);
+    height: 4px;
+    left: 2px;
+    background: linear-gradient(to right, transparent, var(--accent-cyan), transparent);
+    box-shadow: 0 0 10px var(--accent-cyan);
+    z-index: 6;
+    animation: scanner-sweep 3.5s linear infinite;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.ticket-front:hover .ticket-scanner-beam {
+    background: linear-gradient(to right, transparent, var(--accent-lime), transparent);
+    box-shadow: 0 0 10px var(--accent-lime);
+}
+
+/* --- ANIMATION KEYFRAMES --- */
+
+/* Bobbing animation */
+@keyframes float-y {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Laser scan animation */
+@keyframes scanner-sweep {
+    0% {
+        top: 10px;
+    }
+    50% {
+        top: calc(100% - 14px);
+    }
+    100% {
+        top: 10px;
+    }
+}
+
+/* Shine effect on button */
+@keyframes button-shine {
+    0% {
+        left: -60%;
+    }
+    30% {
+        left: 120%;
+    }
+    100% {
+        left: 120%;
+    }
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 992px) {
+    .popup-card {
+        height: auto;
+        max-height: 90vh;
+        width: 600px;
+        overflow-y: auto;
+    }
+    
+    .popup-inner {
+        flex-direction: column;
+    }
+    
+    .popup-left {
+        width: 100%;
+        padding: 40px 40px 24px 40px;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .accent-bar {
+        margin-bottom: 16px;
+    }
+    
+    .popup-title {
+        font-size: 34px;
+        margin-top: 10px;
+    }
+    
+    .register-info {
+        margin: 16px 0;
+        text-align: left;
+    }
+    
+    .cta-button {
+        width: 100%;
+        max-width: 320px;
+    }
+    
+    .trust-footer {
+        justify-content: center;
+        width: 100%;
+        margin-top: 16px;
+        flex-wrap: wrap;
+    }
+    
+    .popup-right {
+        width: 100%;
+        height: 240px;
+        border-left: none;
+    }
+    
+    .tickets-perspective {
+        transform: scale(0.85);
+        height: 220px;
+    }
+    
+    .ticket-back {
+        left: 30px;
+        top: -10px;
+    }
+    
+    .ticket-front {
+        left: 75px;
+        top: -25px;
+    }
+    
+    .close-btn {
+        top: 16px;
+        right: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .popup-card {
+        width: 94%;
+        border-radius: 16px;
+    }
+    
+    .popup-left {
+        padding: 32px 20px 20px 20px;
+    }
+    
+    .popup-title {
+        font-size: 26px;
+    }
+    
+    .register-info {
+        gap: 12px;
+    }
+    
+    .info-text {
+        font-size: 13px;
+    }
+    
+    .trust-footer {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .trust-divider {
+        display: none;
+    }
+    
+    .popup-right {
+        height: 180px;
+    }
+    
+    .tickets-perspective {
+        transform: scale(0.68);
+        height: 170px;
+    }
+    
+    .ticket-back {
+        left: 20px;
+        top: -45px;
+    }
+    
+    .ticket-front {
+        left: 65px;
+        top: -60px;
+    }
+    
+    .close-btn {
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .mock-header {
+        padding: 16px 20px;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+    
+    .hero-section {
+        padding: 80px 20px;
+    }
+    
+    .hero-content h1 {
+        font-size: 36px;
+    }
+}
+
+
+</style>
+</head>
+<body>
+
+    <!-- Mock Event Landing Page (Backdrop) -->
+    <div class="mock-page">
+        <header class="mock-header">
+            <div class="logo">WORLD<span>AI</span>SHOW</div>
+            <nav class="nav-links">
+                <a href="#about">About</a>
+                <a href="#speakers">Speakers</a>
+                <a href="#agenda">Agenda</a>
+                <a href="#sponsors">Sponsors</a>
+            </nav>
+            <button class="nav-cta" id="trigger-popup">Register Now</button>
+        </header>
+
+        <main class="hero-section">
+            <div class="hero-content">
+                <span class="badge">Malaysia Edition 2026</span>
+                <h1>The Ultimate Convergence of AI Innovators</h1>
+                <p>Join global industry leaders, tech pioneers, and researchers in Kuala Lumpur to discover the next generation of artificial intelligence, machine learning, and automation.</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" id="trigger-popup-hero">Get Delegate Pass</button>
+                    <button class="btn-secondary">View Agenda</button>
+                </div>
+            </div>
+            <div class="hero-glow-1"></div>
+            <div class="hero-glow-2"></div>
+        </main>
+    </div>
+
+    <!-- Popup Modal Overlay -->
+    <div class="modal-overlay" id="popup-modal">
+        <div class="modal-backdrop-blur"></div>
+        
+        <!-- Popup Card -->
+        <div class="popup-card" id="popup-card">
+            
+            <!-- Close Button -->
+            <button class="close-btn" id="close-popup" aria-label="Close Pop-up">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 1L13 13M1 13L13 1" stroke="#02081c" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+
+            <!-- Card Inner Layout -->
+            <div class="popup-inner">
+                
+                <!-- Left Side: Content & Action -->
+                <div class="popup-left">
+                    <div class="accent-bar"></div>
+                    
+                    <h2 class="popup-title">
+                        <span class="word-white">Limited</span>
+                        <span class="word-lime">Free Delegate</span>
+                        <span class="word-white">Passes</span>
+                        <span class="word-lime">Remaining</span>
+                    </h2>
+
+                    <div class="register-info">
+                        <div class="icon-circle">
+                            <!-- Group of people outline SVG -->
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <p class="info-text">Register now before<br>all free passes are claimed.</p>
+                    </div>
+
+                    <a href="#" class="cta-button">
+                        <span>CLAIM YOUR FREE PASS</span>
+                        <svg class="cta-arrow" width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 7H15M15 7L10 2M15 7L10 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+
+                    <!-- Bottom Trust Elements -->
+                    <div class="trust-footer">
+                        <div class="trust-item">
+                            <!-- Shield Star Icon -->
+                            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <polygon points="12 11 13.5 14 16.5 14 14 16 15 19 12 17.5 9 19 10 16 7.5 14 10.5 14"/>
+                            </svg>
+                            <span>100% Complimentary</span>
+                        </div>
+                        <div class="trust-divider"></div>
+                        <div class="trust-item">
+                            <!-- Clock Icon -->
+                            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span>Limited Availability</span>
+                        </div>
+                        <div class="trust-divider"></div>
+                        <div class="trust-item">
+                            <!-- Shield Check Icon -->
+                            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <polyline points="9 11 11 13 15 9"/>
+                            </svg>
+                            <span>By Invitation Only</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Side: Animated Wave and Holographic 3D Tickets -->
+                <div class="popup-right" id="popup-right-area">
+                    <!-- Particle Canvas Background -->
+                    <canvas id="wave-canvas"></canvas>
+
+                    <!-- Glow Highlights (Ambient Background Light) -->
+                    <div class="ambient-glow cyan-glow"></div>
+                    <div class="ambient-glow lime-glow"></div>
+
+                    <!-- 3D Holographic Tickets Wrapper -->
+                    <div class="tickets-perspective">
+                        <div class="tickets-bobbing">
+                            <div class="tickets-tilt-container" id="tickets-tilt">
+                                
+                                <!-- Back Ticket -->
+                                <div class="ticket ticket-back">
+                                    <svg class="ticket-bg-svg" viewBox="0 0 140 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M 12 0 L 58 0 A 12 12 0 0 0 82 0 L 128 0 A 12 12 0 0 1 140 12 L 140 160 A 8 8 0 0 0 140 176 L 140 228 A 12 12 0 0 1 128 240 L 82 240 A 12 12 0 0 0 58 240 L 12 240 A 12 12 0 0 1 0 228 L 0 176 A 8 8 0 0 0 0 160 L 0 12 A 12 12 0 0 1 12 0 Z" fill="#030d29" fill-opacity="0.85" stroke="rgba(0, 243, 255, 0.45)" stroke-width="1.5"/>
+                                    </svg>
+                                    <div class="ticket-content">
+                                        <div class="ticket-top">
+                                            <span class="ticket-tag">FREE</span>
+                                            <span class="ticket-label">DELEGATE</span>
+                                            <span class="ticket-label">PASS</span>
+                                        </div>
+                                        <div class="ticket-divider">
+                                            <div class="divider-line"></div>
+                                        </div>
+                                        <div class="ticket-bottom">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="9" cy="7" r="4"></circle>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Front Ticket -->
+                                <div class="ticket ticket-front">
+                                    <svg class="ticket-bg-svg" viewBox="0 0 140 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <defs>
+                                            <filter id="neon-glow-cyan" x="-25%" y="-25%" width="150%" height="150%">
+                                                <feGaussianBlur stdDeviation="4" result="blur" />
+                                                <feMerge>
+                                                    <feMergeNode in="blur" />
+                                                    <feMergeNode in="SourceGraphic" />
+                                                </feMerge>
+                                            </filter>
+                                        </defs>
+                                        <path class="ticket-path" d="M 12 0 L 58 0 A 12 12 0 0 0 82 0 L 128 0 A 12 12 0 0 1 140 12 L 140 160 A 8 8 0 0 0 140 176 L 140 228 A 12 12 0 0 1 128 240 L 82 240 A 12 12 0 0 0 58 240 L 12 240 A 12 12 0 0 1 0 228 L 0 176 A 8 8 0 0 0 0 160 L 0 12 A 12 12 0 0 1 12 0 Z" fill="#030d29" fill-opacity="0.85" stroke="#00f3ff" stroke-width="1.8" filter="url(#neon-glow-cyan)"/>
+                                    </svg>
+                                    <div class="ticket-scanner-beam"></div>
+                                    <div class="ticket-content">
+                                        <div class="ticket-top">
+                                            <div class="ticket-badge">FREE</div>
+                                            <div class="ticket-main-text">DELEGATE</div>
+                                            <div class="ticket-sub-text">PASS</div>
+                                        </div>
+                                        <div class="ticket-divider">
+                                            <div class="divider-line"></div>
+                                        </div>
+                                        <div class="ticket-bottom">
+                                            <svg class="ticket-user-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="9" cy="7" r="4"></circle>
+                                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    
+    <script>
+/**
+ * ParticleWave class renders a 3D-perspective digital grid wave on an HTML5 canvas.
+ * It uses multiple overlapping sine/cosine functions for fluid motion and interpolates
+ * color from cyan to lime green to match the design.
+ */
+class ParticleWave {
+    constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        if (!this.canvas) return;
+
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        
+        // Grid configurations
+        this.cols = 28;
+        this.rows = 14;
+        this.time = 0;
+        this.speed = 0.008;
+
+        // Wave parameters
+        this.amplitude1 = 12;
+        this.amplitude2 = 6;
+        this.frequency1 = 0.22;
+        this.frequency2 = 0.12;
+
+        this.init();
+        this.animate();
+
+        window.addEventListener('resize', () => this.resize());
+    }
+
+    init() {
+        this.resize();
+    }
+
+    resize() {
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        // Set display size
+        this.canvas.width = rect.width * window.devicePixelRatio;
+        this.canvas.height = rect.height * window.devicePixelRatio;
+        
+        // Scale canvas drawing context to handle retina displays
+        this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        this.width = rect.width;
+        this.height = rect.height;
+    }
+
+    animate() {
+        this.time += this.speed;
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        const spacingX = this.width / (this.cols - 1);
+        const spacingY = (this.height * 0.5) / (this.rows - 1);
+        const centerY = this.height * 0.55;
+
+        // 2D Array to store calculated 3D coordinates for line drawing
+        const gridPoints = [];
+
+        // 1. Calculate positions and project to 2D
+        for (let r = 0; r < this.rows; r++) {
+            gridPoints[r] = [];
+            
+            // Depth/perspective scale: 0 is furthest back, 1 is closest front
+            const depthRatio = r / (this.rows - 1);
+            const scale = 0.35 + 0.65 * depthRatio; 
+            
+            for (let c = 0; c < this.cols; c++) {
+                // Base grid coordinate
+                const baseX = c * spacingX;
+                const baseY = centerY + (r - this.rows / 2) * spacingY * 0.85;
+
+                // Wave ripple calculation based on X, Z (row depth), and Time
+                const wave1 = Math.sin(c * this.frequency1 + r * 0.15 + this.time * 2) * this.amplitude1;
+                const wave2 = Math.cos(c * this.frequency2 - this.time * 0.8) * this.amplitude2;
+                const dy = (wave1 + wave2) * scale;
+
+                // Project with perspective relative to the center of the screen
+                const projX = this.width * 0.5 + (baseX - this.width * 0.5) * scale;
+                const projY = baseY + dy * scale + (this.height * 0.12 * (1 - scale));
+
+                // Calculate color interpolation (Cyan on left, Lime Green on right)
+                // Normalize X to a ratio between 0 and 1
+                const xRatio = Math.max(0, Math.min(1, projX / this.width));
+                
+                // Cyan RGB: (0, 243, 255)
+                // Lime RGB: (181, 245, 35)
+                const red = Math.round(0 + (181 - 0) * xRatio);
+                const green = Math.round(243 + (245 - 243) * xRatio);
+                const blue = Math.round(255 + (35 - 255) * xRatio);
+                
+                // Fade out particles towards the very back and sides
+                const edgeFade = Math.sin(xRatio * Math.PI) * 0.9 + 0.1;
+                const alpha = (0.2 + 0.8 * depthRatio) * 0.75 * edgeFade;
+
+                gridPoints[r][c] = {
+                    x: projX,
+                    y: projY,
+                    radius: (0.8 + 1.8 * depthRatio),
+                    color: `rgba(${red}, ${green}, ${blue}, ${alpha})`,
+                    lineColor: `rgba(${red}, ${green}, ${blue}, ${alpha * 0.15})`
+                };
+            }
+        }
+
+        // 2. Draw connections (Grid Mesh Lines) first so they sit under the dots
+        this.ctx.lineWidth = 0.55;
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.cols; c++) {
+                const current = gridPoints[r][c];
+
+                // Connect to the right neighbor
+                if (c < this.cols - 1) {
+                    const right = gridPoints[r][c + 1];
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(current.x, current.y);
+                    this.ctx.lineTo(right.x, right.y);
+                    this.ctx.strokeStyle = current.lineColor;
+                    this.ctx.stroke();
+                }
+
+                // Connect to the bottom neighbor (depth-wise connection)
+                if (r < this.rows - 1) {
+                    const bottom = gridPoints[r + 1][c];
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(current.x, current.y);
+                    this.ctx.lineTo(bottom.x, bottom.y);
+                    this.ctx.strokeStyle = current.lineColor;
+                    this.ctx.stroke();
+                }
+            }
+        }
+
+        // 3. Draw particles (dots) on top of lines
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.cols; c++) {
+                const p = gridPoints[r][c];
+                
+                this.ctx.beginPath();
+                this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                this.ctx.fillStyle = p.color;
+                
+                // Give closer/larger dots a slight glow
+                if (p.radius > 1.8) {
+                    this.ctx.shadowBlur = 4;
+                    this.ctx.shadowColor = p.color;
+                } else {
+                    this.ctx.shadowBlur = 0;
+                }
+                
+                this.ctx.fill();
+            }
+        }
+        this.ctx.shadowBlur = 0; // Reset shadow
+
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
+// Initialized when scripts load
+document.addEventListener('DOMContentLoaded', () => {
+    new ParticleWave('wave-canvas');
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Elements ---
+    const modal = document.getElementById('popup-modal');
+    const card = document.getElementById('popup-card');
+    const closeBtn = document.getElementById('close-popup');
+    const triggerHeader = document.getElementById('trigger-popup');
+    const triggerHero = document.getElementById('trigger-popup-hero');
+    const rightPanel = document.getElementById('popup-right-area');
+    const ticketsTilt = document.getElementById('tickets-tilt');
+
+    // --- Modal Open/Close Logic ---
+    
+    // Open modal function
+    const openModal = () => {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        
+        // Reset tilt position to default
+        if (ticketsTilt) {
+            ticketsTilt.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            ticketsTilt.style.transform = 'rotateY(-20deg) rotateX(10deg) rotateZ(0deg)';
+        }
+    };
+
+    // Close modal function
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    };
+
+    // Auto-open modal after 1.5 seconds delay
+    setTimeout(openModal, 1500);
+
+    // Event listeners for opening
+    if (triggerHeader) triggerHeader.addEventListener('click', openModal);
+    if (triggerHero) triggerHero.addEventListener('click', openModal);
+
+    // Event listeners for closing
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    
+    // Close modal when clicking outside on the backdrop
+    modal.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-backdrop-blur')) {
+            closeModal();
+        }
+    });
+    
+    // Allow closing with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // --- 3D Holographic Parallax Tilt Effect ---
+    if (rightPanel && ticketsTilt) {
+        
+        rightPanel.addEventListener('mousemove', (e) => {
+            const rect = rightPanel.getBoundingClientRect();
+            
+            // Mouse position relative to center of the panel
+            const x = e.clientX - rect.left - (rect.width / 2);
+            const y = e.clientY - rect.top - (rect.height / 2);
+            
+            // Normalized values (-1 to 1)
+            const normX = x / (rect.width / 2);
+            const normY = y / (rect.height / 2);
+            
+            // Rotation calculations (max rotation: 28 degrees Y, -22 degrees X)
+            // Left move tilts right, right move tilts left
+            const rotateY = normX * 28;
+            const rotateX = -normY * 22;
+            
+            // Apply 3D rotation transform dynamically
+            // Remove transition for lag-free cursor tracking
+            ticketsTilt.style.transition = 'transform 0.08s ease-out';
+            ticketsTilt.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(-2deg)`;
+        });
+
+        // Smooth transition reset when mouse leaves the interaction area
+        rightPanel.addEventListener('mouseleave', () => {
+            ticketsTilt.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+            ticketsTilt.style.transform = 'rotateY(-20deg) rotateX(10deg) rotateZ(0deg)';
+        });
+    }
+
+    // --- Optional: Action button hover ripple triggers ---
+    const ctaButton = document.querySelector('.cta-button');
+    if (ctaButton) {
+        ctaButton.addEventListener('click', (e) => {
+            // Optional redirect or action - e.g. custom visual event
+            console.log("Free delegate pass claimed!");
+        });
+    }
+});
+
+
+</script>
+</body>
+</html>
+
+

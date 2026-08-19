@@ -285,11 +285,8 @@
 }
  
 .hero h1 {
-
-  max-width: 790px;
-
+  max-width: 850px;
   font-size: clamp(46px, 6.6vw, 72px);
-
 }
 
 .heroPara {

@@ -40,7 +40,7 @@ const channels: ChannelItem[] = [
     tag: "Premium Access",
     desc: "Unwind and build long-term relationships in Selangor's premium executive suites. Engage with sovereign capital managers, tech pioneers, and ministers during cocktails, establishing trust beyond formal conference rooms.",
     benefits: [
-      "Invitation-only, restricted lounge access",
+      "Restricted lounge access",
       "Sovereign wealth & venture investor hubs",
       "Informal networking in premium settings"
     ],

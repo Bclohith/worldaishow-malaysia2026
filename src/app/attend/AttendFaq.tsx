@@ -41,7 +41,7 @@ export function AttendFaq({ faqs }: { faqs: string[] }) {
             >
               <div className="overflow-hidden">
                 <p className="max-w-[740px] ml-[68px] mr-6 pb-4 text-[#aeb5c5] text-[15px] leading-relaxed max-sm:ml-[44px]">
-                  World AI Show Malaysia is built for invited senior AI,
+                  World AI Show Malaysia is built for senior AI,
                   technology, policy, data, infrastructure, and enterprise
                   leaders. Registration, sponsorship, and agenda details are
                   shared through the official event team.

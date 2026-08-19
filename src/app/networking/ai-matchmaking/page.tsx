@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Connect with the right people at WAIS Malaysia 2026 through AI-powered business matchmaking. Schedule 1:1 meetings with enterprise leaders.",
 };
 
-const subNav = ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery", "WhatsApp Networking"];
+const subNav = ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery"];
 
 export default function AIMatchmakingPage() {
   return (

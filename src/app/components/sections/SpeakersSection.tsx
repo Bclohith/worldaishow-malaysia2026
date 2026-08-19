@@ -90,7 +90,7 @@ export function SpeakersSection() {
             <GradientText>Malaysia&apos;s AI playbook.</GradientText>
           </h2>
           <p className="text-muted text-[20px] leading-[1.45] max-[980px]:text-center max-sm:text-[17px]">
-            30+ speakers across government, GLCs and global tech, curated for senior decision-makers.
+            50+ speakers across government, GLCs and global tech, curated for senior decision-makers.
           </p>
         </div>
 

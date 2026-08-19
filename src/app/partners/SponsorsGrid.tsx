@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { GradientText } from "../components/Shared";
+import dynamic from "next/dynamic";
+
+const ModelViewer = dynamic(() => import("../components/sections/ModelViewer"), { ssr: false });
 
 /* ── Types ──────────────────────────────────────────────────── */
 type SponsorItem = {
@@ -243,7 +246,7 @@ function CategorySection({
           ) {
             return "grid grid-cols-2 gap-6 max-[1024px]:grid-cols-2 max-sm:grid-cols-1 w-full";
           }
-          if (cat.includes("exhibitor") || cat.includes("media")) {
+          if (cat.includes("media")) {
             return "grid grid-cols-4 gap-4 max-[1200px]:grid-cols-4 max-[1024px]:grid-cols-3 max-[768px]:grid-cols-2 max-[480px]:grid-cols-1 w-full";
           }
           return "grid grid-cols-3 gap-5 max-[1200px]:grid-cols-3 max-[1024px]:grid-cols-2 max-sm:grid-cols-1 w-full";
@@ -384,25 +387,44 @@ export function SponsorsGrid() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedSponsor, setSelectedSponsor] = useState<SponsorItem | null>(null);
-  const [activeTab, setActiveTab] = useState<"sponsors-exhibitors" | "associations-media">("sponsors-exhibitors");
+  const [activeTab, setActiveTab] = useState<"sponsors-exhibitors" | "associations-media" | "floor-plan">("sponsors-exhibitors");
+
+  useEffect(() => {
+    // Check hash on mount to switch tabs automatically
+    if (typeof window !== "undefined") {
+      const handleHashChange = () => {
+        if (window.location.hash === "#floor-plan") {
+          setActiveTab("floor-plan");
+          // Optionally scroll to it so the user sees it
+          const el = document.getElementById("sponsors-section");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }
+      };
+
+      // Run once on mount
+      handleHashChange();
+
+      window.addEventListener("hashchange", handleHashChange);
+      return () => window.removeEventListener("hashchange", handleHashChange);
+    }
+  }, []);
 
   useEffect(() => {
     const API_BASE = "https://api.konfhub.com/event/public/world-ai-show-malaysia26";
     
     Promise.all([
       fetch(`${API_BASE}/entity/1`),
-      fetch(`${API_BASE}/entity/2`)
+      fetch(`${API_BASE}/entity/2`),
+      fetch(`${API_BASE}/entity/3`)
     ])
-      .then(async ([sponsorsRes, partnersRes]) => {
-        let rawSponsors: any = { categorized: [] };
-        let rawPartners: any = { categorized: [] };
+      .then(async ([sponsorsRes, partnersRes, exhibitorsRes]) => {
+        let rawSponsors: any = { categorized: [], uncategorized: [] };
+        let rawPartners: any = { categorized: [], uncategorized: [] };
+        let rawExhibitors: any = { categorized: [], uncategorized: [] };
 
-        if (sponsorsRes.ok) {
-          rawSponsors = await sponsorsRes.json();
-        }
-        if (partnersRes.ok) {
-          rawPartners = await partnersRes.json();
-        }
+        if (sponsorsRes.ok) rawSponsors = await sponsorsRes.json();
+        if (partnersRes.ok) rawPartners = await partnersRes.json();
+        if (exhibitorsRes.ok) rawExhibitors = await exhibitorsRes.json();
 
         const sponsorsByCategory: Record<string, SponsorItem[]> = {};
         const partnersByCategory: Record<string, SponsorItem[]> = {};
@@ -416,58 +438,55 @@ export function SponsorsGrid() {
           return trimmed;
         };
 
-        // Process Sponsors
+        const mapEntities = (entities: any[], cleanName: string, categoryMap: Record<string, SponsorItem[]>) => {
+          if (entities.length > 0) {
+            if (!categoryMap[cleanName]) categoryMap[cleanName] = [];
+            categoryMap[cleanName].push(
+              ...entities.map((e: any) => ({
+                id: e.id,
+                name: e.entity_name || "",
+                logo: e.image_url || "",
+                website: e.website_url || "#",
+                category: cleanName,
+                description: e.description || "",
+                location: e.location || "",
+                booth: e.booth_number || "",
+              }))
+            );
+          }
+        };
+
+        // Process Sponsors (Entity 1)
         if (Array.isArray(rawSponsors?.categorized)) {
           for (const cat of rawSponsors.categorized) {
             const rawName = cat.category_name || "Sponsors";
-            const cleanName = cleanCategoryName(rawName);
-            const entities = Array.isArray(cat.entity) ? cat.entity : [];
-
-            if (entities.length > 0) {
-              if (!sponsorsByCategory[cleanName]) {
-                sponsorsByCategory[cleanName] = [];
-              }
-              sponsorsByCategory[cleanName].push(
-                ...entities.map((e: any) => ({
-                  id: e.id,
-                  name: e.entity_name || "",
-                  logo: e.image_url || "",
-                  website: e.website_url || "#",
-                  category: cleanName,
-                  description: e.description || "",
-                  location: e.location || "",
-                  booth: e.booth_number || "",
-                }))
-              );
-            }
+            mapEntities(Array.isArray(cat.entity) ? cat.entity : [], cleanCategoryName(rawName), sponsorsByCategory);
           }
         }
+        if (Array.isArray(rawSponsors?.uncategorized)) {
+          mapEntities(rawSponsors.uncategorized, "Sponsors", sponsorsByCategory);
+        }
 
-        // Process Partners
+        // Process Partners (Entity 2)
         if (Array.isArray(rawPartners?.categorized)) {
           for (const cat of rawPartners.categorized) {
             const rawName = cat.category_name || "Partners";
-            const cleanName = cleanCategoryName(rawName);
-            const entities = Array.isArray(cat.entity) ? cat.entity : [];
-
-            if (entities.length > 0) {
-              if (!partnersByCategory[cleanName]) {
-                partnersByCategory[cleanName] = [];
-              }
-              partnersByCategory[cleanName].push(
-                ...entities.map((e: any) => ({
-                  id: e.id,
-                  name: e.entity_name || "",
-                  logo: e.image_url || "",
-                  website: e.website_url || "#",
-                  category: cleanName,
-                  description: e.description || "",
-                  location: e.location || "",
-                  booth: e.booth_number || "",
-                }))
-              );
-            }
+            mapEntities(Array.isArray(cat.entity) ? cat.entity : [], cleanCategoryName(rawName), partnersByCategory);
           }
+        }
+        if (Array.isArray(rawPartners?.uncategorized)) {
+          mapEntities(rawPartners.uncategorized, "Partners", partnersByCategory);
+        }
+
+        // Process Exhibitors (Entity 3) -> Add to Sponsors Map so they appear in Tab 1
+        if (Array.isArray(rawExhibitors?.categorized)) {
+          for (const cat of rawExhibitors.categorized) {
+            const rawName = cat.category_name || "Exhibitors";
+            mapEntities(Array.isArray(cat.entity) ? cat.entity : [], cleanCategoryName(rawName), sponsorsByCategory);
+          }
+        }
+        if (Array.isArray(rawExhibitors?.uncategorized)) {
+          mapEntities(rawExhibitors.uncategorized, "Exhibitors", sponsorsByCategory);
         }
 
         setData({
@@ -592,10 +611,10 @@ export function SponsorsGrid() {
         {/* Secondary Navigation Tab Bar (Finance2045 / Indonesia style) */}
         {!loading && hasAnyData && (
           <div className="flex justify-center mb-16 max-sm:mb-10">
-            <div className="inline-flex p-1 bg-[#050c1d]/90 border border-white/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+            <div className="flex flex-wrap justify-center p-1 gap-1 sm:gap-0 bg-[#050c1d]/90 border border-white/10 rounded-full max-sm:rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] max-w-full">
               <button
                 onClick={() => setActiveTab("sponsors-exhibitors")}
-                className={`px-8 py-3 max-sm:px-4 max-sm:py-2.5 rounded-full text-sm max-sm:text-xs font-extrabold transition-all duration-300 ${
+                className={`flex-none px-8 py-3 max-sm:px-4 max-sm:py-2.5 rounded-full text-sm max-sm:text-xs font-extrabold transition-all duration-300 ${
                   activeTab === "sponsors-exhibitors"
                     ? "bg-[#C0F43C] text-black shadow-[0_0_20px_rgba(192,244,60,0.2)]"
                     : "text-white/60 hover:text-white"
@@ -605,13 +624,36 @@ export function SponsorsGrid() {
               </button>
               <button
                 onClick={() => setActiveTab("associations-media")}
-                className={`px-8 py-3 max-sm:px-4 max-sm:py-2.5 rounded-full text-sm max-sm:text-xs font-extrabold transition-all duration-300 ${
+                className={`flex-none px-8 py-3 max-sm:px-4 max-sm:py-2.5 rounded-full text-sm max-sm:text-xs font-extrabold transition-all duration-300 ${
                   activeTab === "associations-media"
                     ? "bg-[#C0F43C] text-black shadow-[0_0_20px_rgba(192,244,60,0.2)]"
                     : "text-white/60 hover:text-white"
                 }`}
               >
                 Association Partners &amp; Media Partners
+              </button>
+              <button
+                onClick={() => setActiveTab("floor-plan")}
+                className={`flex-none px-8 py-3 max-sm:px-4 max-sm:py-2.5 rounded-full text-sm max-sm:text-xs font-extrabold transition-all duration-300 relative overflow-hidden group flex items-center justify-center gap-2 border ${
+                  activeTab === "floor-plan"
+                    ? "bg-[#C0F43C] text-black border-transparent shadow-[0_0_20px_rgba(192,244,60,0.2)] animate-tab-active-pulse"
+                    : "text-white/60 hover:text-white border-white/10 hover:border-white/20 animate-tab-inactive-pulse animate-tab-auto-shine"
+                }`}
+              >
+                <svg
+                  className={`w-4 h-4 transition-transform duration-700 ${
+                    activeTab === "floor-plan"
+                      ? "animate-[spin_8s_linear_infinite] text-black"
+                      : "text-[#C0F43C] group-hover:rotate-180"
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                Enter 3D Experience
               </button>
             </div>
           </div>
@@ -716,6 +758,13 @@ export function SponsorsGrid() {
           </div>
         )}
 
+        {/* Tab 3: Floor Plan (3D Viewer) */}
+        {!loading && hasAnyData && activeTab === "floor-plan" && (
+          <div className="w-full aspect-video min-h-[500px] max-h-[750px] relative mt-8">
+            <ModelViewer modelUrl="/malaysia/models/floorplan-draco.glb" />
+          </div>
+        )}
+
         {/* Call to Action at bottom */}
         {!loading && hasAnyData && <PartnerCTA />}
       </div>
@@ -811,9 +860,10 @@ export function SponsorsGrid() {
 
             {/* Description */}
             {selectedSponsor.description ? (
-              <p className="m-0 font-inter text-[14.5px] leading-relaxed text-white/70">
-                {selectedSponsor.description}
-              </p>
+              <div 
+                className="m-0 font-inter text-[14.5px] leading-relaxed text-white/70 space-y-3"
+                dangerouslySetInnerHTML={{ __html: selectedSponsor.description }}
+              />
             ) : (
               <p className="m-0 font-inter text-[13.5px] leading-relaxed text-white/40 italic">
                 No description available. Click below to explore their official website.

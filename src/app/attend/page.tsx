@@ -4,6 +4,7 @@ import { Header } from "../components/sections/Header";
 import { AttendFaq } from "./AttendFaq";
 import { AttendStats } from "./AttendStats";
 import { GradientText } from "../components/Shared";
+import { AmbientGlowCard } from "../components/AmbientGlowCard";
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     "Attend World AI Show Malaysia 2026, the curated gathering for AI leaders, enterprise decision-makers, sponsors, media and association partners.",
 };
 
-const subNav = ["Overview", "Delegate", "Sponsor", "Media Partner", "Association Partner"];
+const subNav = ["Overview", "Sponsor", "Media Partner", "Association Partner"];
 
 type CardItem = {
   title: string;
@@ -71,7 +72,7 @@ const gatewayCards: CardItem[] = [
   },
   {
     title: "Exclusive VIP Networking Experiences",
-    text: "Engage with senior executives, investors and AI leaders through premium sessions and invitation-only interactions.",
+    text: "Engage with senior executives, investors and AI leaders through premium sessions and interactions.",
     icon: "/malaysia/images/Attend/gateway/exclusive-vip-networking-experiences.svg",
   },
   {
@@ -441,7 +442,7 @@ export function AttendOverviewSection() {
     <>
       {/* Hero Section */}
       <section
-        className="relative min-h-[720px] -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:min-h-[690px] max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
+        className="relative min-h-[760px] -mt-[102px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[280px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:min-h-[690px] max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[240px]"
         style={{ backgroundImage: 'url("/malaysia/images/Attend/Attend-Hero-bg.webp")' }}
         id="overview"
       >
@@ -454,7 +455,7 @@ export function AttendOverviewSection() {
             Driving the next era of AI innovation, investment and enterprise transformation across Southeast Asia - in one curated room, over two days.
           </p>
           <div className="flex gap-3.5 mt-11 max-sm:flex-col max-sm:items-start max-sm:gap-4">
-            <ArrowButton href="/malaysia/attend/delegate#passes">Get your pass</ArrowButton>
+            <ArrowButton href="/malaysia/attend/delegate#passes">Buy your pass</ArrowButton>
             <ArrowButton href="/malaysia/sponsorship-enquiry" variant="outline">
               Sponsorship enquiry
             </ArrowButton>
@@ -495,7 +496,7 @@ export function AttendOverviewSection() {
             ))}
           </div>
           <div className="mb-[24px]">
-            <ArrowButton href="/malaysia/attend/delegate#passes">Get Your Pass</ArrowButton>
+            <ArrowButton href="/malaysia/attend/delegate#passes">Buy Your Pass</ArrowButton>
           </div>
         </div>
       </section>
@@ -513,7 +514,7 @@ export function AttendDelegateSection() {
     <>
       {/* Hero Section */}
       <section
-        className="relative -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
+        className="relative min-h-[760px] -mt-[102px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[280px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:min-h-[690px] max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[240px]"
         style={{ backgroundImage: 'url("/malaysia/images/Attend/Delegates-banner.webp")' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
@@ -523,7 +524,7 @@ export function AttendDelegateSection() {
 
         <div className="relative z-10 max-w-[820px]">
           <span className="inline-flex items-center mb-5 px-3.5 py-1.5 border border-cyan/30 rounded-full text-cyan font-mono text-[12px] uppercase tracking-[2px] bg-cyan/5">
-            Delegate Registration
+            Delegate Pass
           </span>
           <h1 className="m-0 text-[#f7f9ff] font-[850] leading-[1.05] tracking-[-1.8px] text-[clamp(44px,5.5vw,68px)] max-sm:text-[38px]">
             Built for <GradientText>AI decision-makers.</GradientText>
@@ -532,7 +533,7 @@ export function AttendDelegateSection() {
             Join 700+ AI decision-makers, government leaders, GLC representatives, and enterprise buyers driving sovereign infrastructure and digital growth.
           </p>
           <div className="flex gap-3.5 mt-9 max-sm:flex-col max-sm:items-start max-sm:gap-4">
-            <ArrowButton href="#passes">Get Your Pass</ArrowButton>
+            <ArrowButton href="#passes">Buy Your Pass</ArrowButton>
           </div>
         </div>
       </section>
@@ -567,95 +568,31 @@ export function AttendDelegateSection() {
       <section className="py-[86px] bg-[#020b1c] text-center max-sm:py-[62px]" id="passes">
         <div className="w-[min(1120px,calc(100%-48px))] mx-auto max-sm:w-[min(100%-28px,1120px)]">
           <h2 className="m-0 text-[#f7f9ff] font-[850] leading-[1.05] tracking-[-1.8px] text-[clamp(40px,5vw,60px)] max-sm:text-[38px]">
-            Get <GradientText>Your Pass</GradientText>
+            Buy <GradientText>Your Pass</GradientText>
           </h2>
           <p className="mt-[18px] mb-12 text-white/62 text-[18px]">Choose the right pass to unlock your World AI Show Malaysia experience.</p>
           
-          <div className="grid grid-cols-2 gap-8 max-md:grid-cols-1 max-w-[1000px] w-full mx-auto text-left">
-            {/* Delegate Pass Card */}
-            <article className="relative p-10 max-sm:p-6 border border-[#9a6cff]/60 rounded-[24px] bg-[#040a19]/86 shadow-[inset_0_0_28px_rgba(65,220,255,0.05),0_24px_70px_rgba(0,0,0,0.34)] transition-all duration-300 hover:scale-[1.01] hover:border-[#9a6cff]/100">
-              <span className="text-[#9a6cff] font-mono text-[12px] font-extrabold uppercase tracking-[2px] select-none">
-                Delegate Pass
-              </span>
-              <strong className="block mt-4 mb-4 text-[#f7f9ff] font-[850] text-[48px] leading-none tracking-tight">
-                FREE
-              </strong>
-              <p className="min-h-[58px] mb-7 text-white/63 text-[15px] leading-relaxed">
-                For qualified attendees from enterprise, government and AI buyer organisations.
-              </p>
-              
-              {/* Premium tick benefit list */}
-              <ul className="m-0 py-[25px] border-t border-white/10 text-white/90 gap-4 flex flex-col min-h-[220px] list-none pl-0">
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-[#18d4ff] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Access to all keynote sessions</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-[#18d4ff] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Full conference &amp; exhibition access</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-[#18d4ff] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Networking with industry leaders</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-[#18d4ff] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Panel discussions &amp; tech showcases</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-[#18d4ff] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Complimentary refreshments</span>
-                </li>
-              </ul>
-
-              <div className="mt-8">
-                <a
-                  href="https://konfhub.com/checkout/world-ai-show-malaysia26?ticketId=97615%7C1%3B&utm_medium=Website"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center w-full px-[32px] py-[15px] rounded-full text-[15px] font-extrabold text-white bg-transparent border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-200 cursor-pointer"
-                >
-                  Register now &rarr;
-                </a>
-              </div>
-              <small className="block mt-[20px] text-white/48 text-[11px] tracking-[2px] text-center uppercase font-mono">
-                Subject to qualification review
-              </small>
-            </article>
-
+          <div className="grid grid-cols-1 max-w-[480px] w-full mx-auto text-left">
             {/* Business Pass Card */}
-            <article className="relative p-10 max-sm:p-6 border border-[#7cdfff]/60 rounded-[24px] bg-[#040a19]/86 shadow-[inset_0_0_28px_rgba(65,220,255,0.05),0_24px_70px_rgba(0,0,0,0.34)] bg-gradient-to-br from-transparent to-[#00ceff]/10 transition-all duration-300 hover:scale-[1.01] hover:border-[#7cdfff]/100">
+            <AmbientGlowCard className="relative p-10 max-sm:p-6 border border-[#7cdfff]/40 rounded-[24px] bg-[#040a19]/90 shadow-[inset_0_0_28px_rgba(65,220,255,0.05),0_24px_70px_rgba(0,0,0,0.34)] bg-gradient-to-br from-transparent to-[#00ceff]/10 transition-all duration-300 hover:scale-[1.01] hover:border-[#7cdfff]/0">
               
               {/* Top center badge matching design */}
-              <span className="absolute -top-[12px] left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-[10px] font-mono font-extrabold uppercase tracking-[1.5px] text-[#C0F43C] bg-[#040a19] border border-[#7cdfff]/60 shadow-[0_0_15px_rgba(124,223,255,0.35)] whitespace-nowrap">
-                &#9733; BEST FOR BUSINESSES &amp; PARTNERS
+              <span className="absolute -top-[12px] left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-[10px] font-mono font-extrabold uppercase tracking-[1.5px] text-[#C0F43C] bg-[#040a19] border border-[#7cdfff]/60 shadow-[0_0_15px_rgba(124,223,255,0.35)] whitespace-nowrap z-20">
+                CONNECT • LEARN • LEAD
               </span>
 
-              <span className="text-[#7cdfff] font-mono text-[12px] font-extrabold uppercase tracking-[2px] select-none">
-                Business Pass
+              <span className="relative z-20 text-[#7cdfff] font-mono text-[12px] font-extrabold uppercase tracking-[2px] select-none">
+                Conference Pass
               </span>
-              <div className="flex items-baseline gap-2.5 mt-4 mb-1">
+              <div className="flex items-baseline gap-2.5 mt-4 mb-4">
                 <span className="text-white/40 text-[32px] font-bold line-through decoration-red-500 decoration-[2.5px] select-none">$799</span>
                 <strong className="text-[#7cdfff] font-[850] text-[48px] leading-none tracking-tight">
                   $499
                 </strong>
                 <em className="text-white/58 text-[16px] font-normal not-italic">/ person</em>
               </div>
-              <span className="block text-[#C0F43C] text-[12px] font-bold font-mono uppercase tracking-[1px] mb-4">
-                Valid till 30 July 2026
-              </span>
               <p className="min-h-[58px] mb-7 text-white/63 text-[15px] leading-relaxed">
-                For technology providers, vendors and partners selling into the AI ecosystem.
+                For enterprise leaders, decision-makers and C-suite executives driving AI adoption across their organisations.
               </p>
               
               {/* Premium tick benefit list */}
@@ -699,13 +636,13 @@ export function AttendDelegateSection() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center w-full px-[32px] py-[15px] rounded-full text-[15px] font-extrabold text-[#06111f] [color:#06111f!important] bg-[#C0F43C] shadow-[0_8px_24px_rgba(192,244,60,0.25)] hover:shadow-[0_12px_32px_rgba(192,244,60,0.4)] transition-all duration-200 cursor-pointer"
                 >
-                  Get your pass &rarr;
+                  Buy Your Pass &rarr;
                 </a>
               </div>
               <small className="block mt-[20px] text-white/48 text-[11px] tracking-[2px] text-center uppercase font-mono">
                 Instant confirmation - secure checkout
               </small>
-            </article>
+            </AmbientGlowCard>
           </div>
         </div>
       </section>
@@ -721,7 +658,7 @@ export function AttendSponsorSection() {
     <>
       {/* Hero Section */}
       <section
-        className="relative -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
+        className="relative min-h-[760px] -mt-[102px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[280px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:min-h-[690px] max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[240px]"
         style={{ backgroundImage: 'url("/malaysia/images/Attend/Sponsor-banner.webp")' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
@@ -783,7 +720,7 @@ export function AttendMediaSection() {
     <>
       {/* Hero Section */}
       <section
-        className="relative -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
+        className="relative min-h-[760px] -mt-[102px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[280px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:min-h-[690px] max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[240px]"
         style={{ backgroundImage: 'url("/malaysia/images/Attend/Media-banner.webp")' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
@@ -838,7 +775,7 @@ export function AttendAssociationSection() {
     <>
       {/* Hero Section */}
       <section
-        className="relative -mt-[81px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[200px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[196px]"
+        className="relative min-h-[760px] -mt-[102px] flex items-end px-[max(24px,calc((100vw-1120px)/2))] py-[76px] pt-[280px] overflow-hidden bg-cover bg-center bg-no-repeat max-sm:min-h-[690px] max-sm:px-[18px] max-sm:py-[56px] max-sm:pt-[240px]"
         style={{ backgroundImage: 'url("/malaysia/images/Attend/Association-banner.webp")' }}
       >
         <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />

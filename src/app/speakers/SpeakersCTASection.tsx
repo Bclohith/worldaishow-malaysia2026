@@ -27,7 +27,7 @@ export function SpeakersCTASection() {
               </div>
               <div className="w-[1px] h-[40px] bg-[#020814]/15 max-sm:hidden" />
               <div>
-                <strong className="block text-[32px] md:text-[38px] font-black leading-none font-space-grotesk tracking-tight">30+</strong>
+                <strong className="block text-[32px] md:text-[38px] font-black leading-none font-space-grotesk tracking-tight">50+</strong>
                 <span className="block mt-1.5 text-[11px] font-extrabold uppercase tracking-wider opacity-80 leading-snug">
                   Speakers
                 </span>
@@ -55,7 +55,7 @@ export function SpeakersCTASection() {
           {/* CTA Button */}
           <div className="mt-10">
             <a
-              href="/malaysia/attend#passes"
+              href="/malaysia/attend/delegate#passes"
               className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full text-[15px] font-extrabold text-white bg-[#020814] hover:bg-[#020814]/90 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(2,8,20,0.15)] transition-all duration-200 cursor-pointer"
             >
               Attend to Show

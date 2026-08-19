@@ -21,7 +21,7 @@ export function FooterSection() {
               className="w-[min(250px,100%)] h-auto object-contain mb-4 select-none"
             />
             <p className="max-w-[430px] m-0 mt-2 text-muted text-[17px] leading-[1.55]">
-              An invitation-only, high-focus gathering of Malaysia&apos;s AI decision-makers, infrastructure builders, GLC executives, and policy leaders.
+              A high-focus gathering of Malaysia&apos;s AI decision-makers, infrastructure builders, GLC executives, and policy leaders.
             </p>
           </div>
 

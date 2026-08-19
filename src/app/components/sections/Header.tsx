@@ -8,9 +8,9 @@ const navItems = ["Home", "Attend", "Agenda", "Speakers", "Partner", "Networking
 
 // Dropdown submenus — Speakers excluded
 const subMenus: Record<string, string[]> = {
-  Attend: ["Overview", "Delegate", "Sponsor", "Media Partner", "Association Partner"],
-  Agenda: ["Overview", "The 2030 Vision", "Themes", "Call for Speakers"],
-  Networking: ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery", "WhatsApp Networking"],
+  Attend: ["Overview", "Sponsor", "Media Partner", "Association Partner"],
+  Agenda: ["Overview", "The 2030 Vision", "Agenda", "Themes", "Call for Speakers"],
+  Networking: ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery"],
 };
 
 function getNavHref(item: string) {
@@ -72,7 +72,6 @@ function getSubNavItemFromPath(pathname: string): string {
   if (cleanPath.startsWith("/networking/attendee-app"))         return "Attendee APP";
   if (cleanPath.startsWith("/networking/ai-matchmaking"))       return "AI Matchmaking";
   if (cleanPath.startsWith("/networking/photo-gallery"))        return "Photo Gallery";
-  if (cleanPath.startsWith("/networking/whatsapp-networking"))  return "WhatsApp Networking";
   if (cleanPath.startsWith("/networking"))                      return "Overview";
   return "";
 }
@@ -202,7 +201,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
 
       <header className="group fixed top-5 left-0 right-0 z-30 w-full px-6 max-sm:top-2.5 max-sm:px-3">
         <nav
-          className="relative grid grid-cols-[180px_1fr_auto] items-center gap-[16px] max-w-[1172px] w-full h-[61px] mx-auto px-[22px] pl-[25px] border border-[#7eacd9]/14 rounded-[34px] bg-[#04080f]/88 shadow-[0_22px_62px_rgba(0,0,0,0.45),inset_0_0_26px_rgba(33,173,255,0.07)] backdrop-blur-[18px] max-[1200px]:grid-cols-[auto_1fr_auto] max-[1200px]:h-auto max-[1200px]:min-h-[61px] max-sm:grid-cols-[1fr_auto_auto] max-sm:py-2 max-sm:px-2.5 max-sm:pl-[18px] max-sm:rounded-[26px]"
+          className="relative grid grid-cols-[180px_1fr_auto] items-center gap-[16px] max-w-[1172px] w-full h-[82px] mx-auto px-[22px] pl-[25px] border border-[#7eacd9]/14 rounded-[34px] bg-[#04080f]/88 shadow-[0_22px_62px_rgba(0,0,0,0.45),inset_0_0_26px_rgba(33,173,255,0.07)] backdrop-blur-[18px] max-[1200px]:grid-cols-[auto_1fr_auto] max-[1200px]:h-auto max-[1200px]:min-h-[82px] max-sm:grid-cols-[1fr_auto_auto] max-sm:py-2 max-sm:px-2.5 max-sm:pl-[18px] max-sm:rounded-[26px]"
           aria-label="Primary navigation"
         >
           <Logo />
@@ -244,7 +243,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
               className="px-[23px] py-[15px] rounded-full !text-black [color:#06111f!important] bg-[#C0F43C] shadow-[0_0_24px_rgba(192,244,60,0.24)] hover:shadow-[0_0_32px_rgba(192,244,60,0.4)] transition-all duration-200 hover:-translate-y-0.5 max-sm:px-3.5 max-sm:py-3 uppercase font-extrabold text-[14px] tracking-[1.2px]"
               href="/malaysia/attend/delegate#passes"
             >
-              Get Your Pass
+              Buy Your Pass
             </a>
           </div>
 
@@ -277,7 +276,7 @@ export function Header({ activeItem, subNavItems, activeSubNavItem }: HeaderProp
 
         {/* ── Dropdown Sub-Nav (Attend, Agenda, etc.) ── */}
         <nav
-          className={`absolute left-1/2 top-[61px] -translate-x-1/2 flex justify-around w-[min(1008px,calc(100%-108px))] h-[41px] px-[34px] items-center rounded-b-[24px] text-[#101727] bg-white/92 shadow-[0_16px_38px_rgba(0,0,0,0.16)] text-[12px] font-semibold tracking-[1.6px] uppercase transition-all duration-300 ease-out max-[1200px]:hidden ${
+          className={`absolute left-1/2 top-[82px] -translate-x-1/2 flex justify-around w-[calc(100%-48px)] max-w-[1008px] h-[41px] px-[34px] items-center rounded-b-[24px] text-[#101727] bg-white/92 shadow-[0_16px_38px_rgba(0,0,0,0.16)] text-[12px] font-semibold tracking-[1.6px] uppercase transition-all duration-300 ease-out max-[1200px]:hidden ${
             currentActiveItem && subMenus[currentActiveItem]
               ? "opacity-100 translate-y-0 pointer-events-auto visible"
               : "opacity-0 -translate-y-2 pointer-events-none invisible"

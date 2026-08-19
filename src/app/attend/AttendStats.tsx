@@ -57,7 +57,7 @@ function Counter({ end, suffix = "", duration = 1500 }: CounterProps) {
 
 const statsData = [
   { value: 700, suffix: "+", label: "Pre-Qualified AI Decision-Makers" },
-  { value: 30, suffix: "+", label: "Speakers" },
+  { value: 50, suffix: "+", label: "Speakers" },
   { value: 20, suffix: "+", label: "Sponsors & Exhibitors" },
   { value: 30, suffix: "+", label: "Media & Association Partners" },
   { value: 4, suffix: "", label: "Strategic AI Focus Areas" },

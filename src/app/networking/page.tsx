@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Discover the high-value networking channels at World AI Show Malaysia 2026. Join C-suite matchmaking, private roundtables, and VIP lounges.",
 };
 
-const subNav = ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery", "WhatsApp Networking"];
+const subNav = ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery"];
 
 export default function NetworkingPage() {
   const waysToConnect = [
@@ -43,18 +43,6 @@ export default function NetworkingPage() {
       actionColor: "text-[#926DFF]",
       borderColor: "border-[#926DFF]/15",
       hoverBorder: "hover:border-[#926DFF]/45",
-      hoverTitle: "group-hover:text-[#926DFF]"
-    },
-    {
-      title: "WhatsApp Networking",
-      desc: "Join a pre-event peer community and start connecting 2 weeks before you arrive.",
-      href: "/malaysia/networking/whatsapp-networking",
-      action: "Explore",
-      badgeBg: "bg-[#00ceff]",
-      actionColor: "text-[#00ceff]",
-      borderColor: "border-[#00ceff]/15",
-      hoverBorder: "hover:border-[#00ceff]/45",
-      hoverTitle: "group-hover:text-[#00ceff]"
     }
   ];
 
@@ -127,7 +115,7 @@ export default function NetworkingPage() {
                 href="/malaysia/attend/delegate#passes"
                 className="px-8 py-[15px] rounded-full !text-black [color:#06111f!important] bg-[#C0F43C] shadow-[0_0_24px_rgba(192,244,60,0.24)] hover:shadow-[0_0_32px_rgba(192,244,60,0.4)] font-extrabold text-[14.5px] text-center transition-all duration-200 hover:-translate-y-0.5"
               >
-                Get Your Pass ➔
+                Buy Your Pass ➔
               </a>
               <a
                 href="/malaysia/sponsorship-enquiry"
@@ -285,7 +273,7 @@ export default function NetworkingPage() {
                   Your Network Starts <span className="text-[#a78bfa]">Before Day One</span>
                 </h3>
                 <p className="m-0 text-white/70 text-[14px] leading-relaxed">
-                  Registered delegates get early access to the event app and WhatsApp community 2 weeks before the summit — browse and filter the attendee list, set meetings, and talk in already connected.
+                  Registered delegates get early access to the event app 2 weeks before the summit — browse and filter the attendee list, set meetings, and talk in already connected.
                 </p>
               </div>
 
@@ -305,7 +293,7 @@ export default function NetworkingPage() {
             One Pass. <GradientText>Every Connection.</GradientText>
           </h2>
           <p className="m-0 mt-4 text-white/58 text-[15px] leading-relaxed max-w-[580px] mx-auto">
-            Secure your place at World AI Show Malaysia 2026 and unlock the full networking suite — AI matchmaking, the event app, WhatsApp community, and a room of 700+ senior AI decision-makers.
+            Secure your place at World AI Show Malaysia 2026 and unlock the full networking suite — AI matchmaking, the event app, and a room of 700+ senior AI decision-makers.
           </p>
 
           <div className="mt-8 flex justify-center gap-4 flex-wrap">
@@ -313,7 +301,7 @@ export default function NetworkingPage() {
               href="/malaysia/attend/delegate#passes"
               className="px-8 py-3.5 rounded-full text-black [color:#06111f!important] bg-[#C0F43C] font-extrabold text-sm shadow-[0_0_24px_rgba(192,244,60,0.24)] hover:shadow-[0_0_32px_rgba(192,244,60,0.4)] transition-all duration-200 hover:-translate-y-0.5"
             >
-              Get Your Pass ➔
+              Buy Your Pass ➔
             </a>
             <a
               href="/malaysia/sponsorship-enquiry"

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "View photos from World AI Show Malaysia 2026 — keynotes, panels, networking sessions, and exhibition highlights.",
 };
 
-const subNav = ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery", "WhatsApp Networking"];
+const subNav = ["Overview", "Attendee APP", "AI Matchmaking", "Photo Gallery"];
 
 export default function PhotoGalleryPage() {
   return (

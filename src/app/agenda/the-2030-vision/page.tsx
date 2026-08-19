@@ -5,7 +5,7 @@ import { AgendaVision } from "../AgendaPage";
 
 export const metadata: Metadata = {
   title: "The 2030 Vision | Agenda | World AI Show Malaysia 2026",
-  description: "Explore Malaysia's AI Vision 2030, government initiatives, cloud computing, high-value investment ecosystems, and innovation strategies.",
+  description: "Explore Malaysia's AI Nation 2030, government initiatives, cloud computing, high-value investment ecosystems, and innovation strategies.",
 };
 
 const subNav = ["Overview", "The 2030 Vision", "Agenda", "Themes", "Call for Speakers"];

@@ -18,7 +18,7 @@ export function SpeakersHero() {
           <GradientText>Malaysia&apos;s AI playbook.</GradientText>
         </h1>
         <p className="max-w-[700px] mt-6 mb-0 text-white/74 text-[20px] leading-relaxed max-sm:text-base">
-          30+ global voices across government, GLCs, technology giants, and venture capital firms. Handpicked and curated to address real-world deployment, sovereign infrastructure, and AI trust.
+          50+ global voices across government, GLCs, technology giants, and venture capital firms. Handpicked and curated to address real-world deployment, sovereign infrastructure, and AI trust.
         </p>
       </div>
     </section>

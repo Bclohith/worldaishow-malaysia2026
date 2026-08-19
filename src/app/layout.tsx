@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "World AI Show Malaysia 2026",
     description:
-      "Where Malaysia's AI decisions get made. Invitation-only, Kuala Lumpur.",
+      "Where Malaysia's AI decisions get made. Kuala Lumpur.",
     type: "website",
   },
 };
@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-space-grotesk bg-bg text-text">
+      <body suppressHydrationWarning className="min-h-full flex flex-col font-space-grotesk bg-bg text-text">
         {children}
         <ScrollToTop />
       </body>
