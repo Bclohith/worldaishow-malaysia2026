@@ -489,7 +489,7 @@
       <div class="card-title">📅 Session</div>
       <div style="margin-bottom:20px;">
         <label for="session-select">Active Session</label>
-        <select id="session-select" onchange="switchSession()"></select>
+        <select id="session-select" onchange="switchSession()" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:inherit;"></select>
       </div>
     </div>
 
@@ -576,9 +576,8 @@
               <th>#</th>
               <th>Full Name</th>
               
-              <th>Session</th>
               <th>Checked In At</th>
-              <th>Action</th>
+                <th>Action</th>
             </tr>
           </thead>
           <tbody id="attendance-body"></tbody>
@@ -771,8 +770,7 @@ function updateTime() {
    SESSION MANAGEMENT
 ═══════════════════════════════════════════════════ */
 function syncAllSessionDropdowns(sessionList) {
-  // Always restrict to default
-  sessionList = SESSIONS_DEFAULT;
+  if (!sessionList || !sessionList.length) sessionList = SESSIONS_DEFAULT;
   const mainSel = document.getElementById('session-select');
   const drawSel = document.getElementById('draw-session-select');
 
@@ -908,7 +906,7 @@ async function processHybridScan(decodedText) {
       // Fuzzy find Name in lines
       let bestMatchIdx = -1;
       let bestDist = Infinity;
-      const targetNameLower = qrName.toLowerCase();
+      const targetNameLower = finalName.toLowerCase();
       
       for (let i = 0; i < lines.length; i++) {
         const lineLower = lines[i].toLowerCase();
@@ -1062,6 +1060,7 @@ function renderTable() {
 
   if (!list.length) { empty.style.display='block'; tbl.style.display='none'; return; }
   empty.style.display='none'; tbl.style.display='table';
+    console.log('Rendering', list.length, 'attendees');
   tbody.innerHTML='';
   list.forEach((a,i)=>{
     const tr=document.createElement('tr');
