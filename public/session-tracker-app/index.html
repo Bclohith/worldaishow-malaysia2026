@@ -18,16 +18,17 @@
   <style>
     /* ── RESET & VARIABLES ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; }
 
     :root {
-      --bg:       #0f172a;
-      --surface:  #1e293b;
-      --surface2: #263045;
-      --border:   #334155;
-      --text:     #e2e8f0;
-      --muted:    #94a3b8;
+      --bg:       #f1f5f9;
+      --surface:  #ffffff;
+      --surface2: #f8fafc;
+      --border:   #e2e8f0;
+      --text:     #0f172a;
+      --muted:    #64748b;
       --accent:   #6c63ff;
-      --accent2:  #a78bfa;
+      --accent2:  #7c3aed;
       --green:    #10b981;
       --red:      #ef4444;
       --yellow:   #f59e0b;
@@ -47,33 +48,48 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 24px;
+      padding: 10px 16px;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 100;
-      gap: 12px;
+      gap: 8px;
+      overflow: hidden;
     }
 
-    .header-left img { display: block; }
+    .header-left { flex-shrink: 0; }
+    .header-left img { display: block; max-height: 40px; width: auto; }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      min-width: 0;
     }
 
     .stat-pill {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 5px 12px;
-      font-size: 13px;
+      padding: 5px 10px;
+      font-size: 12px;
       font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Hide time pill on very small screens */
+    @media (max-width: 480px) {
+      .stat-pill.hide-mobile { display: none; }
+      .stat-pill { padding: 4px 8px; font-size: 11px; }
+      header { padding: 8px 12px; }
+      .header-left img { max-height: 32px; }
     }
 
     .sync-dot {
@@ -235,13 +251,13 @@
 
     /* ── LUCKY DRAW CARD ── */
     .lucky-card {
-      background: linear-gradient(135deg, #1e1b4b, #312e81);
-      border: 1px solid rgba(167,139,250,.3);
+      background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+      border: 1px solid rgba(109,40,217,.2);
       border-radius: 16px;
       padding: 20px;
     }
 
-    .lucky-card .card-title { color: #a78bfa; }
+    .lucky-card .card-title { color: #7c3aed; }
 
     /* ── STATS ── */
     .stats-grid {
@@ -389,7 +405,8 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: var(--surface);
+      background: #1e293b;
+      color: #f1f5f9;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 12px 20px;
@@ -506,7 +523,7 @@
       position: fixed;
       inset: 0;
       z-index: 50000;
-      background: #0a0a1a;
+      background: #1e1b4b;
       display: none;
       flex-direction: column;
       align-items: center;
@@ -557,7 +574,7 @@
       <span>&#128100;</span>
       <span id="live-count">0 checked in</span>
     </div>
-    <div class="stat-pill">
+    <div class="stat-pill hide-mobile">
       <span>&#128336;</span>
       <span id="live-time">--:--</span>
     </div>
@@ -606,7 +623,7 @@
     <!-- Lucky Draw -->
     <div class="lucky-card">
       <div class="card-title">&#127920; Lucky Draw</div>
-      <p style="color:#c4b5fd; font-size:13px; line-height:1.6; margin-bottom:16px;">
+      <p style="color:#6d28d9; font-size:13px; line-height:1.6; margin-bottom:16px;">
         Pick a surprise winner from any session. Names spin on screen — perfect for projectors!
       </p>
       <label for="draw-session">Draw from Session</label>
@@ -723,18 +740,25 @@
 
 <!-- ── LUCKY DRAW OVERLAY ── -->
 <div id="draw-overlay">
-  <div style="font-size:14px; color:#6366f1; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:24px;">&#127920; Lucky Draw</div>
-  <div class="slot-name" id="slot-name">Ready!</div>
-  <div id="draw-winner-section" style="display:none; text-align:center; margin-bottom:32px;">
-    <div style="font-size:14px; color:#a78bfa; margin-bottom:8px; font-weight:600;">&#127881; WINNER</div>
-    <div id="draw-winner-name" style="font-size:clamp(24px,5vw,48px); font-weight:900; color:#fff;"></div>
-  </div>
+  <div style="font-size:13px; color:#a78bfa; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:20px;">&#127920; Lucky Draw</div>
+  <div style="font-size:clamp(20px,5vw,36px); font-weight:900; color:#fff; margin-bottom:32px; text-align:center; padding:0 20px;" id="draw-session-label"></div>
+  <button class="btn btn-primary" id="spin-btn" onclick="spinDraw()" style="font-size:16px; padding:14px 40px; border-radius:50px;">
+    &#9654;&#65038; Spin &amp; Reveal Winner!
+  </button>
+  <button class="btn btn-outline" onclick="closeDraw()" style="margin-top:14px; font-size:14px; padding:10px 28px; border-radius:50px; color:#a78bfa; border-color:#a78bfa;">
+    &#10005; Cancel
+  </button>
+</div>
+
+<!-- ── WINNER CARD OVERLAY ── -->
+<div id="winner-overlay" style="display:none; position:fixed; inset:0; z-index:70000; background:rgba(10,10,26,0.95); backdrop-filter:blur(10px); flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center;">
+  <div style="font-size:56px; margin-bottom:16px;">&#127942;</div>
+  <div style="font-size:13px; font-weight:800; letter-spacing:.15em; color:#a78bfa; text-transform:uppercase; margin-bottom:12px;">&#127881; We Have a Winner!</div>
+  <div id="winner-name-card" style="font-size:clamp(28px,7vw,64px); font-weight:900; color:#fde68a; text-shadow:0 0 40px #f59e0b, 0 0 80px #f59e0b; margin-bottom:40px; line-height:1.2;"></div>
   <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
-    <button class="btn btn-primary" id="spin-btn" onclick="spinDraw()" style="font-size:15px; padding:13px 28px;">&#9654; Spin!</button>
-    <button class="btn btn-outline" id="draw-again-btn" style="display:none; font-size:15px; padding:13px 28px;" onclick="spinAgain()">&#128257; Again</button>
-    <button class="btn btn-outline" onclick="closeDraw()" style="font-size:15px; padding:13px 28px;">&#10005; Close</button>
+    <button class="btn btn-outline" onclick="drawAgain()" style="font-size:15px; padding:12px 28px; border-color:#a78bfa; color:#a78bfa;">&#128257; Draw Again</button>
+    <button class="btn btn-outline" onclick="closeWinner()" style="font-size:15px; padding:12px 28px; border-color:#a78bfa; color:#a78bfa;">&#10005; Close</button>
   </div>
-  <div id="draw-canvas" style="position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:-1;"></div>
 </div>
 
 <!-- ── TOAST ── -->
@@ -1091,84 +1115,262 @@ function closeDup() {
 function launchDraw() {
   const session = document.getElementById('draw-session').value;
   drawNames = attendees.filter(a => a.session === session).map(a => a.name);
-  if (drawNames.length < 1) return toast('No attendees in this session!', 'warn');
-  document.getElementById('slot-name').textContent = 'Ready!';
-  document.getElementById('draw-winner-section').style.display = 'none';
-  document.getElementById('draw-again-btn').style.display = 'none';
+  if (drawNames.length < 1) return toast('No attendees in this session yet!', 'warn');
+  document.getElementById('draw-session-label').textContent = session;
   document.getElementById('draw-overlay').classList.add('show');
+}
+
+function closeDraw() {
+  document.getElementById('draw-overlay').classList.remove('show');
+}
+
+function closeWinner() {
+  document.getElementById('winner-overlay').style.display = 'none';
+}
+
+function drawAgain() {
+  closeWinner();
+  spinDraw();
 }
 
 function spinDraw() {
   if (!drawNames.length) return;
-  document.getElementById('draw-winner-section').style.display = 'none';
-  document.getElementById('spin-btn').disabled = true;
-  document.getElementById('draw-again-btn').style.display = 'none';
+  closeDraw();
+  winnerName = drawNames[Math.floor(Math.random() * drawNames.length)];
+  runDrawAnimation(drawNames, winnerName, function(canvas) {
+    canvas.remove();
+    document.getElementById('winner-name-card').textContent = winnerName;
+    document.getElementById('winner-overlay').style.display = 'flex';
+    launchConfetti();
+  });
+}
 
-  let i = 0;
-  const totalMs = 3000;
-  const start = Date.now();
+/* ── CANVAS ANIMATION ── */
+function runDrawAnimation(names, winner, onComplete) {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;inset:0;z-index:65000;';
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
 
-  function tick() {
-    const elapsed = Date.now() - start;
-    const progress = Math.min(elapsed / totalMs, 1);
-    const interval = 60 + progress * progress * 340; // ease out
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const STORM_MS  = 8000;
+  const REVEAL_MS = 1500;
 
-    document.getElementById('slot-name').textContent = drawNames[i % drawNames.length];
-    i++;
+  // Build particles
+  const particles = names.map((name, i) => {
+    const angle  = (i / names.length) * Math.PI * 2 + Math.random() * 0.8;
+    const radius = 80 + Math.random() * Math.min(W, H) * 0.22;
+    const dir    = Math.random() < 0.5 ? 1 : -1;
+    return {
+      name,
+      isWinner : name === winner,
+      angle, radius,
+      speed    : (0.35 + Math.random() * 0.35) * dir,
+      size     : 12 + Math.random() * 16,
+      opacity  : 0.45 + Math.random() * 0.5,
+      x        : cx + Math.cos(angle) * radius,
+      y        : cy + Math.sin(angle) * radius,
+      vx: 0, vy: 0
+    };
+  });
 
-    if (elapsed < totalMs) {
-      spinTimer = setTimeout(tick, interval);
+  const winP = particles.find(p => p.isWinner);
+  const start = performance.now();
+  let revealStarted = false, revealStart = 0;
+  let wxStart, wyStart;
+  let raf;
+
+  function frame(now) {
+    const elapsed = now - start;
+    ctx.clearRect(0, 0, W, H);
+
+    // Background
+    ctx.fillStyle = '#0d0d1a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Centre radial glow
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 220);
+    g.addColorStop(0, 'rgba(108,99,255,0.18)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    /* ── STORM PHASE ── */
+    if (elapsed < STORM_MS) {
+      const t      = elapsed / STORM_MS;
+      const speed  = 1 + Math.pow(t, 2) * 5;   // ramps 1× → 6×
+
+      particles.forEach(p => {
+        p.angle += p.speed * speed * 0.018;
+        p.x = cx + Math.cos(p.angle) * p.radius;
+        p.y = cy + Math.sin(p.angle) * p.radius;
+
+        const pulse = 0.8 + Math.sin(now * 0.003 + p.angle) * 0.2;
+
+        ctx.save();
+        ctx.globalAlpha   = p.opacity * pulse;
+        ctx.font          = `700 ${p.size}px 'Segoe UI', sans-serif`;
+        ctx.textAlign     = 'center';
+        ctx.textBaseline  = 'middle';
+
+        const hue = (now * 0.08 + p.angle * 25) % 360;
+        ctx.shadowColor = '#6c63ff';
+        ctx.shadowBlur  = 6;
+        ctx.fillStyle   = t > 0.65
+          ? `hsl(${hue},80%,75%)`
+          : '#c4b5fd';
+
+        ctx.fillText(p.name, p.x, p.y);
+        ctx.restore();
+      });
+
+      // "Selecting…" label
+      ctx.save();
+      ctx.globalAlpha  = Math.min(t * 3, 1) * 0.55;
+      ctx.font         = '700 13px Segoe UI, sans-serif';
+      ctx.textAlign    = 'center';
+      ctx.fillStyle    = '#a78bfa';
+      ctx.fillText('SELECTING WINNER...', cx, H - 36);
+      ctx.restore();
+
+      raf = requestAnimationFrame(frame);
+
+    /* ── REVEAL PHASE ── */
     } else {
-      winnerName = drawNames[Math.floor(Math.random() * drawNames.length)];
-      document.getElementById('slot-name').textContent = '';
-      document.getElementById('draw-winner-name').textContent = winnerName;
-      document.getElementById('draw-winner-section').style.display = 'block';
-      document.getElementById('spin-btn').disabled = false;
-      document.getElementById('draw-again-btn').style.display = 'flex';
-      launchConfetti();
+      if (!revealStarted) {
+        revealStarted = true;
+        revealStart   = now;
+        wxStart = winP.x;
+        wyStart = winP.y;
+
+        // Set outward explosion vectors for non-winners
+        particles.forEach(p => {
+          if (p.isWinner) return;
+          const dx = p.x - cx, dy = p.y - cy;
+          const d  = Math.sqrt(dx*dx + dy*dy) || 1;
+          const f  = 16 + Math.random() * 20;
+          p.vx = (dx / d) * f;
+          p.vy = (dy / d) * f;
+        });
+      }
+
+      const rt    = Math.min((now - revealStart) / REVEAL_MS, 1);
+      const ease  = 1 - Math.pow(1 - rt, 3);   // ease-out cubic
+
+      /* Non-winners explode outward */
+      particles.forEach(p => {
+        if (p.isWinner) return;
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= 1.09; p.vy *= 1.09;   // accelerate outward
+        const alpha = Math.max(0, 1 - rt * 2.2);
+        if (alpha <= 0) return;
+
+        ctx.save();
+        ctx.globalAlpha  = alpha;
+        ctx.font         = `700 ${p.size}px 'Segoe UI', sans-serif`;
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle    = '#8b5cf6';
+        ctx.fillText(p.name, p.x, p.y);
+        ctx.restore();
+      });
+
+      /* Winner moves to centre */
+      const wx    = wxStart + (cx - wxStart) * ease;
+      const wy    = wyStart + (cy - wyStart) * ease;
+      const wSize = winP.size + (70 - winP.size) * ease;
+      const glow  = 20 + 70 * ease;
+
+      // Gold ring
+      if (ease > 0.4) {
+        const ringAlpha = (ease - 0.4) / 0.6;
+        ctx.save();
+        ctx.globalAlpha  = ringAlpha * 0.7;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 100 * ease, 0, Math.PI * 2);
+        ctx.strokeStyle  = '#f59e0b';
+        ctx.lineWidth    = 2.5;
+        ctx.shadowColor  = '#f59e0b';
+        ctx.shadowBlur   = 24;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Glow layers (painted back-to-front)
+      for (let layer = 3; layer >= 0; layer--) {
+        ctx.save();
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.globalAlpha  = layer === 0 ? 1 : (0.25 - layer * 0.05) * ease;
+        ctx.font         = `900 ${wSize + layer * 6}px 'Segoe UI', sans-serif`;
+        ctx.shadowColor  = '#f59e0b';
+        ctx.shadowBlur   = glow + layer * 22;
+        ctx.fillStyle    = layer === 0 ? '#fde68a' : '#f59e0b';
+        ctx.fillText(winner, wx, wy);
+        ctx.restore();
+      }
+
+      // "🏆 WINNER!" label fades in
+      if (ease > 0.65) {
+        const la = (ease - 0.65) / 0.35;
+        ctx.save();
+        ctx.globalAlpha  = la;
+        ctx.font         = '800 17px Segoe UI, sans-serif';
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor  = '#f59e0b';
+        ctx.shadowBlur   = 12;
+        ctx.fillStyle    = '#fbbf24';
+        ctx.fillText('🏆  WINNER!', cx, wy - wSize * 0.75);
+        ctx.restore();
+      }
+
+      if (rt < 1) {
+        raf = requestAnimationFrame(frame);
+      } else {
+        cancelAnimationFrame(raf);
+        setTimeout(() => onComplete(canvas), 400);
+      }
     }
   }
-  tick();
+
+  raf = requestAnimationFrame(frame);
 }
 
-function spinAgain() {
-  document.getElementById('draw-winner-section').style.display = 'none';
-  spinDraw();
-}
-
-function closeDraw() {
-  if (spinTimer) clearTimeout(spinTimer);
-  document.getElementById('draw-overlay').classList.remove('show');
-}
-
-/* Simple confetti */
+/* Simple confetti burst */
 function launchConfetti() {
   const canvas = document.createElement('canvas');
   canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:99998;';
-  canvas.width = window.innerWidth;
+  canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
   document.body.appendChild(canvas);
   const ctx = canvas.getContext('2d');
-  const pieces = Array.from({length: 120}, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * -canvas.height,
-    r: Math.random() * 8 + 4,
-    c: `hsl(${Math.random()*360},90%,65%)`,
-    vx: (Math.random()-0.5)*4,
-    vy: Math.random()*6+2,
-    va: (Math.random()-0.5)*0.2
+  const pieces = Array.from({length: 150}, () => ({
+    x  : Math.random() * canvas.width,
+    y  : Math.random() * -canvas.height * 0.5,
+    r  : Math.random() * 9 + 4,
+    c  : `hsl(${Math.random()*360},90%,65%)`,
+    vx : (Math.random() - 0.5) * 5,
+    vy : Math.random() * 7 + 2,
+    rot: Math.random() * Math.PI * 2,
+    rv : (Math.random() - 0.5) * 0.2
   }));
-  let frame;
+  let raf2;
   function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     pieces.forEach(p => {
-      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.va);
-      ctx.fillStyle = p.c; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r);
       ctx.restore();
-      p.x += p.vx; p.y += p.vy; p.vy += 0.1;
+      p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.rot += p.rv;
     });
-    if (pieces.some(p => p.y < canvas.height)) frame = requestAnimationFrame(draw);
-    else { cancelAnimationFrame(frame); canvas.remove(); }
+    if (pieces.some(p => p.y < canvas.height + 20)) raf2 = requestAnimationFrame(draw);
+    else { cancelAnimationFrame(raf2); canvas.remove(); }
   }
   draw();
 }
